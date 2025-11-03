@@ -7,4 +7,6 @@
     <dimen name="standart_padding">16dp</dimen>
     <dimen name="icon_size">24dp</dimen>
     <dimen name="margin_of_text">42dp</dimen>
+    <dimen name="padding_vertical_standart">21dp</dimen>
+    <dimen name="margin_end_top">28dp</dimen>
 </resources>
