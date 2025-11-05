@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
+        android:textColor="@color/black"
         android:gravity="center_vertical"
         android:paddingHorizontal="@dimen/standart_padding"
         android:paddingVertical="@dimen/padding_vertical_standart"
