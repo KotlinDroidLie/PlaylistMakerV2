@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout style="@style/SettingsLayoutBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/settings"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:id="@+id/settings">
 
  <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
      android:id="@+id/button_back"
      app:title="@string/text_settings"
-     app:titleTextColor="@color/black"
-     app:navigationIcon="@drawable/arrow_back"
-     android:paddingBottom="24dp"/>
+     app:navigationIcon="@drawable/arrow_back" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial style="@style/TextViewStyleSettings"
         android:text="@string/themes_dark"/>

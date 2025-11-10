@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout style="@style/MainLayoutBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
-    android:background="@color/blue"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:id="@+id/main">
 
-    <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
+    <com.google.android.material.appbar.MaterialToolbar style="@style/MainToolBarStyle"
         android:paddingStart="@dimen/standart_padding"
         android:paddingEnd="@dimen/standart_padding"
         app:title="@string/app_name"/>
-
 
     <Button style="@style/ButtonStyle"
         android:id="@+id/button_search"
@@ -24,10 +20,10 @@
             android:text="@string/text_media"
             app:icon="@drawable/light_mode_media" />
 
-        <Button style="@style/ButtonStyle"
+    <Button style="@style/ButtonStyle"
             android:id="@+id/button_settings"
             android:text="@string/text_settings"
             app:icon="@drawable/light_mode_setting"
             android:layout_marginBottom="@dimen/margin_end_top"/>
 
-    </LinearLayout>
+</LinearLayout>
