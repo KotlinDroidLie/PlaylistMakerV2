@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ToolBarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="titleTextAppearance">@style/MessageTextStyleYSMedium</item>
+    </style>
+
+    <style name="ButtonStyle"  parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAppearance">@style/MessageTextStyleYSMedium</item>
+        <item name="cornerRadius">@dimen/radius_button</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/icon_padding</item>
+        <item name="iconTint">@color/black</item>
+        <item name="android:layout_marginTop">@dimen/standart_padding</item>
+        <item name="android:layout_marginStart">@dimen/standart_padding</item>
+        <item name="android:layout_marginEnd">@dimen/standart_padding</item>
+    </style>
+
+    <style name="TextViewStyleSettings" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/padding_horizontal_standart</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_standart</item>
+    </style>
+    
+    <style name="MessageTextStyleYSMedium">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textSize">@dimen/text_standart</item>
+    </style>
+
+    <style name="MessageTextStyleYSRegular">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+
+    
+</resources>
