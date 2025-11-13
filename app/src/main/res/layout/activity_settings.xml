@@ -4,24 +4,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/settings">
 
- <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
-     android:id="@+id/button_back"
-     app:title="@string/text_settings"
-     app:navigationIcon="@drawable/arrow_back" />
+    <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
+        android:id="@+id/button_back"
+        app:navigationIcon="@drawable/arrow_back"
+        app:title="@string/text_settings" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial style="@style/TextViewStyleSettings"
-        android:text="@string/themes_dark"/>
+        android:layout_width="match_parent"
+        android:text="@string/themes_dark" />
 
-    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
-        android:drawableEnd="@drawable/share"
-        android:text="@string/share_app"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
-        android:drawableEnd="@drawable/support"
-        android:text="@string/write_to_support"/>
+        <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
+            android:text="@string/share_app"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_share_app"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
-        android:drawableEnd="@drawable/arrow_forward"
-        android:text="@string/user_agreement"/>
+        <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
+            android:id="@+id/btn_share_app"
+            app:icon="@drawable/share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
+            android:text="@string/write_to_support"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_write_support"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
+            android:id="@+id/btn_write_support"
+            app:icon="@drawable/support"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView style="@style/TextViewStyleSettings"
+            android:text="@string/user_agreement"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_user_agreement"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
+            android:id="@+id/btn_user_agreement"
+            app:icon="@drawable/arrow_forward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

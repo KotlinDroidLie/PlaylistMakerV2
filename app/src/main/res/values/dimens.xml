@@ -10,4 +10,5 @@
     <dimen name="padding_vertical_standart">21dp</dimen>
     <dimen name="padding_horizontal_standart">16dp</dimen>
     <dimen name="margin_end_top">24dp</dimen>
+    <dimen name="size_icon">48dp</dimen>
 </resources>
