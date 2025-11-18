@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout style="@style/SecondLayoutBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/search"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ActivitySearch">
+    android:id="@+id/search">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
+        app:title="@string/text_search"
+        android:paddingStart="@dimen/standart_padding"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/standart_padding"
+        android:paddingVertical="8dp">
+
+        <EditText style="@style/SearchBar"
+            android:id="@+id/editText"
+            android:hint="@string/text_search"
+            android:drawableStart="@drawable/search_icon"/>
+
+        <ImageView style="@style/SearchBar"
+            android:id="@+id/clear_text"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:src="@drawable/clear_button"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+</LinearLayout>

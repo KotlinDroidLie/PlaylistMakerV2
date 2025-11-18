@@ -3,7 +3,6 @@
 
     <style name="ToolBarStyle" parent="MainToolBarStyle">
         <item name="titleTextColor">@color/black</item>
-        <item name="android:paddingBottom">24dp</item>
         <item name="navigationIconTint">@color/black</item>
     </style>
 
@@ -54,7 +53,7 @@
         <item name="android:textSize">@dimen/text_small</item>
     </style>
 
-    <style name="SettingsLayoutBackground" parent="MainLayoutBackground">
+    <style name="SecondLayoutBackground" parent="MainLayoutBackground">
         <item name="android:background">@color/white</item>
     </style>
 
@@ -73,5 +72,17 @@
         <item name="iconTint">@color/gray</item>
     </style>
 
-    
+    <style name="SearchBar" parent="MessageTextStyleYSRegular">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_search_bar</item>
+        <item name="android:background">@drawable/roundend_edit_text</item>
+        <item name="drawableTint">@color/gray</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:inputType">text</item>
+        <item name="maxLines">1</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:paddingStart">12dp</item>
+    </style>
+
 </resources>
