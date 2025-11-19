@@ -29,6 +29,8 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.editText)
         val buttonClear = findViewById<ImageView>(R.id.clear_text)
 
+        inputEditText.setText(saveText)
+
         buttonBack.setNavigationOnClickListener {
             finish()
         }
@@ -42,7 +44,7 @@ class SearchActivity : AppCompatActivity() {
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-
+                saveText = s.toString()
             }
 
             override fun beforeTextChanged(
@@ -67,4 +69,22 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(textWatcher)
 
     }
+
+    private var saveText: String = TEXT_DEF
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(EDIT_TEXT, saveText)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        saveText = savedInstanceState.getString(EDIT_TEXT, TEXT_DEF)
+    }
+
+    companion object {
+        const val TEXT_DEF = ""
+        const val EDIT_TEXT = "EDIT_TEXT"
+    }
+
 }
