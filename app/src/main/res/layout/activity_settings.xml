@@ -6,7 +6,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/button_back_settings"
-        app:navigationIcon="@drawable/arrow_back"
+        app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_settings"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial style="@style/TextViewStyleSettings"
@@ -27,7 +27,7 @@
 
         <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
             android:id="@+id/btn_share_app"
-            app:icon="@drawable/share"
+            app:icon="@drawable/ic_share_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +46,7 @@
 
         <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
             android:id="@+id/btn_write_support"
-            app:icon="@drawable/support"
+            app:icon="@drawable/ic_support_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +65,7 @@
 
         <com.google.android.material.button.MaterialButton style="@style/ButtonSettingsStyle"
             android:id="@+id/btn_user_agreement"
-            app:icon="@drawable/arrow_forward"
+            app:icon="@drawable/ic_arrow_forward_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

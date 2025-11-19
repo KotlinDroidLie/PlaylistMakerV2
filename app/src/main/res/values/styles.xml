@@ -2,8 +2,8 @@
 <resources>
 
     <style name="ToolBarStyle" parent="MainToolBarStyle">
-        <item name="titleTextColor">@color/black</item>
-        <item name="navigationIconTint">@color/black</item>
+        <item name="titleTextColor">@color/YP_black</item>
+        <item name="navigationIconTint">@color/YP_black</item>
     </style>
 
     <style name="MainToolBarStyle">
@@ -20,12 +20,12 @@
         <item name="backgroundTint">@color/white</item>
         <item name="android:letterSpacing">0</item>
         <item name="textAllCaps">false</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/YP_black</item>
         <item name="android:textAppearance">@style/MessageTextStyleYSMedium</item>
         <item name="cornerRadius">@dimen/radius_button</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/icon_padding</item>
-        <item name="iconTint">@color/black</item>
+        <item name="iconTint">@color/YP_black</item>
         <item name="android:layout_marginTop">@dimen/standart_padding</item>
         <item name="android:layout_marginStart">@dimen/standart_padding</item>
         <item name="android:layout_marginEnd">@dimen/standart_padding</item>
@@ -34,7 +34,7 @@
     <style name="TextViewStyleSettings" parent="MessageTextStyleYSRegular">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/YP_black</item>
         <item name="android:background">@color/white</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingHorizontal">@dimen/padding_horizontal_standart</item>
@@ -73,7 +73,7 @@
     </style>
 
     <style name="SearchBar" parent="MessageTextStyleYSRegular">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/YP_black</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/height_search_bar</item>
         <item name="android:background">@drawable/roundend_edit_text</item>

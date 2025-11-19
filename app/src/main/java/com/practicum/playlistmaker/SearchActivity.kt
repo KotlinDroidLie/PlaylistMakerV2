@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,9 @@ import android.view.inputmethod.InputMethodManager
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
+
+    private var saveText: String = TEXT_DEF
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,35 +46,16 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
         }
 
-        val textWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
+        inputEditText.addTextChangedListener(
+            onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
+                buttonClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+            },
+            afterTextChanged= { s: Editable? ->
                 saveText = s.toString()
             }
-
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-                buttonClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-            }
-
-        }
-
-        inputEditText.addTextChangedListener(textWatcher)
+        )
 
     }
-
-    private var saveText: String = TEXT_DEF
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -83,8 +68,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TEXT_DEF = ""
-        const val EDIT_TEXT = "EDIT_TEXT"
+        private const val TEXT_DEF = ""
+        private const val EDIT_TEXT = "EDIT_TEXT"
     }
 
 }

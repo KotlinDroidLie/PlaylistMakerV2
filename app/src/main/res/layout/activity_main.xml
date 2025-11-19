@@ -12,18 +12,18 @@
     <Button style="@style/ButtonMainStyle"
         android:id="@+id/button_search"
         android:text="@string/text_search"
-        app:icon="@drawable/light_mode_search"
+        app:icon="@drawable/ic_light_mode_search_24"
         android:layout_marginTop="@dimen/margin_end_top"/>
 
     <Button style="@style/ButtonMainStyle"
             android:id="@+id/button_media"
             android:text="@string/text_media"
-            app:icon="@drawable/light_mode_media" />
+            app:icon="@drawable/ic_light_mode_media_24" />
 
     <Button style="@style/ButtonMainStyle"
             android:id="@+id/button_settings"
             android:text="@string/text_settings"
-            app:icon="@drawable/light_mode_setting"
+            app:icon="@drawable/ic_light_mode_setting_24"
             android:layout_marginBottom="@dimen/margin_end_top"/>
 
 </LinearLayout>
