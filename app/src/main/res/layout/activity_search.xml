@@ -5,8 +5,9 @@
     android:id="@+id/search">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
-        app:title="@string/text_search"
-        android:paddingStart="@dimen/standart_padding"/>
+        android:id="@+id/button_back_search"
+        app:navigationIcon="@drawable/arrow_back"
+        app:title="@string/text_search"/>
 
     <FrameLayout
         android:layout_width="match_parent"

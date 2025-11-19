@@ -1,10 +1,8 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<MaterialToolbar>(R.id.button_back)
+        val buttonBack = findViewById<MaterialToolbar>(R.id.button_back_settings)
         buttonBack.setNavigationOnClickListener {
             finish()
         }

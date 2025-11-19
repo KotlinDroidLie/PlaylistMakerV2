@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
+import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +25,13 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
+        val buttonBack = findViewById<MaterialToolbar>(R.id.button_back_search)
         val inputEditText = findViewById<EditText>(R.id.editText)
         val buttonClear = findViewById<ImageView>(R.id.clear_text)
+
+        buttonBack.setNavigationOnClickListener {
+            finish()
+        }
 
         buttonClear.setOnClickListener {
             inputEditText.setText("")
