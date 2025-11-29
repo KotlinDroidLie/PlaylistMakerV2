@@ -3,7 +3,6 @@ package com.practicum.playlistmaker
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
@@ -23,15 +22,15 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.linear_layout_search_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val buttonBack = findViewById<MaterialToolbar>(R.id.button_back_search)
-        val inputEditText = findViewById<EditText>(R.id.editText)
-        val buttonClear = findViewById<ImageView>(R.id.clear_text)
+        val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
+        val inputEditText = findViewById<EditText>(R.id.et_search)
+        val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
 
         inputEditText.setText(saveText)
 

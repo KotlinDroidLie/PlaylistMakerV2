@@ -2,10 +2,10 @@
 <LinearLayout style="@style/SecondLayoutBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search">
+    android:id="@+id/linear_layout_search_activity">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
-        android:id="@+id/button_back_search"
+        android:id="@+id/btn_search_back"
         app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_search"/>
 
@@ -16,16 +16,22 @@
         android:paddingVertical="8dp">
 
         <EditText style="@style/SearchBar"
-            android:id="@+id/editText"
+            android:id="@+id/et_search"
             android:hint="@string/text_search"
             android:drawableStart="@drawable/ic_search_16"/>
 
         <ImageView style="@style/SearchBar"
-            android:id="@+id/clear_text"
+            android:id="@+id/iv_clear_text"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:src="@drawable/ic_clear_40x36"
             android:visibility="gone"/>
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_songs_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="12dp"/>
 
 </LinearLayout>
