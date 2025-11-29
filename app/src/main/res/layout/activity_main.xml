@@ -5,8 +5,8 @@
     android:id="@+id/main">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/MainToolBarStyle"
-        android:paddingStart="@dimen/standart_padding"
-        android:paddingEnd="@dimen/standart_padding"
+        android:paddingStart="@dimen/standard_padding"
+        android:paddingEnd="@dimen/standard_padding"
         app:title="@string/app_name"/>
 
     <Button style="@style/ButtonMainStyle"

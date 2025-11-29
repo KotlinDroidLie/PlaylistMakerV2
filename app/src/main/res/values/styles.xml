@@ -26,9 +26,9 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/icon_padding</item>
         <item name="iconTint">@color/YP_black</item>
-        <item name="android:layout_marginTop">@dimen/standart_padding</item>
-        <item name="android:layout_marginStart">@dimen/standart_padding</item>
-        <item name="android:layout_marginEnd">@dimen/standart_padding</item>
+        <item name="android:layout_marginTop">@dimen/standard_padding</item>
+        <item name="android:layout_marginStart">@dimen/standard_padding</item>
+        <item name="android:layout_marginEnd">@dimen/standard_padding</item>
     </style>
 
     <style name="TextViewStyleSettings" parent="MessageTextStyleYSRegular">
@@ -37,20 +37,20 @@
         <item name="android:textColor">@color/YP_black</item>
         <item name="android:background">@color/white</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingHorizontal">@dimen/padding_horizontal_standart</item>
-        <item name="android:paddingVertical">@dimen/padding_vertical_standart</item>
+        <item name="android:paddingHorizontal">@dimen/padding_horizontal_standard</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_standard</item>
     </style>
     
     <style name="MessageTextStyleYSMedium">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:textSize">@dimen/text_standart</item>
+        <item name="android:textSize">@dimen/text_large</item>
     </style>
 
     <style name="MessageTextStyleYSRegular">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textSize">@dimen/text_standard</item>
     </style>
 
     <style name="SecondLayoutBackground" parent="MainLayoutBackground">
@@ -84,5 +84,29 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:paddingStart">12dp</item>
     </style>
+
+    <style name="ButtonSongDetails">
+        <item name="android:layout_width">@dimen/size_icon</item>
+        <item name="android:layout_height">@dimen/size_icon</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="iconTint">@color/gray</item>
+    </style>
+
+    <style name="TextViewStyleSongName" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:textSize">@dimen/text_standard</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TextViewStyleSongDetails" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+
 
 </resources>
