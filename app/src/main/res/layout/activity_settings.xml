@@ -2,10 +2,10 @@
 <LinearLayout style="@style/SecondLayoutBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/settings">
+    android:id="@+id/linear_layout_settings_activity">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
-        android:id="@+id/button_back_settings"
+        android:id="@+id/btn_settings_back"
         app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_settings"/>
 

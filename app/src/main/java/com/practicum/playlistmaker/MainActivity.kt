@@ -14,15 +14,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.linear_layout_main_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
-        val buttonMedia = findViewById<Button>(R.id.button_media)
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
+        val buttonSearch = findViewById<Button>(R.id.btn_search)
+        val buttonMedia = findViewById<Button>(R.id.btn_media)
+        val buttonSettings = findViewById<Button>(R.id.btn_settings)
         val buttonSearchClickListener = object : View.OnClickListener{
             override fun onClick(v: View?) {
                 val intentSearch = Intent(this@MainActivity, SearchActivity::class.java)

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_standart">22sp</dimen>
-    <dimen name="text_small">16sp</dimen>
+    <dimen name="text_large">22sp</dimen>
+    <dimen name="text_standard">16sp</dimen>
     <dimen name="radius_button">16dp</dimen>
+    <dimen name="text_small">11sp</dimen>
     <dimen name="icon_padding">8dp</dimen>
-    <dimen name="standart_padding">16dp</dimen>
+    <dimen name="standard_padding">16dp</dimen>
     <dimen name="icon_size">24dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="poster_song_size">45dp</dimen>
     <dimen name="margin_of_text">42dp</dimen>
-    <dimen name="padding_vertical_standart">21dp</dimen>
-    <dimen name="padding_horizontal_standart">16dp</dimen>
+    <dimen name="padding_vertical_standard">21dp</dimen>
+    <dimen name="padding_horizontal_standard">16dp</dimen>
     <dimen name="margin_end_top">24dp</dimen>
     <dimen name="size_icon">48dp</dimen>
     <dimen name="height_search_bar">36dp</dimen>
+    <dimen name="height_song_view">61dp</dimen>
 </resources>
