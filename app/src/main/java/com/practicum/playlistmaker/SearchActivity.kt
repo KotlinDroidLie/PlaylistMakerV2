@@ -67,7 +67,7 @@ class SearchActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv_songs_list)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
-        recyclerView.adapter  = SearchAdapter(trackList)
+        recyclerView.adapter  = TrackAdapter(trackList)
 
         inputEditText.setText(saveText)
 

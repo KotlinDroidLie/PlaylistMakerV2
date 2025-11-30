@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker
 
-import android.view.RoundedCorner
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +13,20 @@ class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val poster = itemView.findViewById<ImageView>(R.id.iv_poster_song)
     private val duration = itemView.findViewById<MaterialTextView>(R.id.tv_duration_song)
     private val artist = itemView.findViewById<MaterialTextView>(R.id.tv_group_name)
+    private val cornerRadius = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        2f,
+        itemView.context.resources.displayMetrics
+    ).toInt()
 
     fun bind(model: TrackModel){
         name.text = model.trackName
-        Glide.with(itemView.context).load(model.artworkUrl100).transform(RoundedCorners(2)).placeholder(R.drawable.ic_placeholder_45).into(poster)
         duration.text = model.trackTime
         artist.text = model.artistName
+        Glide.with(itemView.context)
+            .load(model.artworkUrl100)
+            .transform(RoundedCorners(cornerRadius))
+            .placeholder(R.drawable.ic_placeholder_45)
+            .into(poster)
     }
 }
