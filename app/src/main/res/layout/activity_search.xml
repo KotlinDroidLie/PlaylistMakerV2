@@ -39,12 +39,12 @@
 
         <include style="@style/IncludeViewStatusSearchMessage"
             android:id="@+id/view_nothing_found"
-            layout="@layout/search_nothing_found"
+            layout="@layout/status_search_nothing_found"
             android:visibility="gone"/>
 
         <include style="@style/IncludeViewStatusSearchMessage"
             android:id="@+id/view_connection_problems"
-            layout="@layout/search_connection_problems"
+            layout="@layout/status_search_connection_problems"
             android:visibility="gone"/>
     </FrameLayout>
 

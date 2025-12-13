@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStatusSearchMessage"
+        android:drawableTop="@drawable/ic_search_connection_problems_120"
+        android:text="@string/connection_problems"/>
+
+    <Button style="@style/ButtonSearchRefresh"
+        android:text="@string/refresh"/>
+</LinearLayout>
