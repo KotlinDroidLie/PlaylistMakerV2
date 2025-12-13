@@ -9,4 +9,7 @@
     <string name="user_agreement">User Agreement</string>
     <string name="support_mail_title">Message to Playlist Maker app developers</string>
     <string name="support_mail_text">Thank you developers for the awesome app!</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="refresh">Refresh</string>
+    <string name="connection_problems">Connection problems\n\n Download failed. Check your internet connection</string>
 </resources>
