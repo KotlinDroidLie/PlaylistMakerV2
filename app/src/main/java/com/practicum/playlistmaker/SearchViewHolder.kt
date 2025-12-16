@@ -21,10 +21,10 @@ class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(model: TrackModel){
         name.text = model.trackName
-        duration.text = model.trackTime
+        duration.text = model.formatTrackDuration()
         artist.text = model.artistName
         Glide.with(itemView.context)
-            .load(model.artworkUrl100)
+            .load(model.trackImage)
             .transform(RoundedCorners(cornerRadius))
             .placeholder(R.drawable.ic_placeholder_45)
             .into(poster)
