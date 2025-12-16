@@ -9,5 +9,6 @@
         android:text="@string/connection_problems"/>
 
     <Button style="@style/ButtonSearchRefresh"
+        android:id="@+id/btn_refresh"
         android:text="@string/refresh"/>
 </LinearLayout>
