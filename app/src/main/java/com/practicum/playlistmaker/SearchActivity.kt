@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -137,21 +138,21 @@ class SearchActivity : AppCompatActivity() {
     private fun showStausMessageSearch(status: StatusSearchMessage){
         when (status) {
             StatusSearchMessage.OK ->{
-                recyclerView.visibility = View.VISIBLE
-                viewMessageNotFound.visibility = View.GONE
-                viewMessageError.visibility = View.GONE
+                recyclerView.isVisible = true
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = false
             }
             StatusSearchMessage.NOT_FOUND ->{
-                recyclerView.visibility = View.GONE
-                viewMessageError.visibility = View.GONE
-                viewMessageNotFound.visibility = View.VISIBLE
+                recyclerView.isVisible = false
+                viewMessageError.isVisible = false
+                viewMessageNotFound.isVisible = true
             }
             StatusSearchMessage.ERROR ->{
-                recyclerView.visibility = View.GONE
-                viewMessageNotFound.visibility = View.GONE
-                viewMessageError.visibility = View.VISIBLE
+                recyclerView.isVisible = false
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = true
             }
-            StatusSearchMessage.HIDDEN -> recyclerView.visibility = View.GONE
+            StatusSearchMessage.HIDDEN -> recyclerView.isVisible = false
         }
     }
 
