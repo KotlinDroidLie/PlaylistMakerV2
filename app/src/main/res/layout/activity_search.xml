@@ -28,10 +28,24 @@
             android:visibility="gone"/>
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_songs_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="12dp"/>
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_songs_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="12dp"/>
+
+        <include style="@style/IncludeViewStatusSearchMessage"
+            android:id="@+id/view_nothing_found"
+            layout="@layout/search_status_nothing_found_view"
+            android:visibility="gone"/>
+
+        <include style="@style/IncludeViewStatusSearchMessage"
+            android:id="@+id/view_connection_problems"
+            layout="@layout/search_status_connection_problems_view"
+            android:visibility="gone"/>
+    </FrameLayout>
 
 </LinearLayout>

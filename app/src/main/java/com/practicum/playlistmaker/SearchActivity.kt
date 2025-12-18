@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import android.widget.ImageView
@@ -12,44 +12,33 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.textview.MaterialTextView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-    private val trackList = listOf(
-        TrackModel(
-            "Smells Like Teen Spirit",
-            "Nirvana",
-            "5:01",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-        ),
-        TrackModel(
-            "Billie Jean",
-            "Michael Jackson",
-            "4:35",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-        ),
-        TrackModel(
-            "Stayin' Alive",
-            "Bee Gees",
-            "4:10",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-        ),
-        TrackModel(
-            "Whole Lotta Love",
-            "Led Zeppelin",
-            "5:33",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-        ),
-        TrackModel(
-            "Sweet Child O'Mine",
-            "Guns N' Roses",
-            "5:03",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        )
-    )
+    private val iTunesBaseUrl = "https://itunes.apple.com"
+    private lateinit var recyclerView: RecyclerView
+    lateinit var adapter: TrackAdapter
+    private lateinit var viewMessageNotFound: MaterialTextView
+    private lateinit var viewMessageError: LinearLayout
+    private val trackList = ArrayList<TrackModel>()
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(iTunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val iTunesApi = retrofit.create(ITunesApi::class.java)
     private var saveText: String = TEXT_DEF
+    private var lastText: String = TEXT_DEF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +53,14 @@ class SearchActivity : AppCompatActivity() {
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
         val inputEditText = findViewById<EditText>(R.id.et_search)
         val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
+        val buttonRefresh = findViewById<Button>(R.id.btn_refresh)
+        viewMessageNotFound = findViewById(R.id.view_nothing_found)
+        viewMessageError = findViewById(R.id.view_connection_problems)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.rv_songs_list)
+        recyclerView = findViewById(R.id.rv_songs_list)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
-        recyclerView.adapter  = TrackAdapter(trackList)
+        adapter = TrackAdapter(trackList)
+        recyclerView.adapter  = adapter
 
         inputEditText.setText(saveText)
 
@@ -78,8 +71,12 @@ class SearchActivity : AppCompatActivity() {
         buttonClear.setOnClickListener {
             inputEditText.setText("")
             inputEditText.clearFocus()
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+            hideKeyboard(inputEditText)
+            showStausMessageSearch(StatusSearchMessage.HIDDEN)
+        }
+
+        buttonRefresh.setOnClickListener {
+            searchTrack(lastText)
         }
 
         inputEditText.addTextChangedListener(
@@ -91,21 +88,95 @@ class SearchActivity : AppCompatActivity() {
             }
         )
 
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                inputEditText.clearFocus()
+                searchTrack()
+                true
+            }
+            false
+        }
+
+    }
+    private fun searchTrack(text: String = saveText){
+        iTunesApi.search(text)
+            .enqueue(object : Callback<TrackResponse> {
+                override fun onResponse(
+                    call: Call<TrackResponse?>,
+                    response: Response<TrackResponse?>
+                ) {
+                    when{
+                        response.isSuccessful -> {
+                            trackList.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                trackList.addAll(response.body()?.results!!)
+                                adapter.notifyDataSetChanged()
+                            }
+                            if (trackList.isEmpty()){
+                                showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
+                            } else {
+                                showStausMessageSearch(StatusSearchMessage.OK)
+                            }
+                        }
+                        else -> {
+                            lastText = saveText
+                            showStausMessageSearch(StatusSearchMessage.ERROR)
+                        }
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<TrackResponse?>,
+                    t: Throwable
+                ) {
+                    lastText = saveText
+                    showStausMessageSearch(StatusSearchMessage.ERROR)
+                }
+
+            })
+    }
+    private fun showStausMessageSearch(status: StatusSearchMessage){
+        when (status) {
+            StatusSearchMessage.OK ->{
+                recyclerView.isVisible = true
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = false
+            }
+            StatusSearchMessage.NOT_FOUND ->{
+                recyclerView.isVisible = false
+                viewMessageError.isVisible = false
+                viewMessageNotFound.isVisible = true
+            }
+            StatusSearchMessage.ERROR ->{
+                recyclerView.isVisible = false
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = true
+            }
+            StatusSearchMessage.HIDDEN -> recyclerView.isVisible = false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EDIT_TEXT, saveText)
+        outState.putString(LAST_TEXT, lastText)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         saveText = savedInstanceState.getString(EDIT_TEXT, TEXT_DEF)
+        lastText = savedInstanceState.getString(LAST_TEXT, TEXT_DEF)
+    }
+
+    private fun hideKeyboard(view: View){
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     companion object {
         private const val TEXT_DEF = ""
         private const val EDIT_TEXT = "EDIT_TEXT"
+        private const val LAST_TEXT = "LAST_TEXT"
     }
 
 }
