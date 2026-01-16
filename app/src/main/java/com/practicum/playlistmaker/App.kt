@@ -17,7 +17,6 @@ class App : Application() {
     fun switchTheme(darkThemeEnable: Boolean) {
         settingPrefs.edit {
             putBoolean(KEY_SWITCH_THEME, darkThemeEnable)
-                .apply()
         }
 
         AppCompatDelegate.setDefaultNightMode(
@@ -28,7 +27,7 @@ class App : Application() {
 
     fun isDarkThemeEnable() = settingPrefs.getBoolean(KEY_SWITCH_THEME, false)
     companion object{
-        const val SETTING_PREFERENCE = "setting_preference"
-        const val KEY_SWITCH_THEME = "key_switch_theme"
+        private const val SETTING_PREFERENCE = "setting_preference"
+        private const val KEY_SWITCH_THEME = "key_switch_theme"
     }
 }

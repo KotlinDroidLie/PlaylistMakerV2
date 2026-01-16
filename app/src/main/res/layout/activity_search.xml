@@ -35,7 +35,7 @@
             android:id="@+id/rv_songs_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="12dp"/>
+            android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal" />
 
         <include style="@style/IncludeViewStatusSearchMessage"
             android:id="@+id/view_nothing_found"
@@ -46,6 +46,11 @@
             android:id="@+id/view_connection_problems"
             layout="@layout/search_status_connection_problems_view"
             android:visibility="gone"/>
+
+        <include style="@style/IncludeViewSearchHistory"
+            android:id="@+id/view_search_history"
+            layout="@layout/search_status_history_view"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

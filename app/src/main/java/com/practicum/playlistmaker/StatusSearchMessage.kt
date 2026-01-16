@@ -1,5 +1,5 @@
 package com.practicum.playlistmaker
 
 enum class StatusSearchMessage {
-    OK, NOT_FOUND, ERROR, HIDDEN
+    DEFAULT, NOT_FOUND, ERROR, HIDDEN, SEARCH_HISTORY
 }
