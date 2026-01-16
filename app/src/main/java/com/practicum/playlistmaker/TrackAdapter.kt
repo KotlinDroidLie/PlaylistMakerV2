@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter(private val trackList: List<TrackModel>,private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
+class TrackAdapter(private val trackList: MutableList<TrackModel>,private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

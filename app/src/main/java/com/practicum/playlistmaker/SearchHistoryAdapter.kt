@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class SearchHistoryAdapter(): RecyclerView.Adapter<SearchViewHolder>() {
-    lateinit var trackHistory: ArrayList<TrackModel>
+    lateinit var trackHistory: MutableList<TrackModel>
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

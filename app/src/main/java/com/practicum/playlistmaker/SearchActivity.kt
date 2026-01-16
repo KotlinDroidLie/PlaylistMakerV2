@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var viewMessageNotFound: MaterialTextView
     private lateinit var viewMessageError: LinearLayout
     private lateinit var viewHistorySearch: LinearLayout
-    private val trackList = ArrayList<TrackModel>()
+    private val trackList = mutableListOf<TrackModel>()
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -98,8 +98,6 @@ class SearchActivity : AppCompatActivity() {
             historyAdapter.trackHistory = searchHistory.read()
             historyAdapter.notifyDataSetChanged()
             showStausMessageSearch(StatusSearchMessage.HIDDEN)
-            inputEditText.clearFocus()
-            hideKeyboard(inputEditText)
         }
 
         buttonClear.setOnClickListener {
