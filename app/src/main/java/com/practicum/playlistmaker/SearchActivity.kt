@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
@@ -24,14 +25,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 class SearchActivity : AppCompatActivity() {
+    private lateinit var historySharedPreferences: SharedPreferences
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private lateinit var recyclerView: RecyclerView
+    private lateinit var historyRecyclerView: RecyclerView
+    lateinit var searchHistory: SearchHistory
     lateinit var adapter: TrackAdapter
+    private lateinit var historyAdapter: SearchHistoryAdapter
     private lateinit var viewMessageNotFound: MaterialTextView
     private lateinit var viewMessageError: LinearLayout
-    private val trackList = ArrayList<TrackModel>()
+    private lateinit var viewHistorySearch: LinearLayout
+    private val trackList = mutableListOf<TrackModel>()
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -49,23 +54,50 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        historySharedPreferences = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
+
+        searchHistory = SearchHistory(historySharedPreferences)
+        searchHistory.loadFromPreference()
+
+        val onItemClickListener = object : OnItemClickListener {
+            override fun addToSearchHistory(track: TrackModel) {
+                searchHistory.write(track)
+                historyAdapter.trackHistory = searchHistory.read()
+                historyAdapter.notifyDataSetChanged()
+            }
+        }
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
         val inputEditText = findViewById<EditText>(R.id.et_search)
         val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
         val buttonRefresh = findViewById<Button>(R.id.btn_refresh)
+        val buttonClearHistory = findViewById<Button>(R.id.btn_clear_history)
         viewMessageNotFound = findViewById(R.id.view_nothing_found)
         viewMessageError = findViewById(R.id.view_connection_problems)
+        viewHistorySearch = findViewById(R.id.view_search_history)
+
+        historyRecyclerView = findViewById(R.id.rv_history_songs_list)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
+        historyAdapter = SearchHistoryAdapter()
+        historyAdapter.trackHistory = searchHistory.read()
+        historyRecyclerView.adapter  = historyAdapter
 
         recyclerView = findViewById(R.id.rv_songs_list)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
-        adapter = TrackAdapter(trackList)
+        adapter = TrackAdapter(trackList, onItemClickListener)
         recyclerView.adapter  = adapter
 
         inputEditText.setText(saveText)
 
         buttonBack.setNavigationOnClickListener {
             finish()
+        }
+
+        buttonClearHistory.setOnClickListener {
+            searchHistory.clear()
+            historyAdapter.trackHistory = searchHistory.read()
+            historyAdapter.notifyDataSetChanged()
+            showStausMessageSearch(StatusSearchMessage.HIDDEN)
         }
 
         buttonClear.setOnClickListener {
@@ -76,27 +108,37 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonRefresh.setOnClickListener {
-            searchTrack(lastText)
-        }
+                searchTrack(lastText)
+            }
 
         inputEditText.addTextChangedListener(
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
-                buttonClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-            },
-            afterTextChanged= { s: Editable? ->
+                buttonClear.isVisible = if (s.isNullOrEmpty()) false else true
+                if (inputEditText.hasFocus() && s.isNullOrEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
+                else showStausMessageSearch(StatusSearchMessage.HIDDEN)
+                },
+            afterTextChanged = { s: Editable? ->
                 saveText = s.toString()
             }
-        )
+            )
+
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
+        }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE && inputEditText.text.isNotEmpty()) {
                 inputEditText.clearFocus()
                 searchTrack()
                 true
             }
             false
         }
+    }
 
+    override fun onStop() {
+        super.onStop()
+        searchHistory.saveToPreference()
     }
     private fun searchTrack(text: String = saveText){
         iTunesApi.search(text)
@@ -115,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
                             if (trackList.isEmpty()){
                                 showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
                             } else {
-                                showStausMessageSearch(StatusSearchMessage.OK)
+                                showStausMessageSearch(StatusSearchMessage.DEFAULT)
                             }
                         }
                         else -> {
@@ -137,22 +179,34 @@ class SearchActivity : AppCompatActivity() {
     }
     private fun showStausMessageSearch(status: StatusSearchMessage){
         when (status) {
-            StatusSearchMessage.OK ->{
+            StatusSearchMessage.DEFAULT ->{
                 recyclerView.isVisible = true
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = false
+                viewHistorySearch.isVisible = false
             }
             StatusSearchMessage.NOT_FOUND ->{
                 recyclerView.isVisible = false
                 viewMessageError.isVisible = false
+                viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = true
             }
             StatusSearchMessage.ERROR ->{
                 recyclerView.isVisible = false
+                viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = true
             }
-            StatusSearchMessage.HIDDEN -> recyclerView.isVisible = false
+            StatusSearchMessage.HIDDEN -> {
+                recyclerView.isVisible = false
+                viewHistorySearch.isVisible = false
+            }
+            StatusSearchMessage.SEARCH_HISTORY ->{
+                recyclerView.isVisible = false
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = false
+                viewHistorySearch.isVisible = true
+            }
         }
     }
 
@@ -177,6 +231,6 @@ class SearchActivity : AppCompatActivity() {
         private const val TEXT_DEF = ""
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val LAST_TEXT = "LAST_TEXT"
+        const val HISTORY_PREFERENCES = "history_preferences"
     }
-
 }

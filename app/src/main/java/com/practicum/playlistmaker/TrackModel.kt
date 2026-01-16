@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Locale
 
 data class TrackModel(
+    @SerializedName("trackId") val trackId: Int,
     @SerializedName("trackName") val trackName: String,
     @SerializedName("artistName") val artistName: String,
     @SerializedName("trackTimeMillis") val trackDuration: Int,

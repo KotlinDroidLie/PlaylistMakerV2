@@ -8,7 +8,7 @@
         android:drawableTop="@drawable/ic_search_connection_problems_120"
         android:text="@string/connection_problems"/>
 
-    <Button style="@style/ButtonSearchRefresh"
+    <Button style="@style/ButtonSearchView"
         android:id="@+id/btn_refresh"
         android:text="@string/refresh"/>
 </LinearLayout>
