@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
+import com.practicum.playlistmaker.GsonSingleton.gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,6 +67,14 @@ class SearchActivity : AppCompatActivity() {
                 historyAdapter.trackHistory = searchHistory.read()
                 historyAdapter.notifyDataSetChanged()
             }
+
+            override fun openAudioPlayer(track: TrackModel) {
+                val json = gson.toJson(track)
+                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
+                    putExtra("track", json)
+                }
+                startActivity(intent)
+            }
         }
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
@@ -78,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
 
         historyRecyclerView = findViewById(R.id.rv_history_songs_list)
         historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
-        historyAdapter = SearchHistoryAdapter()
+        historyAdapter = SearchHistoryAdapter(onItemClickListener)
         historyAdapter.trackHistory = searchHistory.read()
         historyRecyclerView.adapter  = historyAdapter
 

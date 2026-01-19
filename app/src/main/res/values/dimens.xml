@@ -12,7 +12,7 @@
     <dimen name="margin_of_text">42dp</dimen>
     <dimen name="padding_vertical_standard">21dp</dimen>
     <dimen name="padding_horizontal_standard">16dp</dimen>
-    <dimen name="margin_end_top">24dp</dimen>
+    <dimen name="standard_layout_margin">24dp</dimen>
     <dimen name="size_icon">48dp</dimen>
     <dimen name="height_search_bar">36dp</dimen>
     <dimen name="height_song_view">61dp</dimen>

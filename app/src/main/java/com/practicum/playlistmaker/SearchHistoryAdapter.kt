@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class SearchHistoryAdapter(): RecyclerView.Adapter<SearchViewHolder>() {
+class SearchHistoryAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
     lateinit var trackHistory: MutableList<TrackModel>
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -19,6 +19,7 @@ class SearchHistoryAdapter(): RecyclerView.Adapter<SearchViewHolder>() {
         position: Int
     ) {
         holder.bind(trackHistory[position])
+        holder.itemView.setOnClickListener { onItemClickListener.openAudioPlayer(trackHistory[position]) }
     }
 
     override fun getItemCount(): Int {
