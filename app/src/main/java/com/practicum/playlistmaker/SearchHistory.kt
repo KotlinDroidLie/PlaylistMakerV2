@@ -2,7 +2,8 @@ package com.practicum.playlistmaker
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.google.gson.Gson
+import com.practicum.playlistmaker.GsonSingleton.gson
+
 class SearchHistory(private val historySearchSharedPreferences: SharedPreferences) {
     private val trackHistoryList = mutableListOf<TrackModel>()
 
@@ -37,6 +38,5 @@ class SearchHistory(private val historySearchSharedPreferences: SharedPreference
     companion object{
         private const val MAX_SIZE = 10
         const val KEY_HISTORY_TRACK = "key_history_track"
-        private val gson = Gson()
     }
 }

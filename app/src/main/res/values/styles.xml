@@ -146,5 +146,29 @@
         <item name="android:layout_marginTop">42dp</item>
         <item name="android:layout_marginHorizontal">@dimen/recycler_view_margin_horizontal</item>
     </style>
+    
+    <style name="TextViewStyleAudioPlayerSongDetails" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:textSize">13sp</item>
+        <item name="layout_constrainedWidth">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 
+    <style name="TextViewStyleAudioPlayerSongDescriptionDetails" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="ImageButtonAudioPlayerStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/rounded_button_audio_player</item>
+    </style>
 </resources>

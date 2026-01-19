@@ -13,7 +13,7 @@
         android:id="@+id/btn_search"
         android:text="@string/text_search"
         app:icon="@drawable/ic_light_mode_search_24"
-        android:layout_marginTop="@dimen/margin_end_top"/>
+        android:layout_marginTop="@dimen/standard_layout_margin"/>
 
     <Button style="@style/ButtonMainStyle"
         android:id="@+id/btn_media"
@@ -24,6 +24,6 @@
         android:id="@+id/btn_settings"
         android:text="@string/text_settings"
         app:icon="@drawable/ic_light_mode_setting_24"
-        android:layout_marginBottom="@dimen/margin_end_top"/>
+        android:layout_marginBottom="@dimen/standard_layout_margin"/>
 
 </LinearLayout>

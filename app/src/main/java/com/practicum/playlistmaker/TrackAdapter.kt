@@ -18,7 +18,10 @@ class TrackAdapter(private val trackList: MutableList<TrackModel>,private val on
         position: Int
     ) {
         holder.bind(trackList[position])
-        holder.itemView.setOnClickListener { onItemClickListener.addToSearchHistory(trackList[position]) }
+        holder.itemView.setOnClickListener {
+            onItemClickListener.addToSearchHistory(trackList[position])
+            onItemClickListener.openAudioPlayer(trackList[position])
+        }
     }
 
     override fun getItemCount(): Int {
