@@ -19,4 +19,5 @@
     <string name="genre">Genre</string>
     <string name="year">Year</string>
     <string name="country">Country</string>
+    <string name="error_failed_load_track">Failed to load the track</string>
 </resources>

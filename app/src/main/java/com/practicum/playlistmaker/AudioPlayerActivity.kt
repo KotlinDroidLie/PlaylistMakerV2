@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
@@ -13,7 +14,6 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
-import com.practicum.playlistmaker.GsonSingleton.gson
 
 class AudioPlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,12 @@ class AudioPlayerActivity : AppCompatActivity() {
         val albumDescriptionGroup = findViewById<Group>(R.id.group_album_name)
         val yearTrackGroup = findViewById<Group>(R.id.group_year_song)
 
-        val track = gson.fromJson(intent.getStringExtra("track"), TrackModel::class.java)
+        val track: TrackModel? = intent.getParcelableExtra(KEY_TRACK)
+        track ?: run {
+            Toast.makeText(this, resources.getString(R.string.error_failed_load_track), Toast.LENGTH_SHORT).show()
+            finish()
+            return
+            }
 
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -60,14 +65,22 @@ class AudioPlayerActivity : AppCompatActivity() {
         genreSong.text = track.genre
         country.text = track.country
 
-        if(track.albumName != null) albumName.text = track.albumName
-        else albumDescriptionGroup.isVisible = false
+        if(track.albumName != null){
+            albumName.text = track.albumName
+        } else {
+            albumDescriptionGroup.isVisible = false
+        }
 
         val date = track.dateFormat(YEAR_FORMAT_PATTERN)
-        if(date.isNotEmpty()) yearSong.text = date
-        else yearTrackGroup.isVisible = false
+        if(date.isNotEmpty()){
+            yearSong.text = date
+        } else {
+            yearTrackGroup.isVisible = false
+        }
+
     }
     companion object{
         const val YEAR_FORMAT_PATTERN = "yyyy"
+        const val KEY_TRACK = "track"
     }
 }

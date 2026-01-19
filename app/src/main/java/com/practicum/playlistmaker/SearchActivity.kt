@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
-import com.practicum.playlistmaker.GsonSingleton.gson
+import com.practicum.playlistmaker.AudioPlayerActivity.Companion.KEY_TRACK
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,9 +69,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun openAudioPlayer(track: TrackModel) {
-                val json = gson.toJson(track)
                 val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
-                    putExtra("track", json)
+                    putExtra(KEY_TRACK, track)
                 }
                 startActivity(intent)
             }
