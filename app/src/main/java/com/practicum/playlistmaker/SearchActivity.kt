@@ -30,6 +30,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
+    private var isClickAllowed = true
     private lateinit var historySharedPreferences: SharedPreferences
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private lateinit var recyclerView: RecyclerView
@@ -74,10 +75,12 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun openAudioPlayer(track: TrackModel) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
-                    putExtra(KEY_TRACK, track)
+                if (clickDebounce()){
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
+                        putExtra(KEY_TRACK, track)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         }
 
@@ -254,8 +257,17 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DELAY)
     }
+    private fun clickDebounce(): Boolean{
+        val current = isClickAllowed
+        if (current){
+            isClickAllowed = false
+            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DELAY)
+        }
+        return current
+    }
 
     companion object {
+        private const val CLICK_DELAY = 1000L
         private const val SEARCH_DELAY = 2000L
         private const val TEXT_DEF = ""
         private const val EDIT_TEXT = "EDIT_TEXT"
