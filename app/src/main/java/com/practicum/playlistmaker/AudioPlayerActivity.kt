@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.TypedValue
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +18,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 
 class AudioPlayerActivity : AppCompatActivity() {
+    private val mediaPlayer = MediaPlayer()
+    private var mediaPlayerState = STATE_DEFAULT
+    private lateinit var buttonPlay: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,6 +31,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             insets
         }
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_audio_player_back)
+        buttonPlay = findViewById(R.id.ibtn_music)
+
+        buttonPlay.setOnClickListener {
+            controlMediaPlayer()
+        }
 
         buttonBack.setNavigationOnClickListener {
             finish()
@@ -54,6 +64,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             return
             }
 
+        val audioUrl = track.audioPreviewUrl
+        preparedMediaPlayer(audioUrl)
+
         Glide.with(this)
             .load(track.getCoverArtwork())
             .transform(RoundedCorners(cornerRadius))
@@ -79,7 +92,57 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+    private fun preparedMediaPlayer(audioUrl: String){
+        with(mediaPlayer){
+            setDataSource(audioUrl)
+            prepareAsync()
+            setOnPreparedListener {
+                mediaPlayerState = STATE_PREPARED
+            }
+            setOnCompletionListener {
+                buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
+                mediaPlayerState = STATE_PREPARED
+            }
+        }
+    }
+
+    private fun startPlayer(){
+        mediaPlayer.start()
+        buttonPlay.setImageResource(R.drawable.ic_button_pause_music_100)
+        mediaPlayerState = STATE_PLAYING
+    }
+
+    private fun pausePlayer(){
+        mediaPlayer.pause()
+        buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
+        mediaPlayerState = STATE_PAUSED
+    }
+    private fun controlMediaPlayer(){
+        when(mediaPlayerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PAUSED, STATE_PREPARED ->{
+                startPlayer()
+            }
+        }
+    }
+
     companion object{
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
         const val YEAR_FORMAT_PATTERN = "yyyy"
         const val KEY_TRACK = "track"
     }

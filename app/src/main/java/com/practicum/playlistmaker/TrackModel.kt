@@ -16,7 +16,8 @@ data class TrackModel(
     @SerializedName("primaryGenreName") val genre: String,
     @SerializedName("country") val country: String,
     @SerializedName("trackTimeMillis") val trackDuration: Int,
-    @SerializedName("artworkUrl100") val trackImage: String
+    @SerializedName("artworkUrl100") val trackImage: String,
+    @SerializedName("previewUrl") val audioPreviewUrl: String
 ) : Parcelable {
     fun formatTrackDuration(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackDuration)
     fun getCoverArtwork() = trackImage.replaceAfterLast('/',"512x512bb.jpg")
