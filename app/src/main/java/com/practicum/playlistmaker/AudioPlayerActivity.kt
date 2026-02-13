@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -16,9 +18,13 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
+    private lateinit var playbackPosition: TextView
+    private val mainHandler = Handler(Looper.getMainLooper())
     private var mediaPlayerState = STATE_DEFAULT
     private lateinit var buttonPlay: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +36,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        playbackPosition = findViewById(R.id.tv_current_time_song)
+
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_audio_player_back)
         buttonPlay = findViewById(R.id.ibtn_music)
 
@@ -95,12 +103,13 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pause()
+        pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        pauseProgressUpdate()
     }
     private fun preparedMediaPlayer(audioUrl: String){
         with(mediaPlayer){
@@ -112,6 +121,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             setOnCompletionListener {
                 buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
                 mediaPlayerState = STATE_PREPARED
+                pauseProgressUpdate()
+                playbackPosition.text = "00:00"
             }
         }
     }
@@ -131,13 +142,30 @@ class AudioPlayerActivity : AppCompatActivity() {
         when(mediaPlayerState) {
             STATE_PLAYING -> {
                 pausePlayer()
+                pauseProgressUpdate()
             }
             STATE_PAUSED, STATE_PREPARED ->{
                 startPlayer()
+                startProgressUpdate()
             }
         }
     }
 
+    private val updateProgressRunnable = object : Runnable {
+        override fun run() {
+            val currentPosition = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            playbackPosition.text = currentPosition
+            mainHandler.postDelayed(this, 500)
+        }
+
+    }
+
+    private fun startProgressUpdate(){
+        updateProgressRunnable.run()
+    }
+    private fun pauseProgressUpdate(){
+        mainHandler.removeCallbacks(updateProgressRunnable)
+    }
     companion object{
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
