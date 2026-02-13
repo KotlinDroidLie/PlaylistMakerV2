@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var historyAdapter: SearchHistoryAdapter
     private lateinit var viewMessageNotFound: MaterialTextView
+    private lateinit var searchProgressBar: ProgressBar
     private lateinit var viewMessageError: LinearLayout
     private lateinit var viewHistorySearch: LinearLayout
     private val trackList = mutableListOf<TrackModel>()
@@ -79,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        searchProgressBar = findViewById(R.id.pb_search)
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
         inputEditText = findViewById(R.id.et_search)
         val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
@@ -144,6 +147,7 @@ class SearchActivity : AppCompatActivity() {
         searchHistory.saveToPreference()
     }
     private fun searchTrack(text: String = saveText){
+        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
         iTunesApi.search(text)
             .enqueue(object : Callback<TrackResponse> {
                 override fun onResponse(
@@ -187,28 +191,40 @@ class SearchActivity : AppCompatActivity() {
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.NOT_FOUND ->{
                 recyclerView.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = true
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.ERROR ->{
                 recyclerView.isVisible = false
                 viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = true
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.HIDDEN -> {
                 recyclerView.isVisible = false
                 viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.SEARCH_HISTORY ->{
                 recyclerView.isVisible = false
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = true
+                searchProgressBar.isVisible = false
+            }
+            StatusSearchMessage.SEARCH_LOADING ->{
+                recyclerView.isVisible = false
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = false
+                viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = true
             }
         }
     }
