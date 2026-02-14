@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.AudioPlayerActivity.Companion.KEY_TRACK
+import kotlinx.coroutines.Runnable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -149,6 +150,12 @@ class SearchActivity : AppCompatActivity() {
         super.onStop()
         searchHistory.saveToPreference()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.removeCallbacks(clickAllowedRunnable)
+    }
     private fun searchTrack(text: String = saveText){
         showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
         iTunesApi.search(text)
@@ -257,11 +264,15 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.postDelayed(searchRunnable, SEARCH_DELAY)
     }
+
+    private val clickAllowedRunnable = Runnable {
+        isClickAllowed = true
+    }
     private fun clickDebounce(): Boolean{
         val current = isClickAllowed
         if (current){
             isClickAllowed = false
-            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DELAY)
+            mainHandler.postDelayed(clickAllowedRunnable, CLICK_DELAY)
         }
         return current
     }
