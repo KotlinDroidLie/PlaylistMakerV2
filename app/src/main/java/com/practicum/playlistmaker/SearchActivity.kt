@@ -3,9 +3,10 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import android.widget.ImageView
@@ -16,26 +17,32 @@ import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.AudioPlayerActivity.Companion.KEY_TRACK
+import kotlinx.coroutines.Runnable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
+    private var isClickAllowed = true
     private lateinit var historySharedPreferences: SharedPreferences
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
     lateinit var searchHistory: SearchHistory
     lateinit var adapter: TrackAdapter
+    private lateinit var inputEditText: EditText
+    private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var historyAdapter: SearchHistoryAdapter
     private lateinit var viewMessageNotFound: MaterialTextView
+    private lateinit var searchProgressBar: ProgressBar
     private lateinit var viewMessageError: LinearLayout
     private lateinit var viewHistorySearch: LinearLayout
     private val trackList = mutableListOf<TrackModel>()
@@ -69,15 +76,18 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun openAudioPlayer(track: TrackModel) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
-                    putExtra(KEY_TRACK, track)
+                if (clickDebounce()){
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
+                        putExtra(KEY_TRACK, track)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         }
 
+        searchProgressBar = findViewById(R.id.pb_search)
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
-        val inputEditText = findViewById<EditText>(R.id.et_search)
+        inputEditText = findViewById(R.id.et_search)
         val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
         val buttonRefresh = findViewById<Button>(R.id.btn_refresh)
         val buttonClearHistory = findViewById<Button>(R.id.btn_clear_history)
@@ -124,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 buttonClear.isVisible = if (s.isNullOrEmpty()) false else true
                 if (inputEditText.hasFocus() && s.isNullOrEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
-                else showStausMessageSearch(StatusSearchMessage.HIDDEN)
+                searchDebounce()
                 },
             afterTextChanged = { s: Editable? ->
                 saveText = s.toString()
@@ -134,22 +144,20 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && inputEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
         }
-
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && inputEditText.text.isNotEmpty()) {
-                inputEditText.clearFocus()
-                searchTrack()
-                true
-            }
-            false
-        }
     }
 
     override fun onStop() {
         super.onStop()
         searchHistory.saveToPreference()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.removeCallbacks(clickAllowedRunnable)
+    }
     private fun searchTrack(text: String = saveText){
+        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
         iTunesApi.search(text)
             .enqueue(object : Callback<TrackResponse> {
                 override fun onResponse(
@@ -193,28 +201,40 @@ class SearchActivity : AppCompatActivity() {
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.NOT_FOUND ->{
                 recyclerView.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = true
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.ERROR ->{
                 recyclerView.isVisible = false
                 viewHistorySearch.isVisible = false
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = true
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.HIDDEN -> {
                 recyclerView.isVisible = false
                 viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = false
             }
             StatusSearchMessage.SEARCH_HISTORY ->{
                 recyclerView.isVisible = false
                 viewMessageNotFound.isVisible = false
                 viewMessageError.isVisible = false
                 viewHistorySearch.isVisible = true
+                searchProgressBar.isVisible = false
+            }
+            StatusSearchMessage.SEARCH_LOADING ->{
+                recyclerView.isVisible = false
+                viewMessageNotFound.isVisible = false
+                viewMessageError.isVisible = false
+                viewHistorySearch.isVisible = false
+                searchProgressBar.isVisible = true
             }
         }
     }
@@ -236,7 +256,30 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    private val searchRunnable = Runnable{
+        if(inputEditText.text.isNotBlank()) searchTrack()
+    }
+
+    private fun searchDebounce(){
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DELAY)
+    }
+
+    private val clickAllowedRunnable = Runnable {
+        isClickAllowed = true
+    }
+    private fun clickDebounce(): Boolean{
+        val current = isClickAllowed
+        if (current){
+            isClickAllowed = false
+            mainHandler.postDelayed(clickAllowedRunnable, CLICK_DELAY)
+        }
+        return current
+    }
+
     companion object {
+        private const val CLICK_DELAY = 1000L
+        private const val SEARCH_DELAY = 2000L
         private const val TEXT_DEF = ""
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val LAST_TEXT = "LAST_TEXT"
