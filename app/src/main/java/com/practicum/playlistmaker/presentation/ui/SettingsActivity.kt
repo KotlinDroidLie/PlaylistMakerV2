@@ -25,10 +25,10 @@ class SettingsActivity : AppCompatActivity() {
         }
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.sw_theme)
 
-        themeSwitcher.isChecked = (applicationContext as App).isDarkThemeEnable()
+//        themeSwitcher.isChecked = (applicationContext as App).isDarkThemeEnable()
 
         themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+//            (applicationContext as App).switchTheme(isChecked)
         }
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)

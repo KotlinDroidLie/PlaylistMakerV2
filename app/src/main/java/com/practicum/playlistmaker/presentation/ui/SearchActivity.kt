@@ -136,7 +136,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonRefresh.setOnClickListener {
-                searchTrack(lastText)
+//                searchTrack(lastText)
             }
 
         inputEditText.addTextChangedListener(
@@ -167,44 +167,44 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.removeCallbacks(clickAllowedRunnable)
     }
-    private fun searchTrack(text: String = saveText){
-        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
-        iTunesApi.search(text)
-            .enqueue(object : Callback<TrackResponse> {
-                override fun onResponse(
-                    call: Call<TrackResponse?>,
-                    response: Response<TrackResponse?>
-                ) {
-                    when{
-                        response.isSuccessful -> {
-                            trackList.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                trackList.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
-                            }
-                            if (trackList.isEmpty()){
-                                showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
-                            } else {
-                                showStausMessageSearch(StatusSearchMessage.DEFAULT)
-                            }
-                        }
-                        else -> {
-                            lastText = saveText
-                            showStausMessageSearch(StatusSearchMessage.ERROR)
-                        }
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<TrackResponse?>,
-                    t: Throwable
-                ) {
-                    lastText = saveText
-                    showStausMessageSearch(StatusSearchMessage.ERROR)
-                }
-
-            })
-    }
+//    private fun searchTrack(text: String = saveText){
+//        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
+//        iTunesApi.search(text)
+//            .enqueue(object : Callback<TrackResponse> {
+//                override fun onResponse(
+//                    call: Call<TrackResponse?>,
+//                    response: Response<TrackResponse?>
+//                ) {
+//                    when{
+//                        response.isSuccessful -> {
+//                            trackList.clear()
+//                            if (response.body()?.results?.isNotEmpty() == true) {
+//                                trackList.addAll(response.body()?.results!!)
+//                                adapter.notifyDataSetChanged()
+//                            }
+//                            if (trackList.isEmpty()){
+//                                showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
+//                            } else {
+//                                showStausMessageSearch(StatusSearchMessage.DEFAULT)
+//                            }
+//                        }
+//                        else -> {
+//                            lastText = saveText
+//                            showStausMessageSearch(StatusSearchMessage.ERROR)
+//                        }
+//                    }
+//                }
+//
+//                override fun onFailure(
+//                    call: Call<TrackResponse?>,
+//                    t: Throwable
+//                ) {
+//                    lastText = saveText
+//                    showStausMessageSearch(StatusSearchMessage.ERROR)
+//                }
+//
+//            })
+//    }
     private fun showStausMessageSearch(status: StatusSearchMessage){
         when (status) {
             StatusSearchMessage.DEFAULT ->{
@@ -268,7 +268,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val searchRunnable = Runnable{
-        if(inputEditText.text.isNotBlank()) searchTrack()
+//        if(inputEditText.text.isNotBlank()) searchTrack()
     }
 
     private fun searchDebounce(){
