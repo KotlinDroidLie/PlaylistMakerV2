@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -18,6 +18,8 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.TrackModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 

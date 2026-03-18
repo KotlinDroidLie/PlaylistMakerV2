@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.util.TypedValue
 import android.view.View
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.textview.MaterialTextView
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.TrackModel
 
 class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val name = itemView.findViewById<MaterialTextView>(R.id.tv_name_song)

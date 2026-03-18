@@ -1,13 +1,9 @@
-package com.practicum.playlistmaker
-import android.icu.text.SimpleDateFormat
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
-import java.util.Date
-import java.util.Locale
+package com.practicum.playlistmaker.data.dto
 
-@Parcelize
-data class TrackModel(
+import com.google.gson.annotations.SerializedName
+import java.util.Date
+
+data class TrackDto(
     @SerializedName("trackId") val trackId: Int,
     @SerializedName("trackName") val trackName: String,
     @SerializedName("artistName") val artistName: String,
@@ -18,8 +14,4 @@ data class TrackModel(
     @SerializedName("trackTimeMillis") val trackDuration: Int,
     @SerializedName("artworkUrl100") val trackImage: String,
     @SerializedName("previewUrl") val audioPreviewUrl: String
-) : Parcelable {
-    fun formatTrackDuration(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackDuration)
-    fun getCoverArtwork() = trackImage.replaceAfterLast('/',"512x512bb.jpg")
-    fun dateFormat(format: String) = SimpleDateFormat(format, Locale.getDefault()).format(releaseDate) ?: ""
-}
+)

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,29 +7,38 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
-import com.practicum.playlistmaker.AudioPlayerActivity.Companion.KEY_TRACK
-import kotlinx.coroutines.Runnable
+import com.practicum.playlistmaker.presentation.ui.AudioPlayerActivity
+import com.practicum.playlistmaker.OnItemClickListener
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.SearchHistory
+import com.practicum.playlistmaker.presentation.StatusSearchMessage
+import com.practicum.playlistmaker.data.dto.TrackResponse
+import com.practicum.playlistmaker.data.network.ITunesApi
+import com.practicum.playlistmaker.domain.models.TrackModel
+import com.practicum.playlistmaker.presentation.SearchHistoryAdapter
+import com.practicum.playlistmaker.presentation.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private lateinit var historySharedPreferences: SharedPreferences
@@ -78,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
             override fun openAudioPlayer(track: TrackModel) {
                 if (clickDebounce()){
                     val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
-                        putExtra(KEY_TRACK, track)
+                        putExtra(AudioPlayerActivity.Companion.KEY_TRACK, track)
                     }
                     startActivity(intent)
                 }
@@ -96,13 +105,13 @@ class SearchActivity : AppCompatActivity() {
         viewHistorySearch = findViewById(R.id.view_search_history)
 
         historyRecyclerView = findViewById(R.id.rv_history_songs_list)
-        historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         historyAdapter = SearchHistoryAdapter(onItemClickListener)
         historyAdapter.trackHistory = searchHistory.read()
         historyRecyclerView.adapter  = historyAdapter
 
         recyclerView = findViewById(R.id.rv_songs_list)
-        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
+        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = TrackAdapter(trackList, onItemClickListener)
         recyclerView.adapter  = adapter
 
@@ -133,7 +142,8 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 buttonClear.isVisible = if (s.isNullOrEmpty()) false else true
-                if (inputEditText.hasFocus() && s.isNullOrEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
+                if (inputEditText.hasFocus() && s.isNullOrEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(
+                    StatusSearchMessage.SEARCH_HISTORY)
                 searchDebounce()
                 },
             afterTextChanged = { s: Editable? ->
@@ -142,7 +152,8 @@ class SearchActivity : AppCompatActivity() {
             )
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(StatusSearchMessage.SEARCH_HISTORY)
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(
+                StatusSearchMessage.SEARCH_HISTORY)
         }
     }
 
