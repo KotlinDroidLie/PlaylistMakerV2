@@ -1,13 +1,13 @@
 package com.practicum.playlistmaker.domain.impl
 
-import com.practicum.playlistmaker.domain.api.AddTrackToHistoryUseCase
-import com.practicum.playlistmaker.domain.api.HistoryTracksRepository
+import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.models.TrackModel
 
 class AddTrackToHistoryUseCaseImpl(
     private val historyRepository: HistoryTracksRepository
 ) : AddTrackToHistoryUseCase {
-    override fun invoke(track: TrackModel) {
+    override fun execute(track: TrackModel) {
         historyRepository.addTrack(track)
         historyRepository.saveHistory()
     }

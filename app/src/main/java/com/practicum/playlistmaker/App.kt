@@ -3,8 +3,8 @@ package com.practicum.playlistmaker
 import android.app.Application
 import com.practicum.playlistmaker.data.repository.LocalHistoryTracksRepository
 import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl
-import com.practicum.playlistmaker.domain.api.HistoryTracksRepository
-import com.practicum.playlistmaker.domain.api.ThemeRepository
+import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
+import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 
 class App : Application() {
     private lateinit var historyTracksRepository: HistoryTracksRepository

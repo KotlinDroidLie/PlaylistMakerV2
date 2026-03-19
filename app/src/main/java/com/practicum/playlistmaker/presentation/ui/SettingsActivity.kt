@@ -10,10 +10,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.ShareAppUseCase
-import com.practicum.playlistmaker.domain.api.SwitchThemeUseCase
-import com.practicum.playlistmaker.domain.api.WriteSupportUseCase
-import com.practicum.playlistmaker.domain.api.UserAgreementUseCase
+import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
+import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
+import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
+import com.practicum.playlistmaker.domain.api.usecase.UserAgreementUseCase
 import com.practicum.playlistmaker.domain.impl.ShareAppUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.WriteSupportUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.UserAgreementUseCaseImpl

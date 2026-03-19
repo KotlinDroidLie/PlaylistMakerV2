@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.domain.impl
 
 import android.content.Intent
 import androidx.core.net.toUri
-import com.practicum.playlistmaker.domain.api.UserAgreementUseCase
+import com.practicum.playlistmaker.domain.api.usecase.UserAgreementUseCase
 
 class UserAgreementUseCaseImpl(private val link: String) : UserAgreementUseCase {
     override fun execute(): Intent {

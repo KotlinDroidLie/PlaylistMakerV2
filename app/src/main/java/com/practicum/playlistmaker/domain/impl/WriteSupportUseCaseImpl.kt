@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.domain.impl
 
 import android.content.Intent
 import androidx.core.net.toUri
-import com.practicum.playlistmaker.domain.api.WriteSupportUseCase
+import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
 
 class WriteSupportUseCaseImpl(
     private val email: String,

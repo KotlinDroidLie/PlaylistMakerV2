@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.domain.api
+package com.practicum.playlistmaker.domain.api.usecase
 
 import com.practicum.playlistmaker.domain.models.TrackModel
 
 interface AddTrackToHistoryUseCase {
-    operator fun invoke(track: TrackModel)
+     fun execute(track: TrackModel)
 }

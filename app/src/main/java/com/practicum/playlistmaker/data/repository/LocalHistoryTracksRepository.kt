@@ -3,11 +3,11 @@ package com.practicum.playlistmaker.data.repository
 import android.content.Context
 import androidx.core.content.edit
 import com.practicum.playlistmaker.GsonSingleton.gson
-import com.practicum.playlistmaker.domain.api.HistoryTracksRepository
+import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.models.TrackModel
 import kotlin.collections.addAll
 
-class LocalHistoryTracksRepository(private val context: Context): HistoryTracksRepository {
+class  LocalHistoryTracksRepository(private val context: Context): HistoryTracksRepository {
     private val historySearchSharedPreferences = context.getSharedPreferences(HISTORY_PREFERENCES, Context.MODE_PRIVATE)
     private val trackHistoryList = mutableListOf<TrackModel>()
 

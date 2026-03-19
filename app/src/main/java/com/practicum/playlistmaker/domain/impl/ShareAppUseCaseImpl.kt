@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.domain.impl
 
 import android.content.Intent
 import androidx.core.net.toUri
-import com.practicum.playlistmaker.domain.api.ShareAppUseCase
+import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 
 class ShareAppUseCaseImpl(private val shareLink: String) : ShareAppUseCase {
     override fun execute(): Intent {

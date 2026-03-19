@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
-import com.practicum.playlistmaker.domain.api.ThemeRepository
+import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 
 class LocalThemeRepositoryImpl(private val context: Context): ThemeRepository {
 

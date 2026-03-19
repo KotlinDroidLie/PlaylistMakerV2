@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.domain.impl
 
-import com.practicum.playlistmaker.domain.api.SearchTracksUseCase
+import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
 import java.util.concurrent.Executors
-import com.practicum.playlistmaker.domain.api.TrackRepository
+import com.practicum.playlistmaker.domain.api.repo.TrackRepository
 
 class SearchTracksUseCaseImpl(private val repository: TrackRepository):  SearchTracksUseCase {
     private val executor = Executors.newCachedThreadPool()

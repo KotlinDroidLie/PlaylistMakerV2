@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.domain.api
+package com.practicum.playlistmaker.domain.api.usecase
 
 import com.practicum.playlistmaker.domain.models.TrackModel
 
 interface GetSearchHistoryUseCase {
-    operator fun invoke(): List<TrackModel>
+    fun execute(): List<TrackModel>
 }

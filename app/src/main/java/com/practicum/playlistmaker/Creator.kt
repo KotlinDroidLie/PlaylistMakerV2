@@ -2,8 +2,8 @@ package com.practicum.playlistmaker
 
 import android.content.Context
 import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl
-import com.practicum.playlistmaker.domain.api.SwitchThemeUseCase
-import com.practicum.playlistmaker.domain.api.ThemeRepository
+import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
+import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 import com.practicum.playlistmaker.domain.impl.SwitchThemeUseCaseImpl
 
 object Creator {
