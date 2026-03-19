@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.presentation.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,12 +13,13 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
 import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
-import com.practicum.playlistmaker.domain.api.usecase.LoadImageUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel
 import com.practicum.playlistmaker.presentation.MediaController
 import com.practicum.playlistmaker.presentation.PlaybackState
@@ -26,7 +28,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
     private lateinit var mediaController: MediaController
     private lateinit var playbackPosition: TextView
-    private lateinit var loadImageUseCase: LoadImageUseCase
     private lateinit var formatTrackYearUseCase: FormatTrackYearUseCase
     private lateinit var formatTrackDurationUseCase: FormatTrackDurationUseCase
     private lateinit var buttonPlay: ImageButton
@@ -41,7 +42,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             insets
         }
 
-        loadImageUseCase = Creator.getLoadImageUseCase(this)
         formatTrackYearUseCase = Creator.getFormatTrackYearUseCase()
         formatTrackDurationUseCase = Creator.getFormatTrackDurationUseCase()
         playbackPosition = findViewById(R.id.tv_current_time_song)
@@ -75,9 +75,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             return
             }
 
-        loadImageUseCase = Creator.getLoadImageUseCase(this)
-        formatTrackYearUseCase = Creator.getFormatTrackYearUseCase()
-        formatTrackDurationUseCase = Creator.getFormatTrackDurationUseCase()
         mediaController = MediaController(mediaPlayer)
 
         mediaController.setPlaybackPositionCallback { position ->
@@ -90,8 +87,19 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         val audioUrl = track.audioPreviewUrl
         mediaController.prepareMedia(audioUrl)
+
+        val cornerRadius = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            this.resources.displayMetrics
+        ).toInt()
         
-        loadImageUseCase.execute(track.getCoverArtwork(), posterSong)
+
+        Glide.with(this)
+            .load(track.getCoverArtwork())
+            .transform(RoundedCorners(cornerRadius))
+            .placeholder(R.drawable.ic_placeholder_312)
+            .into(posterSong)
         songName.text = track.trackName
         groupName.text = track.artistName
         durationSong.text = formatTrackDurationUseCase.execute(track.trackDuration)

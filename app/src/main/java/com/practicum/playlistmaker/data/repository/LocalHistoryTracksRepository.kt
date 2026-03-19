@@ -14,7 +14,7 @@ class  LocalHistoryTracksRepository(context: Context): HistoryTracksRepository {
     private val historySearchSharedPreferences = context.getSharedPreferences(HISTORY_PREFERENCES, Context.MODE_PRIVATE)
     private val trackHistoryList = mutableListOf<TrackHistoryDto>()
 
-    override fun getHistory(): MutableList<TrackModel> {
+    override fun getHistory(): List<TrackModel> {
         return trackHistoryList.map { it.toDomain() }.toMutableList()
     }
 

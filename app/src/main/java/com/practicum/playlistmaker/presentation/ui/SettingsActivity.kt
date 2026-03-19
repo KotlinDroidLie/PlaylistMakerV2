@@ -1,24 +1,20 @@
 package com.practicum.playlistmaker.presentation.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
-import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
-import com.practicum.playlistmaker.domain.api.usecase.UserAgreementUseCase
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var shareAppUseCase: ShareAppUseCase
-    private lateinit var writeSupportUseCase: WriteSupportUseCase
-    private lateinit var userAgreementUseCase: UserAgreementUseCase
     private lateinit var switchThemeUseCase: SwitchThemeUseCase
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +27,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        shareAppUseCase = Creator.getShareAppUseCase(this)
-        writeSupportUseCase = Creator.getWriteSupportUseCase(this)
-        userAgreementUseCase = Creator.getUserAgreementUseCase(this)
         switchThemeUseCase = Creator.getSwitchThemeUseCase(this)
-
         
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.sw_theme)
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)
@@ -53,17 +45,30 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonShareApp.setOnClickListener {
-            val shareIntent = shareAppUseCase.execute()
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT,getString(R.string.link_share_app))
+            }
             startActivity(shareIntent)
         }
 
         buttonWriteSupport.setOnClickListener {
-            val supportIntent = writeSupportUseCase.execute()
+            val supportIntent = Intent().apply {
+                action = Intent.ACTION_SENDTO
+                data = "mailto:".toUri()
+                putExtra(Intent.EXTRA_EMAIL,arrayOf(getString(R.string.my_mail)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_mail_title))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_mail_text))
+            }
             startActivity(supportIntent)
         }
 
         buttonUserAgreement.setOnClickListener {
-            val userAgreementIntent = userAgreementUseCase.execute()
+            val userAgreementIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = getString(R.string.link_user_agreement).toUri()
+            }
             startActivity(userAgreementIntent)
         }
     }
