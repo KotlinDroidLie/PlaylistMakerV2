@@ -10,18 +10,18 @@ class LocalThemeRepositoryImpl(private val context: Context): ThemeRepository {
 
     private val  settingPrefs = context.getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE)
 
-    override fun switchTheme() {
+    override fun switchTheme(isChecked: Boolean) {
         settingPrefs.edit {
-            putBoolean(KEY_SWITCH_THEME,isDarkThemeEnable())
+            putBoolean(KEY_SWITCH_THEME,isChecked)
         }
 
         AppCompatDelegate.setDefaultNightMode(
-            if (isDarkThemeEnable()) AppCompatDelegate.MODE_NIGHT_YES
+            if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
             else AppCompatDelegate.MODE_NIGHT_NO
         )
     }
 
-    private fun isDarkThemeEnable() = settingPrefs.getBoolean(KEY_SWITCH_THEME, false)
+    override fun isDarkThemeEnable() = settingPrefs.getBoolean(KEY_SWITCH_THEME, false)
 
 
     private companion object{

@@ -14,6 +14,6 @@ class App : Application() {
         historyTracksRepository = LocalHistoryTracksRepository(this)
         historyTracksRepository.loadHistory()
         themeRepository = LocalThemeRepositoryImpl(this)
-        themeRepository.switchTheme()
+        themeRepository.switchTheme(themeRepository.isDarkThemeEnable())
     }
 }

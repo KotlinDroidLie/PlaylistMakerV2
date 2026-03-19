@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.domain.api
 
 interface ThemeRepository {
-    fun switchTheme()
+    fun isDarkThemeEnable(): Boolean
+    fun switchTheme(isChecked: Boolean)
 }
