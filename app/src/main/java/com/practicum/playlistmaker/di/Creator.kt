@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.di
 
 import android.content.Context
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.data.repository.LocalHistoryTracksRepository
 import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl

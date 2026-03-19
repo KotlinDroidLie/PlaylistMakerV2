@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.domain.impl
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.net.toUri
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 
