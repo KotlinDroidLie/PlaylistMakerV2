@@ -34,13 +34,9 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        shareAppUseCase = ShareAppUseCaseImpl(getString(R.string.link_share_app))
-        writeSupportUseCase = WriteSupportUseCaseImpl(
-            getString(R.string.my_mail),
-            getString(R.string.support_mail_title),
-            getString(R.string.support_mail_text)
-        )
-        userAgreementUseCase = UserAgreementUseCaseImpl(getString(R.string.link_user_agreement))
+        shareAppUseCase = Creator.getShareAppUseCase(this)
+        writeSupportUseCase = Creator.getWriteSupportUseCase(this)
+        userAgreementUseCase = Creator.getUserAgreementUseCase(this)
         switchThemeUseCase = Creator.getSwitchThemeUseCase(this)
 
         
