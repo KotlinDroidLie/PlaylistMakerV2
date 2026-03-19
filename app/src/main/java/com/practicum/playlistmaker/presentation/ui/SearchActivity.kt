@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.presentation.ui
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,25 +25,24 @@ import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.OnItemClickListener
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.presentation.StatusSearchMessage
-import com.practicum.playlistmaker.data.dto.TrackResponse
 import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
+import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.GetSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel
 import com.practicum.playlistmaker.presentation.SearchHistoryAdapter
 import com.practicum.playlistmaker.presentation.TrackAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
+    private lateinit var addTrackToHistoryUseCase: AddTrackToHistoryUseCase
+    private lateinit var clearSearchHistoryUseCase: ClearSearchHistoryUseCase
+    private lateinit var getSearchHistoryUseCase: GetSearchHistoryUseCase
     private lateinit var searchTracksUseCase: SearchTracksUseCase
     private var isClickAllowed = true
-    private lateinit var historySharedPreferences: SharedPreferences
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
-    lateinit var searchHistory: SearchHistory
     lateinit var adapter: TrackAdapter
     private lateinit var inputEditText: EditText
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -67,15 +65,14 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
         searchTracksUseCase = Creator.getSearchTracksUseCase()
-        historySharedPreferences = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
-
-        searchHistory = SearchHistory(historySharedPreferences)
-        searchHistory.loadFromPreference()
+        addTrackToHistoryUseCase = Creator.getAddTrackToHistoryUseCase(this)
+        clearSearchHistoryUseCase = Creator.getClearSearchHistoryUseCase(this)
+        getSearchHistoryUseCase = Creator.getSearchHistoryUseCase(this)
 
         val onItemClickListener = object : OnItemClickListener {
             override fun addToSearchHistory(track: TrackModel) {
-                searchHistory.write(track)
-                historyAdapter.trackHistory = searchHistory.read()
+                addTrackToHistoryUseCase.execute(track)
+                historyAdapter.trackHistory = getSearchHistoryUseCase.execute()
                 historyAdapter.notifyDataSetChanged()
             }
 
@@ -102,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
         historyRecyclerView = findViewById(R.id.rv_history_songs_list)
         historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         historyAdapter = SearchHistoryAdapter(onItemClickListener)
-        historyAdapter.trackHistory = searchHistory.read()
+        historyAdapter.trackHistory =  getSearchHistoryUseCase.execute()
         historyRecyclerView.adapter  = historyAdapter
 
         recyclerView = findViewById(R.id.rv_songs_list)
@@ -117,8 +114,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonClearHistory.setOnClickListener {
-            searchHistory.clear()
-            historyAdapter.trackHistory = searchHistory.read()
+            clearSearchHistoryUseCase.execute()
+            historyAdapter.trackHistory =  getSearchHistoryUseCase.execute()
             historyAdapter.notifyDataSetChanged()
             showStausMessageSearch(StatusSearchMessage.HIDDEN)
         }
@@ -137,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 buttonClear.isVisible = if (s.isNullOrEmpty()) false else true
-                if (inputEditText.hasFocus() && s.isNullOrEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(
+                if (inputEditText.hasFocus() && s.isNullOrEmpty() && getSearchHistoryUseCase.execute().isNotEmpty()) showStausMessageSearch(
                     StatusSearchMessage.SEARCH_HISTORY)
                 searchDebounce()
                 },
@@ -147,14 +144,9 @@ class SearchActivity : AppCompatActivity() {
             )
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) showStausMessageSearch(
+            if (hasFocus && inputEditText.text.isEmpty() && getSearchHistoryUseCase.execute().isNotEmpty()) showStausMessageSearch(
                 StatusSearchMessage.SEARCH_HISTORY)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        searchHistory.saveToPreference()
     }
 
     override fun onDestroy() {
@@ -275,6 +267,5 @@ class SearchActivity : AppCompatActivity() {
         private const val TEXT_DEF = ""
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val LAST_TEXT = "LAST_TEXT"
-        const val HISTORY_PREFERENCES = "history_preferences"
     }
 }

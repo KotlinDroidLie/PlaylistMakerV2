@@ -49,7 +49,7 @@ object Creator {
         return ClearSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 
-    fun getGetSearchHistoryUseCase(context: Context): GetSearchHistoryUseCase {
+    fun getSearchHistoryUseCase(context: Context): GetSearchHistoryUseCase {
         return GetSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 
