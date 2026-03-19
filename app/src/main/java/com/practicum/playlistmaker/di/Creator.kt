@@ -10,7 +10,10 @@ import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 import com.practicum.playlistmaker.domain.api.repo.TrackRepository
 import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
 import com.practicum.playlistmaker.domain.api.usecase.GetSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.LoadImageUseCase
 import com.practicum.playlistmaker.domain.api.usecase.LoadSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SaveSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
@@ -20,7 +23,10 @@ import com.practicum.playlistmaker.domain.api.usecase.UserAgreementUseCase
 import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
 import com.practicum.playlistmaker.domain.impl.AddTrackToHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.ClearSearchHistoryUseCaseImpl
+import com.practicum.playlistmaker.domain.impl.FormatTrackDurationUseCaseImpl
+import com.practicum.playlistmaker.domain.impl.FormatTrackYearUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.GetSearchHistoryUseCaseImpl
+import com.practicum.playlistmaker.domain.impl.LoadImageUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.LoadSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SaveSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SearchTracksUseCaseImpl
@@ -83,5 +89,16 @@ object Creator {
         return SaveSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 
+    fun getLoadImageUseCase(context: Context): LoadImageUseCase {
+        return LoadImageUseCaseImpl(context)
+    }
+
+    fun getFormatTrackYearUseCase(): FormatTrackYearUseCase {
+        return FormatTrackYearUseCaseImpl()
+    }
+
+    fun getFormatTrackDurationUseCase(): FormatTrackDurationUseCase {
+        return FormatTrackDurationUseCaseImpl()
+    }
 
 }

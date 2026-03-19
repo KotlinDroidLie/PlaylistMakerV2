@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,10 +14,12 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
+import com.practicum.playlistmaker.domain.api.usecase.LoadImageUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -28,6 +29,9 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playbackPosition: TextView
     private val mainHandler = Handler(Looper.getMainLooper())
     private var mediaPlayerState = STATE_DEFAULT
+    private lateinit var loadImageUseCase: LoadImageUseCase
+    private lateinit var formatTrackYearUseCase: FormatTrackYearUseCase
+    private lateinit var formatTrackDurationUseCase: FormatTrackDurationUseCase
     private lateinit var buttonPlay: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +42,10 @@ class AudioPlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        loadImageUseCase = Creator.getLoadImageUseCase(this)
+        formatTrackYearUseCase = Creator.getFormatTrackYearUseCase()
+        formatTrackDurationUseCase = Creator.getFormatTrackDurationUseCase()
         playbackPosition = findViewById(R.id.tv_current_time_song)
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_audio_player_back)
@@ -50,11 +58,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         buttonBack.setNavigationOnClickListener {
             finish()
         }
-        val cornerRadius = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            8f,
-            this.resources.displayMetrics
-        ).toInt()
 
         val posterSong = findViewById<ImageView>(R.id.iv_poster_song_player)
         val songName = findViewById<TextView>(R.id.tv_name_song_player)
@@ -77,14 +80,10 @@ class AudioPlayerActivity : AppCompatActivity() {
         val audioUrl = track.audioPreviewUrl
         preparedMediaPlayer(audioUrl)
 
-        Glide.with(this)
-            .load(track.getCoverArtwork())
-            .transform(RoundedCorners(cornerRadius))
-            .placeholder(R.drawable.ic_placeholder_312)
-            .into(posterSong)
+        loadImageUseCase.execute(track.getCoverArtwork(),posterSong)
         songName.text = track.trackName
         groupName.text = track.artistName
-        durationSong.text = track.formatTrackDuration()
+        durationSong.text = formatTrackDurationUseCase.execute(track.trackDuration)
         genreSong.text = track.genre
         country.text = track.country
 
@@ -94,7 +93,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             albumDescriptionGroup.isVisible = false
         }
 
-        val date = track.dateFormat(YEAR_FORMAT_PATTERN)
+        val date = formatTrackYearUseCase.execute(track.releaseDate)
         if(date.isNotEmpty()){
             yearSong.text = date
         } else {
@@ -173,7 +172,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        const val YEAR_FORMAT_PATTERN = "yyyy"
         const val KEY_TRACK = "track"
     }
 }
