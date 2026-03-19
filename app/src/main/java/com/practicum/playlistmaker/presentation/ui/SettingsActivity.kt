@@ -1,16 +1,22 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
-import androidx.core.net.toUri
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
+
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var switchThemeUseCase: SwitchThemeUseCase
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,20 +26,24 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        switchThemeUseCase = Creator.getSwitchThemeUseCase(this)
+        
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.sw_theme)
+        val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)
+        val buttonShareApp = findViewById<Button>(R.id.btn_share_app)
+        val buttonWriteSupport = findViewById<Button>(R.id.btn_write_support)
+        val buttonUserAgreement = findViewById<Button>(R.id.btn_user_agreement)
 
-        themeSwitcher.isChecked = (applicationContext as App).isDarkThemeEnable()
-
+        themeSwitcher.isChecked = switchThemeUseCase.isDarkThemeEnable()
         themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            switchThemeUseCase.switchTheme(isChecked)
         }
 
-        val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)
         buttonBack.setNavigationOnClickListener {
             finish()
         }
 
-        val buttonShareApp = findViewById<Button>(R.id.btn_share_app)
         buttonShareApp.setOnClickListener {
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -43,7 +53,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        val buttonWriteSupport = findViewById<Button>(R.id.btn_write_support)
         buttonWriteSupport.setOnClickListener {
             val supportIntent = Intent().apply {
                 action = Intent.ACTION_SENDTO
@@ -55,7 +64,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        val buttonUserAgreement = findViewById<Button>(R.id.btn_user_agreement)
         buttonUserAgreement.setOnClickListener {
             val userAgreementIntent = Intent().apply {
                 action = Intent.ACTION_VIEW

@@ -1,33 +1,14 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
+import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl
+import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 
 class App : Application() {
-    private lateinit var settingPrefs: SharedPreferences
+    private lateinit var themeRepository: ThemeRepository
     override fun onCreate() {
         super.onCreate()
-        settingPrefs = getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE)
-        val darkThemeEnable = isDarkThemeEnable()
-        switchTheme(darkThemeEnable)
-    }
-
-    fun switchTheme(darkThemeEnable: Boolean) {
-        settingPrefs.edit {
-            putBoolean(KEY_SWITCH_THEME, darkThemeEnable)
-        }
-
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnable) AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
-        )
-    }
-
-    fun isDarkThemeEnable() = settingPrefs.getBoolean(KEY_SWITCH_THEME, false)
-    companion object{
-        private const val SETTING_PREFERENCE = "setting_preference"
-        private const val KEY_SWITCH_THEME = "key_switch_theme"
+        themeRepository = LocalThemeRepositoryImpl(this)
+        themeRepository.switchTheme(themeRepository.isDarkThemeEnable())
     }
 }

@@ -1,9 +1,7 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -18,15 +16,22 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
+import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
+import com.practicum.playlistmaker.domain.models.TrackModel
+import com.practicum.playlistmaker.presentation.MediaController
+import com.practicum.playlistmaker.presentation.PlaybackState
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
+    private lateinit var mediaController: MediaController
     private lateinit var playbackPosition: TextView
-    private val mainHandler = Handler(Looper.getMainLooper())
-    private var mediaPlayerState = STATE_DEFAULT
+    private lateinit var formatTrackYearUseCase: FormatTrackYearUseCase
+    private lateinit var formatTrackDurationUseCase: FormatTrackDurationUseCase
     private lateinit var buttonPlay: ImageButton
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,6 +41,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        formatTrackYearUseCase = Creator.getFormatTrackYearUseCase()
+        formatTrackDurationUseCase = Creator.getFormatTrackDurationUseCase()
         playbackPosition = findViewById(R.id.tv_current_time_song)
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_audio_player_back)
@@ -48,11 +56,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         buttonBack.setNavigationOnClickListener {
             finish()
         }
-        val cornerRadius = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            8f,
-            this.resources.displayMetrics
-        ).toInt()
 
         val posterSong = findViewById<ImageView>(R.id.iv_poster_song_player)
         val songName = findViewById<TextView>(R.id.tv_name_song_player)
@@ -72,8 +75,25 @@ class AudioPlayerActivity : AppCompatActivity() {
             return
             }
 
+        mediaController = MediaController(mediaPlayer)
+
+        mediaController.setPlaybackPositionCallback { position ->
+            playbackPosition.text = position
+        }
+        
+        mediaController.setPlaybackCompletionCallback {
+            buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
+        }
+
         val audioUrl = track.audioPreviewUrl
-        preparedMediaPlayer(audioUrl)
+        mediaController.prepareMedia(audioUrl)
+
+        val cornerRadius = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            this.resources.displayMetrics
+        ).toInt()
+        
 
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -82,7 +102,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(posterSong)
         songName.text = track.trackName
         groupName.text = track.artistName
-        durationSong.text = track.formatTrackDuration()
+        durationSong.text = formatTrackDurationUseCase.execute(track.trackDuration)
         genreSong.text = track.genre
         country.text = track.country
 
@@ -92,7 +112,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             albumDescriptionGroup.isVisible = false
         }
 
-        val date = track.dateFormat(YEAR_FORMAT_PATTERN)
+        val date = formatTrackYearUseCase.execute(track.releaseDate)
         if(date.isNotEmpty()){
             yearSong.text = date
         } else {
@@ -103,75 +123,31 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        mediaController.pause()
+        updatePlayButtonIcon()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        pauseProgressUpdate()
+        mediaController.release()
     }
-    private fun preparedMediaPlayer(audioUrl: String){
-        with(mediaPlayer){
-            setDataSource(audioUrl)
-            prepareAsync()
-            setOnPreparedListener {
-                mediaPlayerState = STATE_PREPARED
-            }
-            setOnCompletionListener {
-                buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
-                mediaPlayerState = STATE_PREPARED
-                pauseProgressUpdate()
-                playbackPosition.text = "00:00"
-            }
-        }
-    }
-
-    private fun startPlayer(){
-        mediaPlayer.start()
-        buttonPlay.setImageResource(R.drawable.ic_button_pause_music_100)
-        mediaPlayerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer(){
-        mediaPlayer.pause()
-        buttonPlay.setImageResource(R.drawable.ic_button_play_music_100)
-        mediaPlayerState = STATE_PAUSED
-    }
+    
     private fun controlMediaPlayer(){
-        when(mediaPlayerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-                pauseProgressUpdate()
-            }
-            STATE_PAUSED, STATE_PREPARED ->{
-                startPlayer()
-                startProgressUpdate()
-            }
+        when(mediaController.getCurrentState()) {
+            PlaybackState.PLAYING -> mediaController.pause()
+            PlaybackState.PAUSED, PlaybackState.PREPARED -> mediaController.play()
+            PlaybackState.DEFAULT -> {}
         }
+        updatePlayButtonIcon()
     }
-
-    private val updateProgressRunnable = object : Runnable {
-        override fun run() {
-            val currentPosition = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-            playbackPosition.text = currentPosition
-            mainHandler.postDelayed(this, 500)
+    private fun updatePlayButtonIcon() {
+        val icon = when (mediaController.getCurrentState()) {
+            PlaybackState.PLAYING -> R.drawable.ic_button_pause_music_100
+            else -> R.drawable.ic_button_play_music_100
         }
-
-    }
-
-    private fun startProgressUpdate(){
-        updateProgressRunnable.run()
-    }
-    private fun pauseProgressUpdate(){
-        mainHandler.removeCallbacks(updateProgressRunnable)
+        buttonPlay.setImageResource(icon)
     }
     companion object{
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        const val YEAR_FORMAT_PATTERN = "yyyy"
         const val KEY_TRACK = "track"
     }
 }

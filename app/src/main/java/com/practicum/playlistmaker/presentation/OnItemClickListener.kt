@@ -1,4 +1,6 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
+
+import com.practicum.playlistmaker.domain.models.TrackModel
 
 interface OnItemClickListener {
     fun addToSearchHistory(track: TrackModel)
