@@ -87,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
             override fun openAudioPlayer(track: TrackModel) {
                 if (clickDebounce()){
                     val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java).apply {
-                        putExtra(AudioPlayerActivity.Companion.KEY_TRACK, track)
+                        putExtra(AudioPlayerActivity.KEY_TRACK, track)
                     }
                     startActivity(intent)
                 }
