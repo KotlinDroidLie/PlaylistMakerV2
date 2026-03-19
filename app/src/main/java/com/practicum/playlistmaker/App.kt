@@ -7,12 +7,9 @@ import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 
 class App : Application() {
-    private lateinit var historyTracksRepository: HistoryTracksRepository
     private lateinit var themeRepository: ThemeRepository
     override fun onCreate() {
         super.onCreate()
-        historyTracksRepository = LocalHistoryTracksRepository(this)
-        historyTracksRepository.loadHistory()
         themeRepository = LocalThemeRepositoryImpl(this)
         themeRepository.switchTheme(themeRepository.isDarkThemeEnable())
     }

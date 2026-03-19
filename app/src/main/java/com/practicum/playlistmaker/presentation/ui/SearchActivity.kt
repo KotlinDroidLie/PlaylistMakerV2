@@ -30,6 +30,8 @@ import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
 import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.GetSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.LoadSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.SaveSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel
 import com.practicum.playlistmaker.presentation.SearchHistoryAdapter
@@ -40,6 +42,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearSearchHistoryUseCase: ClearSearchHistoryUseCase
     private lateinit var getSearchHistoryUseCase: GetSearchHistoryUseCase
     private lateinit var searchTracksUseCase: SearchTracksUseCase
+    private lateinit var loadSearchHistoryUseCase: LoadSearchHistoryUseCase
+    private lateinit var saveSearchHistoryUseCase: SaveSearchHistoryUseCase
     private var isClickAllowed = true
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
@@ -64,10 +68,14 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        loadSearchHistoryUseCase = Creator.getLoadSearchHistoryUseCase(this)
+        saveSearchHistoryUseCase = Creator.getSaveSearchHistoryUseCase(this)
         searchTracksUseCase = Creator.getSearchTracksUseCase()
         addTrackToHistoryUseCase = Creator.getAddTrackToHistoryUseCase(this)
         clearSearchHistoryUseCase = Creator.getClearSearchHistoryUseCase(this)
         getSearchHistoryUseCase = Creator.getSearchHistoryUseCase(this)
+
+        loadSearchHistoryUseCase.execute()
 
         val onItemClickListener = object : OnItemClickListener {
             override fun addToSearchHistory(track: TrackModel) {
@@ -149,6 +157,10 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        saveSearchHistoryUseCase.execute()
+    }
     override fun onDestroy() {
         super.onDestroy()
         mainHandler.removeCallbacks(searchRunnable)

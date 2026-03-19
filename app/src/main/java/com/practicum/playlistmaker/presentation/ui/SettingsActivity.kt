@@ -14,9 +14,6 @@ import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
 import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
 import com.practicum.playlistmaker.domain.api.usecase.UserAgreementUseCase
-import com.practicum.playlistmaker.domain.impl.ShareAppUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.WriteSupportUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.UserAgreementUseCaseImpl
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var shareAppUseCase: ShareAppUseCase

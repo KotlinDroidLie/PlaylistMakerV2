@@ -12,6 +12,8 @@ import com.practicum.playlistmaker.domain.api.repo.TrackRepository
 import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.GetSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.LoadSearchHistoryUseCase
+import com.practicum.playlistmaker.domain.api.usecase.SaveSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
 import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
@@ -20,6 +22,8 @@ import com.practicum.playlistmaker.domain.api.usecase.WriteSupportUseCase
 import com.practicum.playlistmaker.domain.impl.AddTrackToHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.ClearSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.GetSearchHistoryUseCaseImpl
+import com.practicum.playlistmaker.domain.impl.LoadSearchHistoryUseCaseImpl
+import com.practicum.playlistmaker.domain.impl.SaveSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SearchTracksUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.ShareAppUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SwitchThemeUseCaseImpl
@@ -70,6 +74,14 @@ object Creator {
 
     fun getUserAgreementUseCase(context: Context): UserAgreementUseCase{
         return UserAgreementUseCaseImpl(context)
+    }
+
+    fun getLoadSearchHistoryUseCase(context: Context): LoadSearchHistoryUseCase {
+        return LoadSearchHistoryUseCaseImpl(getHistoryRepository(context))
+    }
+
+    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase{
+        return SaveSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 
 
