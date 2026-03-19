@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.data.repository
 
 import android.content.Context
 import androidx.core.content.edit
-import com.practicum.playlistmaker.GsonSingleton.gson
+import com.practicum.playlistmaker.di.GsonSingleton.gson
 import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.models.TrackModel
 import kotlin.collections.addAll

@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.practicum.playlistmaker.Creator
+import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.api.usecase.ShareAppUseCase
 import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
