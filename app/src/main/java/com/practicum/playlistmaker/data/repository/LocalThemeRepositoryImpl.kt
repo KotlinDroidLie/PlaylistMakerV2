@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
 
-class LocalThemeRepositoryImpl(private val context: Context): ThemeRepository {
+class LocalThemeRepositoryImpl(context: Context): ThemeRepository {
 
     private val  settingPrefs = context.getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE)
 

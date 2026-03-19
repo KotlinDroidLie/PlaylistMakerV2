@@ -2,6 +2,9 @@ package com.practicum.playlistmaker.data.repository
 
 import android.content.Context
 import androidx.core.content.edit
+import com.practicum.playlistmaker.data.dto.TrackHistoryDto
+import com.practicum.playlistmaker.data.extensions.toDomain
+import com.practicum.playlistmaker.data.extensions.toDto
 import com.practicum.playlistmaker.di.GsonSingleton.gson
 import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.models.TrackModel
@@ -9,18 +12,21 @@ import kotlin.collections.addAll
 
 class  LocalHistoryTracksRepository(context: Context): HistoryTracksRepository {
     private val historySearchSharedPreferences = context.getSharedPreferences(HISTORY_PREFERENCES, Context.MODE_PRIVATE)
-    private val trackHistoryList = mutableListOf<TrackModel>()
+    private val trackHistoryList = mutableListOf<TrackHistoryDto>()
 
-    override fun getHistory() = trackHistoryList
+    override fun getHistory(): MutableList<TrackModel> {
+        return trackHistoryList.map { it.toDomain() }.toMutableList()
+    }
 
     override fun addTrack(track: TrackModel) {
-        val removeTrackId = trackHistoryList.indexOfFirst { it.trackId == track.trackId }
+        val dto = track.toDto()
+        val removeTrackId = trackHistoryList.indexOfFirst { it.trackId == dto.trackId }
         if (removeTrackId != -1) {
             trackHistoryList.removeAt(removeTrackId)
         } else if (trackHistoryList.size == MAX_SIZE) {
             trackHistoryList.removeAt(MAX_SIZE - 1)
         }
-        trackHistoryList.add(0, track)
+        trackHistoryList.add(0, dto)
     }
 
     override fun clearHistory() {
@@ -38,7 +44,7 @@ class  LocalHistoryTracksRepository(context: Context): HistoryTracksRepository {
         val json = historySearchSharedPreferences.getString(KEY_HISTORY_TRACK, null)
         if (json != null){
             trackHistoryList.clear()
-            trackHistoryList.addAll(gson.fromJson(json, Array<TrackModel>::class.java))
+            trackHistoryList.addAll(gson.fromJson(json, Array<TrackHistoryDto>::class.java))
         } else {
             trackHistoryList.clear()
         }

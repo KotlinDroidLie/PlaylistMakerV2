@@ -1,12 +1,11 @@
 package com.practicum.playlistmaker.data.network
 
-import com.practicum.playlistmaker.data.network.NetworkClient
 import com.practicum.playlistmaker.data.dto.Response
 import com.practicum.playlistmaker.data.dto.TrackRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient(): NetworkClient {
+class RetrofitNetworkClient: NetworkClient {
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
