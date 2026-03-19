@@ -23,26 +23,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
-import com.practicum.playlistmaker.presentation.ui.AudioPlayerActivity
+import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.OnItemClickListener
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.presentation.StatusSearchMessage
 import com.practicum.playlistmaker.data.dto.TrackResponse
-import com.practicum.playlistmaker.data.network.ITunesApi
+import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
+import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel
 import com.practicum.playlistmaker.presentation.SearchHistoryAdapter
 import com.practicum.playlistmaker.presentation.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+    private lateinit var searchTracksUseCase: SearchTracksUseCase
     private var isClickAllowed = true
     private lateinit var historySharedPreferences: SharedPreferences
-    private val iTunesBaseUrl = "https://itunes.apple.com"
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
     lateinit var searchHistory: SearchHistory
@@ -55,11 +54,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var viewMessageError: LinearLayout
     private lateinit var viewHistorySearch: LinearLayout
     private val trackList = mutableListOf<TrackModel>()
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesApi = retrofit.create(ITunesApi::class.java)
     private var saveText: String = TEXT_DEF
     private var lastText: String = TEXT_DEF
 
@@ -72,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        searchTracksUseCase = Creator.getSearchTracksUseCase()
         historySharedPreferences = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
 
         searchHistory = SearchHistory(historySharedPreferences)
@@ -136,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonRefresh.setOnClickListener {
-//                searchTrack(lastText)
+                executeSearch(lastText)
             }
 
         inputEditText.addTextChangedListener(
@@ -167,44 +162,30 @@ class SearchActivity : AppCompatActivity() {
         mainHandler.removeCallbacks(searchRunnable)
         mainHandler.removeCallbacks(clickAllowedRunnable)
     }
-//    private fun searchTrack(text: String = saveText){
-//        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
-//        iTunesApi.search(text)
-//            .enqueue(object : Callback<TrackResponse> {
-//                override fun onResponse(
-//                    call: Call<TrackResponse?>,
-//                    response: Response<TrackResponse?>
-//                ) {
-//                    when{
-//                        response.isSuccessful -> {
-//                            trackList.clear()
-//                            if (response.body()?.results?.isNotEmpty() == true) {
-//                                trackList.addAll(response.body()?.results!!)
-//                                adapter.notifyDataSetChanged()
-//                            }
-//                            if (trackList.isEmpty()){
-//                                showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
-//                            } else {
-//                                showStausMessageSearch(StatusSearchMessage.DEFAULT)
-//                            }
-//                        }
-//                        else -> {
-//                            lastText = saveText
-//                            showStausMessageSearch(StatusSearchMessage.ERROR)
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(
-//                    call: Call<TrackResponse?>,
-//                    t: Throwable
-//                ) {
-//                    lastText = saveText
-//                    showStausMessageSearch(StatusSearchMessage.ERROR)
-//                }
-//
-//            })
-//    }
+
+    private fun executeSearch(text: String = saveText) {
+        showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
+        searchTracksUseCase.searchTracks(text, object : SearchTracksUseCase.TracksConsumer {
+            override fun consume(result: TrackRepositoryResult) {
+                    trackList.clear()
+                    when (result) {
+                        is TrackRepositoryResult.Success -> {
+                            trackList.addAll(result.tracks)
+                            adapter.notifyDataSetChanged()
+                            showStausMessageSearch(StatusSearchMessage.DEFAULT)
+                        }
+                        is TrackRepositoryResult.NotFound -> {
+                            showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
+                        }
+                        is TrackRepositoryResult.NetworkError -> {
+                            lastText = saveText
+                            showStausMessageSearch(StatusSearchMessage.ERROR)
+                        }
+                    }
+            }
+        })
+    }
+
     private fun showStausMessageSearch(status: StatusSearchMessage){
         when (status) {
             StatusSearchMessage.DEFAULT ->{
@@ -268,7 +249,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val searchRunnable = Runnable{
-//        if(inputEditText.text.isNotBlank()) searchTrack()
+        if(inputEditText.text.isNotBlank()) executeSearch()
     }
 
     private fun searchDebounce(){

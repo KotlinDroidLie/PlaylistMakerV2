@@ -1,15 +1,28 @@
 package com.practicum.playlistmaker.domain.impl
 
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
-import java.util.concurrent.Executors
 import com.practicum.playlistmaker.domain.api.repo.TrackRepository
+import android.os.Handler
+import android.os.Looper
+import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
 
-class SearchTracksUseCaseImpl(private val repository: TrackRepository):  SearchTracksUseCase {
-    private val executor = Executors.newCachedThreadPool()
+class SearchTracksUseCaseImpl(
+    private val repository: TrackRepository,
+    private val mainHandler: Handler = Handler(Looper.getMainLooper())
+):  SearchTracksUseCase {
 
     override fun searchTracks(expression: String, consumer: SearchTracksUseCase.TracksConsumer) {
-        executor.execute{}
-        consumer.consume(repository.doRequest(expression))
+        Thread {
+            val result = try {
+                repository.doRequest(expression)
+            } catch (e: Exception) {
+                TrackRepositoryResult.NetworkError
+            }
+
+            mainHandler.post {
+                consumer.consume(result)
+            }
+        }.start()
     }
 
 }
