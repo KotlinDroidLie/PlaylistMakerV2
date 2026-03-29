@@ -4,10 +4,10 @@ import android.content.Context
 import com.practicum.playlistmaker.core.data.impl.RetrofitNetworkClient
 import com.practicum.playlistmaker.data.repository.LocalHistoryTracksRepository
 import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl
-import com.practicum.playlistmaker.data.repository.RemoteTrackRepositoryImpl
+import com.practicum.playlistmaker.features.search.data.RemoteTrackRepository
 import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
-import com.practicum.playlistmaker.domain.api.repo.TrackRepository
+import com.practicum.playlistmaker.features.search.domain.api.ITrackRepository
 import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
 import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
@@ -36,8 +36,8 @@ object Creator {
         return SwitchThemeUseCaseImpl(getThemeRepository(context))
     }
 
-    private fun getTrackRepository(): TrackRepository {
-        return RemoteTrackRepositoryImpl(RetrofitNetworkClient())
+    private fun getTrackRepository(): ITrackRepository {
+        return RemoteTrackRepository(RetrofitNetworkClient())
     }
 
     fun getSearchTracksUseCase(): SearchTracksUseCase {

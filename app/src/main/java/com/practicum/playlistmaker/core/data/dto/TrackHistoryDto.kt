@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data.dto
+package com.practicum.playlistmaker.core.data.dto
 
 import java.util.Date
 
@@ -14,4 +14,3 @@ data class TrackHistoryDto(
     val trackImage: String,
     val audioPreviewUrl: String
 )
-

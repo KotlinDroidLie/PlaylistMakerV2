@@ -2,9 +2,9 @@ package com.practicum.playlistmaker.features.search.data
 
 import com.practicum.playlistmaker.core.data.Resource
 import com.practicum.playlistmaker.core.data.api.StorageClient
-import com.practicum.playlistmaker.data.dto.TrackHistoryDto
-import com.practicum.playlistmaker.data.extensions.toDomain
-import com.practicum.playlistmaker.data.extensions.toDto
+import com.practicum.playlistmaker.core.data.dto.TrackHistoryDto
+import com.practicum.playlistmaker.core.data.extensions.toDomain
+import com.practicum.playlistmaker.core.data.extensions.toDto
 import com.practicum.playlistmaker.domain.models.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.ISearchHistoryRepository
 

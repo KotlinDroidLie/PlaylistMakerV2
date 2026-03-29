@@ -1,13 +1,13 @@
 package com.practicum.playlistmaker.domain.impl
 
 import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
-import com.practicum.playlistmaker.domain.api.repo.TrackRepository
+import com.practicum.playlistmaker.features.search.domain.api.ITrackRepository
 import android.os.Handler
 import android.os.Looper
 import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
 
 class SearchTracksUseCaseImpl(
-    private val repository: TrackRepository,
+    private val repository: ITrackRepository,
     private val mainHandler: Handler = Handler(Looper.getMainLooper())
 ):  SearchTracksUseCase {
 

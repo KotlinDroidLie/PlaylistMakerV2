@@ -1,14 +1,5 @@
 package com.practicum.playlistmaker.data.repository
 
-import android.content.Context
-import androidx.core.content.edit
-import com.practicum.playlistmaker.data.dto.TrackHistoryDto
-import com.practicum.playlistmaker.data.extensions.toDomain
-import com.practicum.playlistmaker.data.extensions.toDto
-import com.practicum.playlistmaker.di.GsonSingleton.gson
-import com.practicum.playlistmaker.domain.models.TrackModel
-import kotlin.collections.addAll
-
 //class  LocalHistoryTracksRepository(context: Context): HistoryTracksRepository {
 //    private val historySearchSharedPreferences = context.getSharedPreferences(HISTORY_PREFERENCES, Context.MODE_PRIVATE)
 //    private val trackHistoryList = mutableListOf<TrackHistoryDto>()
