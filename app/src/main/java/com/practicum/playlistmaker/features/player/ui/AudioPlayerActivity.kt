@@ -19,13 +19,13 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.TrackModel
 import com.practicum.playlistmaker.core.di.Creator
+import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
     private lateinit var mediaController: MediaController
     private lateinit var playbackPosition: TextView
-    private lateinit var formatTrackYearUseCase: IFormatTrackYearUseCase
-    private lateinit var formatTrackDurationUseCase: IFormatTrackDurationUseCase
+    private lateinit var formatTrackUseCase: IFormatTrackUseCase
     private lateinit var buttonPlay: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        formatTrackYearUseCase = Creator.getFormatTrackYearUseCase()
-        formatTrackDurationUseCase = Creator.getFormatTrackDurationUseCase()
+        formatTrackUseCase = Creator.getFormatTrackUseCase()
         playbackPosition = findViewById(R.id.tv_current_time_song)
 
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_audio_player_back)
@@ -98,7 +96,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(posterSong)
         songName.text = track.trackName
         groupName.text = track.artistName
-        durationSong.text = formatTrackDurationUseCase.execute(track.trackDuration)
+        durationSong.text = formatTrackUseCase.getTrackDuration(track.trackDuration)
         genreSong.text = track.genre
         country.text = track.country
 
@@ -107,8 +105,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         } else {
             albumDescriptionGroup.isVisible = false
         }
-
-        val date = formatTrackYearUseCase.execute(track.releaseDate)
+        val date = formatTrackUseCase.getTrackYear(track.releaseDate)
         if(date.isNotEmpty()){
             yearSong.text = date
         } else {

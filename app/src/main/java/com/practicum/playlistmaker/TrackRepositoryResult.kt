@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domainTerminated.api
+package com.practicum.playlistmaker
 
 import com.practicum.playlistmaker.core.TrackModel
 

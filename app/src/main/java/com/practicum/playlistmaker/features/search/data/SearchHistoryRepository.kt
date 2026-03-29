@@ -23,10 +23,10 @@ class SearchHistoryRepository(private val storage: StorageClient<MutableList<Tra
         storage.storeData(trackHistory)
     }
 
-    override fun getHistory(): Resource<List<TrackModel>> {
+    override fun getHistory(): List<TrackModel> {
         val trackHistory = storage.getData() ?: listOf()
         val model = trackHistory.map { it.toDomain() }
-        return Resource.Success(model)
+        return model
     }
 
     override fun clearHistory() {

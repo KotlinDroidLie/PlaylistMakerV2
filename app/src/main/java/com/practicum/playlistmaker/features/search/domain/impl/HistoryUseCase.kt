@@ -8,7 +8,7 @@ import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUs
 class HistoryUseCase(
     private val historyRepository: ISearchHistoryRepository
 ): IHistoryUseCase {
-    override fun getHistory(): Resource<List<TrackModel>> {
+    override fun getHistory(): List<TrackModel> {
         return historyRepository.getHistory()
     }
 

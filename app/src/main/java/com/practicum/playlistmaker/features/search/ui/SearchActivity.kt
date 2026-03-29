@@ -24,24 +24,15 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.data.dto.ErrorType
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.domainTerminated.api.TrackRepositoryResult
-import com.practicum.playlistmaker.domainTerminated.api.usecase.LoadSearchHistoryUseCase
-import com.practicum.playlistmaker.domainTerminated.api.usecase.SaveSearchHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
-import com.practicum.playlistmaker.features.search.ui.OnItemClickListener
-import com.practicum.playlistmaker.features.search.ui.SearchHistoryAdapter
-import com.practicum.playlistmaker.features.search.ui.StatusSearchMessage
-import com.practicum.playlistmaker.features.search.ui.TrackAdapter
 import com.practicum.playlistmaker.features.player.ui.AudioPlayerActivity
+import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var addTrackToHistoryUseCase: IAddTrackToHistoryUseCase
-    private lateinit var clearSearchHistoryUseCase: IClearSearchHistoryUseCase
-    private lateinit var getSearchHistoryUseCase: IGetSearchHistoryUseCase
+    private lateinit var historyUseCase: IHistoryUseCase
     private lateinit var ISearchTracksUseCase: ISearchTracksUseCase
-    private lateinit var loadSearchHistoryUseCase: LoadSearchHistoryUseCase
-    private lateinit var saveSearchHistoryUseCase: SaveSearchHistoryUseCase
     private var isClickAllowed = true
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
@@ -66,19 +57,14 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        loadSearchHistoryUseCase = Creator.getLoadSearchHistoryUseCase(this)
-        saveSearchHistoryUseCase = Creator.getSaveSearchHistoryUseCase(this)
-        ISearchTracksUseCase = Creator.getSearchTracksUseCase()
-        addTrackToHistoryUseCase = Creator.getAddTrackToHistoryUseCase(this)
-        clearSearchHistoryUseCase = Creator.getClearSearchHistoryUseCase(this)
-        getSearchHistoryUseCase = Creator.getSearchHistoryUseCase(this)
+        historyUseCase = Creator.getHistoryUseCase(this)
+        ISearchTracksUseCase = Creator.getSearchTracksUseCase(this)
 
-        loadSearchHistoryUseCase.execute()
 
         val onItemClickListener = object : OnItemClickListener {
             override fun addToSearchHistory(track: TrackModel) {
-                addTrackToHistoryUseCase.execute(track)
-                historyAdapter.trackHistory = getSearchHistoryUseCase.execute()
+                historyUseCase.saveToHistory(track)
+                historyAdapter.trackHistory = historyUseCase.getHistory()
                 historyAdapter.notifyDataSetChanged()
             }
 
@@ -105,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
         historyRecyclerView = findViewById(R.id.rv_history_songs_list)
         historyRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         historyAdapter = SearchHistoryAdapter(onItemClickListener)
-        historyAdapter.trackHistory =  getSearchHistoryUseCase.execute()
+        historyAdapter.trackHistory =  historyUseCase.getHistory()
         historyRecyclerView.adapter  = historyAdapter
 
         recyclerView = findViewById(R.id.rv_songs_list)
@@ -120,8 +106,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonClearHistory.setOnClickListener {
-            clearSearchHistoryUseCase.execute()
-            historyAdapter.trackHistory =  getSearchHistoryUseCase.execute()
+            historyUseCase.clearHistory()
+            historyAdapter.trackHistory =  historyUseCase.getHistory()
             historyAdapter.notifyDataSetChanged()
             showStausMessageSearch(StatusSearchMessage.HIDDEN)
         }
@@ -140,7 +126,7 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 buttonClear.isVisible = if (s.isNullOrEmpty()) false else true
-                if (inputEditText.hasFocus() && s.isNullOrEmpty() && getSearchHistoryUseCase.execute().isNotEmpty()) showStausMessageSearch(
+                if (inputEditText.hasFocus() && s.isNullOrEmpty() && historyUseCase.getHistory().isNotEmpty()) showStausMessageSearch(
                     StatusSearchMessage.SEARCH_HISTORY)
                 searchDebounce()
                 },
@@ -150,14 +136,13 @@ class SearchActivity : AppCompatActivity() {
             )
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && inputEditText.text.isEmpty() && getSearchHistoryUseCase.execute().isNotEmpty()) showStausMessageSearch(
+            if (hasFocus && inputEditText.text.isEmpty() && historyUseCase.getHistory().isNotEmpty()) showStausMessageSearch(
                 StatusSearchMessage.SEARCH_HISTORY)
         }
     }
 
     override fun onStop() {
         super.onStop()
-        saveSearchHistoryUseCase.execute()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -168,22 +153,19 @@ class SearchActivity : AppCompatActivity() {
     private fun executeSearch(text: String = saveText) {
         showStausMessageSearch(StatusSearchMessage.SEARCH_LOADING)
         ISearchTracksUseCase.searchTracks(text, object : ISearchTracksUseCase.TracksConsumer {
-            override fun consume(result: TrackRepositoryResult) {
-                    trackList.clear()
-                    when (result) {
-                        is TrackRepositoryResult.Success -> {
-                            trackList.addAll(result.tracks)
-                            adapter.notifyDataSetChanged()
-                            showStausMessageSearch(StatusSearchMessage.DEFAULT)
-                        }
-                        is TrackRepositoryResult.NotFound -> {
-                            showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
-                        }
-                        is TrackRepositoryResult.NetworkError -> {
-                            lastText = saveText
-                            showStausMessageSearch(StatusSearchMessage.ERROR)
-                        }
-                    }
+            override fun consume(foundTracks: List<TrackModel>?, errorMessage: String?, typeError: ErrorType?) {
+                trackList.clear()
+                if (foundTracks != null){
+                    trackList.addAll(foundTracks)
+                    adapter.notifyDataSetChanged()
+                    showStausMessageSearch(StatusSearchMessage.DEFAULT)
+                }
+                if(errorMessage != null){
+                    lastText = saveText
+                    showStausMessageSearch(StatusSearchMessage.ERROR)
+                } else if (trackList.isEmpty()){
+                    showStausMessageSearch(StatusSearchMessage.NOT_FOUND)
+                }
             }
         })
     }
