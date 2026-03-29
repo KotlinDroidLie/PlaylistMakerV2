@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.di
+package com.practicum.playlistmaker.core.di
 
 import android.content.Context
-import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
+import com.practicum.playlistmaker.core.data.impl.RetrofitNetworkClient
 import com.practicum.playlistmaker.data.repository.LocalHistoryTracksRepository
 import com.practicum.playlistmaker.data.repository.LocalThemeRepositoryImpl
 import com.practicum.playlistmaker.data.repository.RemoteTrackRepositoryImpl
@@ -26,7 +26,6 @@ import com.practicum.playlistmaker.domain.impl.LoadSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SaveSearchHistoryUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SearchTracksUseCaseImpl
 import com.practicum.playlistmaker.domain.impl.SwitchThemeUseCaseImpl
-
 
 object Creator {
     private var historyRepository: HistoryTracksRepository? = null
@@ -66,7 +65,7 @@ object Creator {
         return LoadSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 
-    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase{
+    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase {
         return SaveSearchHistoryUseCaseImpl(getHistoryRepository(context))
     }
 

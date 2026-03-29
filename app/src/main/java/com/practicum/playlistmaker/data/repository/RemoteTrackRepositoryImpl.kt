@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.data.repository
 import com.practicum.playlistmaker.data.dto.TrackRequest
 import com.practicum.playlistmaker.data.dto.TrackResponse
 import com.practicum.playlistmaker.data.extensions.toDomainModels
-import com.practicum.playlistmaker.data.network.NetworkClient
+import com.practicum.playlistmaker.core.data.api.NetworkClient
 import com.practicum.playlistmaker.domain.api.TrackRepositoryResult
 import com.practicum.playlistmaker.domain.api.repo.TrackRepository
 

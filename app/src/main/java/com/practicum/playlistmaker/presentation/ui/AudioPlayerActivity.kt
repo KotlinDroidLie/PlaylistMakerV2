@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
 import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
 import com.practicum.playlistmaker.domain.models.TrackModel

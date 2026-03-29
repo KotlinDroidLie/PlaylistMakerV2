@@ -1,5 +1,7 @@
-package com.practicum.playlistmaker.data.network
+package com.practicum.playlistmaker.core.data.impl
 
+import com.practicum.playlistmaker.core.data.api.ITunesApi
+import com.practicum.playlistmaker.core.data.api.NetworkClient
 import com.practicum.playlistmaker.data.dto.Response
 import com.practicum.playlistmaker.data.dto.TrackRequest
 import retrofit2.Retrofit

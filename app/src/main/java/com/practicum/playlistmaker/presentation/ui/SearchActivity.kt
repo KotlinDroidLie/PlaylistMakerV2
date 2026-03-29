@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
-import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.presentation.OnItemClickListener
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.presentation.StatusSearchMessage
