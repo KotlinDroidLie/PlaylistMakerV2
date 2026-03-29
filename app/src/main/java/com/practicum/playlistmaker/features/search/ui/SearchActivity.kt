@@ -28,9 +28,6 @@ import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.domainTerminated.api.TrackRepositoryResult
 import com.practicum.playlistmaker.domainTerminated.api.usecase.LoadSearchHistoryUseCase
 import com.practicum.playlistmaker.domainTerminated.api.usecase.SaveSearchHistoryUseCase
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IAddTrackToHistoryUseCase
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IClearSearchHistoryUseCase
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IGetSearchHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 import com.practicum.playlistmaker.features.search.ui.OnItemClickListener
 import com.practicum.playlistmaker.features.search.ui.SearchHistoryAdapter

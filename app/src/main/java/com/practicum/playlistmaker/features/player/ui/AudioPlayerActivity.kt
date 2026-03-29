@@ -19,8 +19,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.TrackModel
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackDurationUseCase
-import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackYearUseCase
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()

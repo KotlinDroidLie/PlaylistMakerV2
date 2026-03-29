@@ -5,22 +5,16 @@ import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.core.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.core.data.impl.RetrofitNetworkClient
 import com.practicum.playlistmaker.core.data.impl.SharedPrefStorageClient
+import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
+import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCase
 import com.practicum.playlistmaker.features.search.data.RemoteTrackRepository
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IAddTrackToHistoryUseCase
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IClearSearchHistoryUseCase
-import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackDurationUseCase
-import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackYearUseCase
-import com.practicum.playlistmaker.features.search.domain.api.usecase.IGetSearchHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
-import com.practicum.playlistmaker.features.search.domain.impl.AddTrackToHistoryUseCase
-import com.practicum.playlistmaker.features.search.domain.impl.ClearSearchHistoryUseCase
-import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackDurationUseCase
-import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackYearUseCase
-import com.practicum.playlistmaker.features.search.domain.impl.GetSearchHistoryUseCase
 import com.practicum.playlistmaker.features.search.data.SearchHistoryRepository
 import com.practicum.playlistmaker.features.search.domain.api.repo.ISearchHistoryRepository
+import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
+import com.practicum.playlistmaker.features.search.domain.impl.HistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.impl.SearchTracksUseCase
 import com.practicum.playlistmaker.features.settings.domain.impl.SwitchThemeUseCase
 import com.practicum.playlistmaker.features.settings.data.ThemeRepository
@@ -47,17 +41,10 @@ object Creator {
         return RemoteTrackRepository(RetrofitNetworkClient(context))
     }
 
-    fun getAddTrackToHistoryUseCase(context: Context): IAddTrackToHistoryUseCase {
-        return AddTrackToHistoryUseCase(getSearchHistoryRepository(context))
+    fun getHistoryUseCase(context: Context): IHistoryUseCase{
+        return HistoryUseCase(getSearchHistoryRepository(context))
     }
 
-    fun getClearSearchHistoryUseCase(context: Context): IClearSearchHistoryUseCase {
-        return ClearSearchHistoryUseCase(getSearchHistoryRepository(context))
-    }
-
-    fun getSearchHistoryUseCase(context: Context): IGetSearchHistoryUseCase {
-        return GetSearchHistoryUseCase(getSearchHistoryRepository(context))
-    }
 
     fun getSearchTracksUseCase(context: Context): ISearchTracksUseCase {
         return SearchTracksUseCase(getTrackRepository(context))
@@ -74,12 +61,7 @@ object Creator {
 //    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase {
 //        return SaveSearchHistoryUseCaseImpl(getSearchHistoryRepository(context))
 //    }
-
-    fun getFormatTrackYearUseCase(): IFormatTrackYearUseCase {
-        return FormatTrackYearUseCase()
-    }
-
-    fun getFormatTrackDurationUseCase(): IFormatTrackDurationUseCase {
-        return FormatTrackDurationUseCase()
+    fun getFormatTrackUseCase(): IFormatTrackUseCase{
+        return FormatTrackUseCase()
     }
 }
