@@ -2,85 +2,84 @@ package com.practicum.playlistmaker.core.di
 
 import android.content.Context
 import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.core.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.core.data.impl.RetrofitNetworkClient
 import com.practicum.playlistmaker.core.data.impl.SharedPrefStorageClient
-import com.practicum.playlistmaker.data.repository.LocalHistoryTracksRepository
 import com.practicum.playlistmaker.features.search.data.RemoteTrackRepository
-import com.practicum.playlistmaker.domain.api.repo.HistoryTracksRepository
-import com.practicum.playlistmaker.features.search.domain.api.ITrackRepository
-import com.practicum.playlistmaker.domain.api.usecase.AddTrackToHistoryUseCase
-import com.practicum.playlistmaker.domain.api.usecase.ClearSearchHistoryUseCase
-import com.practicum.playlistmaker.domain.api.usecase.FormatTrackDurationUseCase
-import com.practicum.playlistmaker.domain.api.usecase.FormatTrackYearUseCase
-import com.practicum.playlistmaker.domain.api.usecase.GetSearchHistoryUseCase
-import com.practicum.playlistmaker.domain.api.usecase.LoadSearchHistoryUseCase
-import com.practicum.playlistmaker.domain.api.usecase.SaveSearchHistoryUseCase
-import com.practicum.playlistmaker.domain.api.usecase.SearchTracksUseCase
+import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
+import com.practicum.playlistmaker.features.search.domain.api.usecase.IAddTrackToHistoryUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.IClearSearchHistoryUseCase
+import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackDurationUseCase
+import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackYearUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.IGetSearchHistoryUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
-import com.practicum.playlistmaker.domain.impl.AddTrackToHistoryUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.ClearSearchHistoryUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.FormatTrackDurationUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.FormatTrackYearUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.GetSearchHistoryUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.LoadSearchHistoryUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.SaveSearchHistoryUseCaseImpl
-import com.practicum.playlistmaker.domain.impl.SearchTracksUseCaseImpl
+import com.practicum.playlistmaker.features.search.domain.impl.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.features.search.domain.impl.ClearSearchHistoryUseCase
+import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackDurationUseCase
+import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackYearUseCase
+import com.practicum.playlistmaker.features.search.domain.impl.GetSearchHistoryUseCase
+import com.practicum.playlistmaker.features.search.data.SearchHistoryRepository
+import com.practicum.playlistmaker.features.search.domain.api.repo.ISearchHistoryRepository
+import com.practicum.playlistmaker.features.search.domain.impl.SearchTracksUseCase
 import com.practicum.playlistmaker.features.settings.domain.impl.SwitchThemeUseCase
 import com.practicum.playlistmaker.features.settings.data.ThemeRepository
 import com.practicum.playlistmaker.features.settings.domain.api.IThemeRepository
 
 object Creator {
-    private var historyRepository: HistoryTracksRepository? = null
+    private const val HISTORY_KEY = "HISTORY_KEY"
+    private const val THEME_KEY = "THEME_KEY"
     private fun getThemeRepository(context: Context): IThemeRepository {
         return ThemeRepository(SharedPrefStorageClient<Boolean>(
             context = context,
-            dataKey = "THEME",
+            dataKey = THEME_KEY,
             type = object : TypeToken<Boolean>() {}.type
         ))
     }
+    private fun getSearchHistoryRepository(context: Context): ISearchHistoryRepository {
+        return SearchHistoryRepository(SharedPrefStorageClient<MutableList<TrackHistoryDto>>(
+            context = context,
+            dataKey = HISTORY_KEY,
+            type = object : TypeToken<MutableList<TrackHistoryDto>>() {}.type
+        ))
+    }
+    private fun getTrackRepository(context: Context): IRemoteTrackRepository {
+        return RemoteTrackRepository(RetrofitNetworkClient(context))
+    }
+
+    fun getAddTrackToHistoryUseCase(context: Context): IAddTrackToHistoryUseCase {
+        return AddTrackToHistoryUseCase(getSearchHistoryRepository(context))
+    }
+
+    fun getClearSearchHistoryUseCase(context: Context): IClearSearchHistoryUseCase {
+        return ClearSearchHistoryUseCase(getSearchHistoryRepository(context))
+    }
+
+    fun getSearchHistoryUseCase(context: Context): IGetSearchHistoryUseCase {
+        return GetSearchHistoryUseCase(getSearchHistoryRepository(context))
+    }
+
+    fun getSearchTracksUseCase(context: Context): ISearchTracksUseCase {
+        return SearchTracksUseCase(getTrackRepository(context))
+    }
+
     fun getSwitchThemeUseCase(context: Context): ISwitchThemeUseCase {
         return SwitchThemeUseCase(getThemeRepository(context))
     }
 
-    private fun getTrackRepository(): ITrackRepository {
-        return RemoteTrackRepository(RetrofitNetworkClient())
+//    fun getLoadSearchHistoryUseCase(context: Context): LoadSearchHistoryUseCase {
+//        return LoadSearchHistoryUseCaseImpl(getSearchHistoryRepository(context))
+//    }
+//
+//    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase {
+//        return SaveSearchHistoryUseCaseImpl(getSearchHistoryRepository(context))
+//    }
+
+    fun getFormatTrackYearUseCase(): IFormatTrackYearUseCase {
+        return FormatTrackYearUseCase()
     }
 
-    fun getSearchTracksUseCase(): SearchTracksUseCase {
-        return SearchTracksUseCaseImpl(getTrackRepository())
+    fun getFormatTrackDurationUseCase(): IFormatTrackDurationUseCase {
+        return FormatTrackDurationUseCase()
     }
-    private fun getHistoryRepository(context: Context): HistoryTracksRepository {
-        return historyRepository ?: LocalHistoryTracksRepository(context).also {
-            historyRepository = it
-        }
-    }
-
-    fun getAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
-        return AddTrackToHistoryUseCaseImpl(getHistoryRepository(context))
-    }
-
-    fun getClearSearchHistoryUseCase(context: Context): ClearSearchHistoryUseCase {
-        return ClearSearchHistoryUseCaseImpl(getHistoryRepository(context))
-    }
-
-    fun getSearchHistoryUseCase(context: Context): GetSearchHistoryUseCase {
-        return GetSearchHistoryUseCaseImpl(getHistoryRepository(context))
-    }
-
-    fun getLoadSearchHistoryUseCase(context: Context): LoadSearchHistoryUseCase {
-        return LoadSearchHistoryUseCaseImpl(getHistoryRepository(context))
-    }
-
-    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase {
-        return SaveSearchHistoryUseCaseImpl(getHistoryRepository(context))
-    }
-
-    fun getFormatTrackYearUseCase(): FormatTrackYearUseCase {
-        return FormatTrackYearUseCaseImpl()
-    }
-
-    fun getFormatTrackDurationUseCase(): FormatTrackDurationUseCase {
-        return FormatTrackDurationUseCaseImpl()
-    }
-
 }

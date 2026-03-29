@@ -6,10 +6,10 @@ import com.practicum.playlistmaker.core.data.dto.TrackRequest
 import com.practicum.playlistmaker.core.data.dto.TrackResponse
 import com.practicum.playlistmaker.core.data.api.NetworkClient
 import com.practicum.playlistmaker.core.data.extensions.toDomainModels
-import com.practicum.playlistmaker.domain.models.TrackModel
-import com.practicum.playlistmaker.features.search.domain.api.ITrackRepository
+import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
 
-class RemoteTrackRepository(private val networkClient: NetworkClient): ITrackRepository {
+class RemoteTrackRepository(private val networkClient: NetworkClient): IRemoteTrackRepository {
     override fun doRequest(expression: String): Resource<List<TrackModel>> {
         return try{
             val response = networkClient.requestTracks(TrackRequest(expression))

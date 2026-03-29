@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.core.data.extensions
 
 import com.practicum.playlistmaker.core.data.dto.TrackHistoryDto
-import com.practicum.playlistmaker.domain.models.TrackModel
+import com.practicum.playlistmaker.core.TrackModel
 
 fun TrackModel.toDto(): TrackHistoryDto = TrackHistoryDto(
     trackId = trackId,
