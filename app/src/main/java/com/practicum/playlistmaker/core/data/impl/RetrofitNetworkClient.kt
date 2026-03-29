@@ -5,8 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.practicum.playlistmaker.core.data.api.ITunesApi
 import com.practicum.playlistmaker.core.data.api.NetworkClient
-import com.practicum.playlistmaker.core.data.Response
-import com.practicum.playlistmaker.core.data.TrackRequest
+import com.practicum.playlistmaker.core.data.dto.Response
+import com.practicum.playlistmaker.core.data.dto.TrackRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

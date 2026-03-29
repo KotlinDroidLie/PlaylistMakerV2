@@ -12,10 +12,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.api.usecase.SwitchThemeUseCase
+import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var switchThemeUseCase: SwitchThemeUseCase
+    private lateinit var switchThemeUseCase: ISwitchThemeUseCase
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

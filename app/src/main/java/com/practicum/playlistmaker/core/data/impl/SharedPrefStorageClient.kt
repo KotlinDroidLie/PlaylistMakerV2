@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmaker.core.data.api.StorageClient
-import java.lang.reflect.Type
 import androidx.core.content.edit
+import java.lang.reflect.Type
 
 class SharedPrefStorageClient<T>(
     private val context: Context,

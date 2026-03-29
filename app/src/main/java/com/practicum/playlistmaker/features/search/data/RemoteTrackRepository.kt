@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.features.search.data
 
-import com.practicum.playlistmaker.core.data.ErrorType
-import com.practicum.playlistmaker.core.data.Resource
-import com.practicum.playlistmaker.core.data.TrackRequest
-import com.practicum.playlistmaker.core.data.TrackResponse
+import com.practicum.playlistmaker.core.data.dto.ErrorType
+import com.practicum.playlistmaker.core.data.dto.Resource
+import com.practicum.playlistmaker.core.data.dto.TrackRequest
+import com.practicum.playlistmaker.core.data.dto.TrackResponse
 import com.practicum.playlistmaker.core.data.api.NetworkClient
 import com.practicum.playlistmaker.core.data.extensions.toDomainModels
 import com.practicum.playlistmaker.domain.models.TrackModel

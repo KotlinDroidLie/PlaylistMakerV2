@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
-import com.practicum.playlistmaker.domain.api.repo.ThemeRepository
+import com.practicum.playlistmaker.domain.api.repo.ThemeRepository2
 
-class LocalThemeRepositoryImpl(context: Context): ThemeRepository {
+class LocalThemeRepositoryImpl(context: Context): ThemeRepository2 {
 
     private val  settingPrefs = context.getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE)
 
