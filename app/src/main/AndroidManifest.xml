@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".core.app.App"
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,7 +25,7 @@
             android:name=".features.search.ui.activtiy.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".features.media.MediaActivity"
+            android:name=".MediaActivity"
             android:exported="false" />
         <activity
             android:name=".features.main.MainActivity"

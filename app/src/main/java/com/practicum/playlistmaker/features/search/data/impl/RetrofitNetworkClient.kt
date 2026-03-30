@@ -1,12 +1,12 @@
-package com.practicum.playlistmaker.core.data.impl
+package com.practicum.playlistmaker.features.search.data.impl
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import com.practicum.playlistmaker.core.data.api.ITunesApi
-import com.practicum.playlistmaker.core.data.api.NetworkClient
-import com.practicum.playlistmaker.core.data.dto.Response
-import com.practicum.playlistmaker.core.data.dto.TrackRequest
+import com.practicum.playlistmaker.features.search.data.api.ITunesApi
+import com.practicum.playlistmaker.features.search.data.api.NetworkClient
+import com.practicum.playlistmaker.features.search.data.dto.Response
+import com.practicum.playlistmaker.features.search.data.dto.TrackRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

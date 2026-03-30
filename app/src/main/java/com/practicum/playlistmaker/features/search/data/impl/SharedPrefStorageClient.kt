@@ -1,14 +1,14 @@
-package com.practicum.playlistmaker.core.data.impl
+package com.practicum.playlistmaker.features.search.data.impl
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.Gson
-import com.practicum.playlistmaker.core.data.api.StorageClient
 import androidx.core.content.edit
+import com.google.gson.Gson
+import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import java.lang.reflect.Type
 
 class SharedPrefStorageClient<T>(
-    private val context: Context,
+    context: Context,
     private val dataKey: String,
     private val type: Type
 ) : StorageClient<T> {

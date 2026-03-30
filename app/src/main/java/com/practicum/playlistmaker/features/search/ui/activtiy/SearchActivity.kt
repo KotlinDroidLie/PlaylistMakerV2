@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.models.TrackModel
-import com.practicum.playlistmaker.core.di.Creator
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerActivity
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchState
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel

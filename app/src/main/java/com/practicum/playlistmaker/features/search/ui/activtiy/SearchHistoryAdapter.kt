@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.features.search.ui.activtiy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.core.models.TrackModel
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.databinding.SongViewBinding
 
 class SearchHistoryAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {

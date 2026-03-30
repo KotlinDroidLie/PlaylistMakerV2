@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.app.App
-import com.practicum.playlistmaker.core.data.dto.ErrorType
-import com.practicum.playlistmaker.core.models.TrackModel
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.features.search.data.dto.ErrorType
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.core.data.dto
+package com.practicum.playlistmaker.features.search.data.dto
 
 import com.google.gson.annotations.SerializedName
 

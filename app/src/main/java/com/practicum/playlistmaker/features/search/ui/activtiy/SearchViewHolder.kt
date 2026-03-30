@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.models.TrackModel
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.databinding.SongViewBinding
 import java.util.Locale
 

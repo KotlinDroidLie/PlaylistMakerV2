@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.search.domain.impl
 
-import com.practicum.playlistmaker.core.data.dto.Resource
+import com.practicum.playlistmaker.features.search.data.dto.Resource
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 

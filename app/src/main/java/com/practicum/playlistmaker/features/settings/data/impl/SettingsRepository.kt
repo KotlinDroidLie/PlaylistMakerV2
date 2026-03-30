@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.features.settings.data
+package com.practicum.playlistmaker.features.settings.data.impl
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.core.data.api.StorageClient
+import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.settings.data.dto.SettingsDto
 import com.practicum.playlistmaker.features.settings.data.extensions.toDomain
 import com.practicum.playlistmaker.features.settings.data.extensions.toDto

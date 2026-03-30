@@ -1,13 +1,14 @@
-package com.practicum.playlistmaker.features.search.data
+package com.practicum.playlistmaker.features.search.data.impl
 
-import com.practicum.playlistmaker.core.data.api.StorageClient
+import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.features.search.data.extensions.toDomain
 import com.practicum.playlistmaker.features.search.data.extensions.toDto
-import com.practicum.playlistmaker.core.models.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.repo.ISearchHistoryRepository
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 
-class SearchHistoryRepository(private val storage: StorageClient<MutableList<TrackHistoryDto>>): ISearchHistoryRepository {
+class SearchHistoryRepository(private val storage: StorageClient<MutableList<TrackHistoryDto>>):
+    ISearchHistoryRepository {
 
     override fun saveToHistory(m: TrackModel) {
         val dto = m.toDto()

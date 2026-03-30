@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.core.data.dto
+package com.practicum.playlistmaker.features.search.data.dto
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null, val type: ErrorType? = null) {
     class Success<T>(data: T): Resource<T>(data)

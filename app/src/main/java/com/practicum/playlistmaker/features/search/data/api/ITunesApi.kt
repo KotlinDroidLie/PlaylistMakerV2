@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker.core.data.api
+package com.practicum.playlistmaker.features.search.data.api
 
-import com.practicum.playlistmaker.core.data.dto.TrackResponse
+import com.practicum.playlistmaker.features.search.data.dto.TrackResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
