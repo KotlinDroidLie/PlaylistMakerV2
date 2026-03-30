@@ -20,6 +20,10 @@ import com.practicum.playlistmaker.features.settings.domain.impl.SettingsUseCase
 import com.practicum.playlistmaker.features.settings.data.SettingsRepository
 import com.practicum.playlistmaker.features.settings.data.dto.SettingsDto
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsRepository
+import com.practicum.playlistmaker.features.sharing.data.ExternalNavigator
+import com.practicum.playlistmaker.features.sharing.domain.api.IExternalNavigator
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.impl.SharingUseCase
 
 object Creator {
     private const val HISTORY_KEY = "HISTORY_KEY"
@@ -41,11 +45,16 @@ object Creator {
     private fun getTrackRepository(context: Context): IRemoteTrackRepository {
         return RemoteTrackRepository(RetrofitNetworkClient(context))
     }
+    private fun getExternalNavigator(context:Context): IExternalNavigator{
+        return ExternalNavigator(context)
+    }
+    fun getSharingUseCase(context: Context): ISharingUseCase{
+        return SharingUseCase(getExternalNavigator(context))
+    }
 
     fun getHistoryUseCase(context: Context): IHistoryUseCase{
         return HistoryUseCase(getSearchHistoryRepository(context))
     }
-
 
     fun getSearchTracksUseCase(context: Context): ISearchTracksUseCase {
         return SearchTracksUseCase(getTrackRepository(context))
@@ -54,14 +63,6 @@ object Creator {
     fun getSettingsUseCase(context: Context): ISettingsUseCase {
         return SettingsUseCase(getSettingsRepository(context))
     }
-
-//    fun getLoadSearchHistoryUseCase(context: Context): LoadSearchHistoryUseCase {
-//        return LoadSearchHistoryUseCaseImpl(getSearchHistoryRepository(context))
-//    }
-//
-//    fun getSaveSearchHistoryUseCase(context: Context): SaveSearchHistoryUseCase {
-//        return SaveSearchHistoryUseCaseImpl(getSearchHistoryRepository(context))
-//    }
     fun getFormatTrackUseCase(): IFormatTrackUseCase{
         return FormatTrackUseCase()
     }

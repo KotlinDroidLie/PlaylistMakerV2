@@ -12,9 +12,4 @@ class SettingsUseCase(private val settingsRepository: ISettingsRepository): ISet
     override fun getSettings(): SettingsModel {
         return settingsRepository.getSettings()
     }
-
-    override fun saveSettings(model: SettingsModel) {
-        settingsRepository.saveSettings(model)
-    }
-
 }

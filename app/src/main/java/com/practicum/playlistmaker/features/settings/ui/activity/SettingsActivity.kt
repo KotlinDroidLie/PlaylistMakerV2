@@ -1,21 +1,20 @@
-package com.practicum.playlistmaker.features.settings.ui
+package com.practicum.playlistmaker.features.settings.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
+import com.practicum.playlistmaker.features.settings.ui.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var switchThemeUseCase: ISettingsUseCase
+    private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +25,10 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        switchThemeUseCase = Creator.getSettingsUseCase(this)
+        viewModel = ViewModelProvider(this, SettingsViewModel.getViewModelFactory(
+            Creator.getSettingsUseCase(applicationContext),
+            Creator.getSharingUseCase(this)
+        )).get(SettingsViewModel::class.java)
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.sw_theme)
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)
@@ -35,9 +36,12 @@ class SettingsActivity : AppCompatActivity() {
         val buttonWriteSupport = findViewById<Button>(R.id.btn_write_support)
         val buttonUserAgreement = findViewById<Button>(R.id.btn_user_agreement)
 
-        themeSwitcher.isChecked = switchThemeUseCase.getSettings().isDarkThemeEnable
+        viewModel.themeSwitcher.observe(this){
+            themeSwitcher.isChecked = it
+        }
+
         themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
-            switchThemeUseCase.switchTheme(isChecked)
+            viewModel.switchTheme(isChecked)
         }
 
         buttonBack.setNavigationOnClickListener {
@@ -45,31 +49,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonShareApp.setOnClickListener {
-            val shareIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT,getString(R.string.link_share_app))
-            }
-            startActivity(shareIntent)
+            viewModel.shareApp()
         }
 
         buttonWriteSupport.setOnClickListener {
-            val supportIntent = Intent().apply {
-                action = Intent.ACTION_SENDTO
-                data = "mailto:".toUri()
-                putExtra(Intent.EXTRA_EMAIL,arrayOf(getString(R.string.my_mail)))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_mail_title))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_mail_text))
-            }
-            startActivity(supportIntent)
+            viewModel.openSupport()
         }
 
         buttonUserAgreement.setOnClickListener {
-            val userAgreementIntent = Intent().apply {
-                action = Intent.ACTION_VIEW
-                data = getString(R.string.link_user_agreement).toUri()
-            }
-            startActivity(userAgreementIntent)
+            viewModel.openTerms()
         }
     }
 }

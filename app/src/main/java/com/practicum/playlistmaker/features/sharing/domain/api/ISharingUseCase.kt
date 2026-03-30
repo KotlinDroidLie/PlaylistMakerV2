@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.sharing.domain
+package com.practicum.playlistmaker.features.sharing.domain.api
 
 interface ISharingUseCase {
     fun shareApp()

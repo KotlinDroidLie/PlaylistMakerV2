@@ -26,7 +26,7 @@ class SettingsRepository(private val storage: StorageClient<SettingsDto>): ISett
         )
     }
 
-    override fun saveSettings(model: SettingsModel) {
+    private fun saveSettings(model: SettingsModel) {
         val dto = model.toDto()
         storage.storeData(dto)
     }
