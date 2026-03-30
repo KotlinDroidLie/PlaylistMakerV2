@@ -5,6 +5,9 @@ plugins {
 }
 
 android {
+    buildFeatures{
+        viewBinding = true
+    }
     namespace = "com.practicum.playlistmaker"
     compileSdk {
         version = release(36)

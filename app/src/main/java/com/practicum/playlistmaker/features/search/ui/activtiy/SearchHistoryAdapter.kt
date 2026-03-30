@@ -3,8 +3,8 @@ package com.practicum.playlistmaker.features.search.ui.activtiy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.models.TrackModel
+import com.practicum.playlistmaker.databinding.SongViewBinding
 
 class SearchHistoryAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
     var trackHistory: MutableList<TrackModel> = mutableListOf()
@@ -12,8 +12,9 @@ class SearchHistoryAdapter(private val onItemClickListener: OnItemClickListener)
         parent: ViewGroup,
         viewType: Int
     ): SearchViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.song_view, parent, false)
-        return SearchViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = SongViewBinding.inflate(inflater, parent, false)
+        return SearchViewHolder(binding)
     }
 
     override fun onBindViewHolder(

@@ -38,6 +38,10 @@ class SearchActivity : AppCompatActivity() {
     lateinit var adapter: SearchTrackAdapter
     private lateinit var inputEditText: EditText
     private val mainHandler = Handler(Looper.getMainLooper())
+    private lateinit var buttonBack: MaterialToolbar
+    private lateinit var buttonClear: ImageView
+    private lateinit var buttonRefresh: Button
+    private lateinit var buttonClearHistory: Button
     private lateinit var historyAdapter: SearchHistoryAdapter
     private lateinit var viewMessageNotFound: MaterialTextView
     private lateinit var searchProgressBar: ProgressBar
@@ -75,11 +79,11 @@ class SearchActivity : AppCompatActivity() {
         }
         textConnectionProblem = findViewById(R.id.tv_connection_problems)
         searchProgressBar = findViewById(R.id.pb_search)
-        val buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
+        buttonBack = findViewById<MaterialToolbar>(R.id.btn_search_back)
         inputEditText = findViewById(R.id.et_search)
-        val buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
-        val buttonRefresh = findViewById<Button>(R.id.btn_refresh)
-        val buttonClearHistory = findViewById<Button>(R.id.btn_clear_history)
+        buttonClear = findViewById<ImageView>(R.id.iv_clear_text)
+        buttonRefresh = findViewById<Button>(R.id.btn_refresh)
+        buttonClearHistory = findViewById<Button>(R.id.btn_clear_history)
         viewMessageNotFound = findViewById(R.id.view_nothing_found)
         viewMessageError = findViewById(R.id.view_connection_problems)
         viewHistorySearch = findViewById(R.id.view_search_history)
