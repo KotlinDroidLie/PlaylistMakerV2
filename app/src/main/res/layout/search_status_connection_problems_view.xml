@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textview.MaterialTextView style="@style/TextViewStatusSearchMessage"
+        android:id="@+id/tv_connection_problems"
         android:drawableTop="@drawable/ic_search_connection_problems_120"
         android:text="@string/connection_problems"/>
 

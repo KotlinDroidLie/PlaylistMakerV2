@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.models.TrackModel
-import com.practicum.playlistmaker.features.search.ui.activtiy.OnItemClickListener
-import com.practicum.playlistmaker.features.search.ui.activtiy.SearchViewHolder
 
 class SearchHistoryAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
-    lateinit var trackHistory: List<TrackModel>
+    var trackHistory: MutableList<TrackModel> = mutableListOf()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

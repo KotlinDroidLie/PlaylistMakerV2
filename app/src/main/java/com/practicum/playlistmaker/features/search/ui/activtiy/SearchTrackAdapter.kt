@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.models.TrackModel
-import com.practicum.playlistmaker.features.search.ui.activtiy.OnItemClickListener
 
-class TrackAdapter(private val trackList: MutableList<TrackModel>, private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
+class SearchTrackAdapter(private val onItemClickListener: OnItemClickListener): RecyclerView.Adapter<SearchViewHolder>() {
+    var trackList: MutableList<TrackModel> = mutableListOf()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

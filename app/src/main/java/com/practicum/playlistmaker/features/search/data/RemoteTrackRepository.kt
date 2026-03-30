@@ -22,7 +22,7 @@ class RemoteTrackRepository(private val networkClient: NetworkClient): IRemoteTr
                 else -> Resource.Error(type = ErrorType.GENERIC, message = "Ошибка сервера ${response.resultCode}")
             }
         } catch (e: Exception){
-            return Resource.Error(type = ErrorType.EXCEPTION, message = e.message)
+            return Resource.Error(type = ErrorType.EXCEPTION, message = e.message ?: "Неизвестная ошибка.")
         }
     }
 }
