@@ -9,34 +9,56 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val url: String): ViewModel() {
+class PlayerViewModel(model: TrackModel,formatTrackUseCase: IFormatTrackUseCase): ViewModel() {
+    private val formattedTrack: PlayerUiModel
     private val mediaPlayer = MediaPlayer()
+    init {
+        formattedTrack = prepareFormattedTrack(model, formatTrackUseCase)
+        preparedPlayer()
+    }
+    private fun prepareFormattedTrack(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase): PlayerUiModel{
+        return PlayerUiModel(
+            trackName = model.trackName,
+            artistName = model.artistName,
+            albumName = model.albumName,
+            releaseDate = formatTrackUseCase.getTrackYear(model.releaseDate),
+            genre = model.genre,
+            country = model.country,
+            trackDuration = formatTrackUseCase.getTrackDuration(model.trackDuration),
+            trackImage = formatTrackUseCase.getCoverArtwork(model.trackImage),
+            audioPreviewUrl = model.audioPreviewUrl
+        )
+    }
+
     private val mainHandler = Handler(Looper.getMainLooper())
     private val _playerState = MutableLiveData<Int>(STATE_DEFAULT)
-    private val playerState: LiveData<Int> = _playerState
+    val playerState: LiveData<Int> = _playerState
     private val _timer = MutableLiveData<String>(TIMER_DEFAULT_VALUE)
-    private val timer: LiveData<String> = _timer
+    val timer: LiveData<String> = _timer
+    private val _track = MutableLiveData<PlayerUiModel>(formattedTrack)
+    val track: LiveData<PlayerUiModel> = _track
+
+
     companion object{
         private const val TIMER_DEFAULT_VALUE = "00:00"
         const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        fun getViewModelFactory(url: String): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(track: TrackModel, formatTrackUseCase: IFormatTrackUseCase): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                PlayerViewModel(url)
+                PlayerViewModel(track, formatTrackUseCase)
             }
         }
     }
-    init {
-        preparedPlayer()
-    }
     private fun preparedPlayer() {
         with(mediaPlayer){
-            setDataSource(url)
+            setDataSource(formattedTrack.audioPreviewUrl)
             prepareAsync()
             setOnPreparedListener {
                 _playerState.postValue(STATE_PREPARED)
@@ -47,6 +69,7 @@ class PlayerViewModel(private val url: String): ViewModel() {
             }
         }
     }
+
     private val runnable = Runnable {
         if (playerState.value ==  STATE_PLAYING){
             startTimer()

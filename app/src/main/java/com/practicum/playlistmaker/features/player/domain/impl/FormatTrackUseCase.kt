@@ -19,4 +19,8 @@ class FormatTrackUseCase: IFormatTrackUseCase {
             ""
         }
     }
+
+    override fun getCoverArtwork(trackImage: String): String {
+        return trackImage.replaceAfterLast('/',"512x512bb.jpg")
+    }
 }

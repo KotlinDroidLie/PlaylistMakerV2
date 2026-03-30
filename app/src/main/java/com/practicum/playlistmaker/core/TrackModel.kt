@@ -18,8 +18,4 @@ data class TrackModel(
     val trackDuration: Int,
     val trackImage: String,
     val audioPreviewUrl: String
-) : Parcelable {
-    fun formatTrackDuration(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackDuration)
-    fun getCoverArtwork() = trackImage.replaceAfterLast('/',"512x512bb.jpg")
-    fun dateFormat(format: String) = SimpleDateFormat(format, Locale.getDefault()).format(releaseDate) ?: ""
-}
+) : Parcelable
