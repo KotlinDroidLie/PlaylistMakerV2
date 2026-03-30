@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel

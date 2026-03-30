@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.search.domain.api.usecase
 
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 import com.practicum.playlistmaker.core.data.dto.ErrorType
 
 interface ISearchTracksUseCase {

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.search.ui
+package com.practicum.playlistmaker.features.search.ui.activtiy
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,12 +23,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 import com.practicum.playlistmaker.core.data.dto.ErrorType
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerActivity
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
+import com.practicum.playlistmaker.features.search.ui.activtiy.OnItemClickListener
+import com.practicum.playlistmaker.features.search.ui.activtiy.SearchHistoryAdapter
+import com.practicum.playlistmaker.features.search.ui.StatusSearchMessage
+import com.practicum.playlistmaker.features.search.ui.activtiy.TrackAdapter
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var historyUseCase: IHistoryUseCase

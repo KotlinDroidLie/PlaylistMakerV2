@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.core.di
 
 import android.content.Context
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.core.data.dto.TrackHistoryDto
+import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.core.data.impl.RetrofitNetworkClient
 import com.practicum.playlistmaker.core.data.impl.SharedPrefStorageClient
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase

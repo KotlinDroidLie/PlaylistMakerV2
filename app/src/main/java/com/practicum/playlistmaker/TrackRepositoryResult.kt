@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker
 
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 
 sealed interface TrackRepositoryResult {
     data class Success(val tracks: List<TrackModel>) : TrackRepositoryResult

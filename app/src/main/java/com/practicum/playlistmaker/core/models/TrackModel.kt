@@ -1,10 +1,8 @@
-package com.practicum.playlistmaker.core
+package com.practicum.playlistmaker.core.models
 
-import android.icu.text.SimpleDateFormat
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.util.Date
-import java.util.Locale
 
 @Parcelize
 data class TrackModel(

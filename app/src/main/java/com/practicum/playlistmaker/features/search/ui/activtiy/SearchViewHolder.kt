@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.search.ui
+package com.practicum.playlistmaker.features.search.ui.activtiy
 
 import android.icu.text.SimpleDateFormat
 import android.util.TypedValue
@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 import java.util.Locale
 
 class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -33,5 +33,8 @@ class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             .placeholder(R.drawable.ic_placeholder_45)
             .into(poster)
     }
-    private fun formatTrackDuration(trackDuration: Int): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackDuration)
+    private fun formatTrackDuration(trackDuration: Int): String = SimpleDateFormat(
+        "mm:ss",
+        Locale.getDefault()
+    ).format(trackDuration)
 }

@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.search.domain.api.repo
 
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 
 interface ISearchHistoryRepository {
     fun saveToHistory(m: TrackModel)

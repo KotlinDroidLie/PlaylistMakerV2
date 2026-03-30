@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.core.data.extensions
 
 import com.practicum.playlistmaker.core.data.dto.TrackResponse
-import com.practicum.playlistmaker.core.TrackModel
+import com.practicum.playlistmaker.core.models.TrackModel
 
 fun TrackResponse.toDomainModels(): List<TrackModel>{
     return this.results.map {
