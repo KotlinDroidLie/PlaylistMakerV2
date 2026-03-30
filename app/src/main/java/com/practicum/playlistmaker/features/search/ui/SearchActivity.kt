@@ -27,7 +27,7 @@ import com.practicum.playlistmaker.core.TrackModel
 import com.practicum.playlistmaker.core.data.dto.ErrorType
 import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
-import com.practicum.playlistmaker.features.player.ui.AudioPlayerActivity
+import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerActivity
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 
 class SearchActivity : AppCompatActivity() {

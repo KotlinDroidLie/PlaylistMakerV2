@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.player.ui
+package com.practicum.playlistmaker.features.player.ui.view_model
 
 import android.media.MediaPlayer
 import android.os.Handler
@@ -34,7 +34,7 @@ class MediaController(private val mediaPlayer: MediaPlayer) {
         }
     }
 
-    fun prepareMedia(audioUrl: String) {
+    fun preparedPlayer(audioUrl: String) {
         mediaPlayer.reset()
         mediaPlayer.setDataSource(audioUrl)
         mediaPlayer.prepareAsync()

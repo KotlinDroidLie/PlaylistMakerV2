@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.player.ui
+package com.practicum.playlistmaker.features.player.ui.activity
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -20,6 +20,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.TrackModel
 import com.practicum.playlistmaker.core.di.Creator
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
+import com.practicum.playlistmaker.features.player.ui.view_model.MediaController
+import com.practicum.playlistmaker.features.player.ui.view_model.PlaybackState
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val mediaPlayer = MediaPlayer()
@@ -80,7 +82,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         val audioUrl = track.audioPreviewUrl
-        mediaController.prepareMedia(audioUrl)
+        mediaController.preparedPlayer(audioUrl)
 
         val cornerRadius = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
