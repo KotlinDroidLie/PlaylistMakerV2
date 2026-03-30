@@ -12,10 +12,10 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
+import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var switchThemeUseCase: ISwitchThemeUseCase
+    private lateinit var switchThemeUseCase: ISettingsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        switchThemeUseCase = Creator.getSwitchThemeUseCase(this)
+        switchThemeUseCase = Creator.getSettingsUseCase(this)
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.sw_theme)
         val buttonBack = findViewById<MaterialToolbar>(R.id.btn_settings_back)
@@ -35,7 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         val buttonWriteSupport = findViewById<Button>(R.id.btn_write_support)
         val buttonUserAgreement = findViewById<Button>(R.id.btn_user_agreement)
 
-        themeSwitcher.isChecked = switchThemeUseCase.isDarkThemeEnable()
+        themeSwitcher.isChecked = switchThemeUseCase.getSettings().isDarkThemeEnable
         themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
             switchThemeUseCase.switchTheme(isChecked)
         }

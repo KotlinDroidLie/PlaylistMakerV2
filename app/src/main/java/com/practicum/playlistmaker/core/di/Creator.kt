@@ -10,24 +10,25 @@ import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCas
 import com.practicum.playlistmaker.features.search.data.RemoteTrackRepository
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
-import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
+import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.search.data.SearchHistoryRepository
 import com.practicum.playlistmaker.features.search.domain.api.repo.ISearchHistoryRepository
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.impl.HistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.impl.SearchTracksUseCase
-import com.practicum.playlistmaker.features.settings.domain.impl.SwitchThemeUseCase
-import com.practicum.playlistmaker.features.settings.data.ThemeRepository
-import com.practicum.playlistmaker.features.settings.domain.api.IThemeRepository
+import com.practicum.playlistmaker.features.settings.domain.impl.SettingsUseCase
+import com.practicum.playlistmaker.features.settings.data.SettingsRepository
+import com.practicum.playlistmaker.features.settings.data.dto.SettingsDto
+import com.practicum.playlistmaker.features.settings.domain.api.ISettingsRepository
 
 object Creator {
     private const val HISTORY_KEY = "HISTORY_KEY"
-    private const val THEME_KEY = "THEME_KEY"
-    private fun getThemeRepository(context: Context): IThemeRepository {
-        return ThemeRepository(SharedPrefStorageClient<Boolean>(
+    private const val SETTINGS_KEY = "SETTINGS_KEY"
+    private fun getSettingsRepository(context: Context): ISettingsRepository {
+        return SettingsRepository(SharedPrefStorageClient<SettingsDto>(
             context = context,
-            dataKey = THEME_KEY,
-            type = object : TypeToken<Boolean>() {}.type
+            dataKey = SETTINGS_KEY,
+            type = object : TypeToken<SettingsDto>() {}.type
         ))
     }
     private fun getSearchHistoryRepository(context: Context): ISearchHistoryRepository {
@@ -50,8 +51,8 @@ object Creator {
         return SearchTracksUseCase(getTrackRepository(context))
     }
 
-    fun getSwitchThemeUseCase(context: Context): ISwitchThemeUseCase {
-        return SwitchThemeUseCase(getThemeRepository(context))
+    fun getSettingsUseCase(context: Context): ISettingsUseCase {
+        return SettingsUseCase(getSettingsRepository(context))
     }
 
 //    fun getLoadSearchHistoryUseCase(context: Context): LoadSearchHistoryUseCase {

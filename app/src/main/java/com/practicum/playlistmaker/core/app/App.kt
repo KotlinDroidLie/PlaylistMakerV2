@@ -1,14 +1,19 @@
 package com.practicum.playlistmaker.core.app
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.core.di.Creator
-import com.practicum.playlistmaker.features.settings.domain.api.ISwitchThemeUseCase
+import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 
 class App : Application() {
-    private lateinit var switchThemeUseCase: ISwitchThemeUseCase
+    private lateinit var settingsUseCase: ISettingsUseCase
     override fun onCreate() {
         super.onCreate()
-        switchThemeUseCase = Creator.getSwitchThemeUseCase(this)
-        switchThemeUseCase.switchTheme(switchThemeUseCase.isDarkThemeEnable())
+        settingsUseCase = Creator.getSettingsUseCase(this)
+        val settings = settingsUseCase.getSettings()
+        AppCompatDelegate.setDefaultNightMode(
+            if (settings.isDarkThemeEnable) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 }
