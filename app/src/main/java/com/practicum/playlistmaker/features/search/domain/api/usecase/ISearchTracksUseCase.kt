@@ -7,6 +7,6 @@ interface ISearchTracksUseCase {
     fun searchTracks(expression: String, consumer: TracksConsumer)
 
     interface TracksConsumer{
-        fun consume(foundTracks: List<TrackModel>?, errorMessage: String?, typeError: ErrorType?)
+        fun consume(foundTracks: List<TrackModel>?, errorMessage: Int?, typeError: ErrorType?, extraMessage: String?)
     }
 }

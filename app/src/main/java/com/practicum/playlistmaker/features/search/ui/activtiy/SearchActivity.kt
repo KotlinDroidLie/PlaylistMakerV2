@@ -98,10 +98,6 @@ class SearchActivity : AppCompatActivity() {
         adapter = SearchTrackAdapter(onItemClickListener)
         recyclerView.adapter  = adapter
 
-        viewModel.historyTracks.observe(this){
-            updateHistoryList(it)
-        }
-
         viewModel.state.observe(this){
             render(it)
         }
@@ -159,6 +155,7 @@ class SearchActivity : AppCompatActivity() {
             is SearchState.Empty -> showEmpty(state.emptyMessage)
             is SearchState.Error -> showError(state.errorMessage)
             SearchState.Loading -> showLoading()
+            is SearchState.History -> updateHistoryList(state.history)
         }
     }
 
@@ -186,21 +183,21 @@ class SearchActivity : AppCompatActivity() {
         adapter.trackList.addAll(newSearchList)
         adapter.notifyDataSetChanged()
     }
-    private fun showEmpty(emptyMessage: String){
+    private fun showEmpty(emptyMessage: Int){
         recyclerView.isVisible = false
         viewMessageError.isVisible = false
         viewHistorySearch.isVisible = false
         viewMessageNotFound.isVisible = true
         searchProgressBar.isVisible = false
-        viewMessageNotFound.text = emptyMessage
+        viewMessageNotFound.text = getString(emptyMessage)
     }
-    private fun showError(errorMessage: String){
+    private fun showError(errorMessage: Int){
         recyclerView.isVisible = false
         viewHistorySearch.isVisible = false
         viewMessageNotFound.isVisible = false
         viewMessageError.isVisible = true
         searchProgressBar.isVisible = false
-        textConnectionProblem.text = errorMessage
+        textConnectionProblem.text = getString(errorMessage)
     }
     private fun showLoading(){
         recyclerView.isVisible = false
@@ -212,7 +209,7 @@ class SearchActivity : AppCompatActivity() {
     private fun updateHistoryList(newHistoryList: List<TrackModel>){
         historyAdapter.trackHistory.clear()
         historyAdapter.trackHistory.addAll(newHistoryList)
-        adapter.notifyDataSetChanged()
+        historyAdapter.notifyDataSetChanged()
     }
 
     private val clickAllowedRunnable = Runnable {

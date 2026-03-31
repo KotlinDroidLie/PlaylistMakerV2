@@ -11,8 +11,8 @@ class SearchTracksUseCase(
     override fun searchTracks(expression: String, consumer: ISearchTracksUseCase.TracksConsumer) {
         Thread{
             when(val result = repository.doRequest(expression)){
-                is Resource.Error -> { consumer.consume(result.data, result.message, result.type) }
-                is Resource.Success -> { consumer.consume(result.data, null, null) }
+                is Resource.Error -> { consumer.consume(result.data, result.message,result.type,result.extraMessage) }
+                is Resource.Success -> { consumer.consume(result.data, null, null, null) }
             }
         }.start()
     }

@@ -1,10 +1,15 @@
 package com.practicum.playlistmaker.features.sharing.domain.impl
 
+import android.content.Context
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.sharing.domain.model.EmailData
 import com.practicum.playlistmaker.features.sharing.domain.api.IExternalNavigator
 import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
 
-class SharingUseCase(private val externalNavigator: IExternalNavigator): ISharingUseCase {
+class SharingUseCase(
+    private val externalNavigator: IExternalNavigator,
+    private val context: Context
+    ): ISharingUseCase {
     override fun shareApp() {
         externalNavigator.shareLink(getShareAppLink())
     }
@@ -18,18 +23,18 @@ class SharingUseCase(private val externalNavigator: IExternalNavigator): ISharin
     }
 
     private fun getShareAppLink(): String {
-        return "https://practicum.yandex.ru/android-developer/"
+        return context.getString(R.string.link_share_app)
     }
 
     private fun getSupportEmailData(): EmailData {
         return EmailData(
-            email = "asdxasdx20022002@ya.ru",
-            subject = "Сообщение разработчикам и разработчицам приложения Playlist Maker",
-            text = "Спасибо разработчикам и разработчицам за крутое приложение!"
+            email = context.getString(R.string.my_mail),
+            subject = context.getString(R.string.support_mail_title),
+            text = context.getString(R.string.support_mail_text)
         )
     }
 
     private fun getTermsLink(): String {
-        return "https://yandex.ru/legal/practicum_offer/ru/"
+        return context.getString(R.string.link_user_agreement)
     }
 }

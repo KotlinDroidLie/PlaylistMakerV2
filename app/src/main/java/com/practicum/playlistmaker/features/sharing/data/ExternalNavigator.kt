@@ -12,6 +12,7 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
             action = Intent.ACTION_SEND
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, link)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(shareIntent)
     }
@@ -20,6 +21,7 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
         val openIntent = Intent().apply {
             action = Intent.ACTION_VIEW
             data = link.toUri()
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(openIntent)
     }
@@ -31,6 +33,7 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailData.email))
             putExtra(Intent.EXTRA_SUBJECT, emailData.subject)
             putExtra(Intent.EXTRA_TEXT, emailData.text)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(emailIntent)
     }

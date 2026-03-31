@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.features.search.data.impl
 
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.search.data.api.NetworkClient
 import com.practicum.playlistmaker.features.search.data.dto.ErrorType
 import com.practicum.playlistmaker.features.search.data.dto.Resource
@@ -18,11 +19,11 @@ class RemoteTrackRepository(private val networkClient: NetworkClient): IRemoteTr
                     val tracks = (response as TrackResponse).toDomainModels()
                     Resource.Success(tracks)
                 }
-                -1 -> Resource.Error(type = ErrorType.NETWORK, message = "Отсутствует подключение к интернету!")
-                else -> Resource.Error(type = ErrorType.GENERIC, message = "Ошибка сервера ${response.resultCode}")
+                -1 -> Resource.Error(type = ErrorType.NETWORK, message = R.string.placeholder_text_error_network)
+                else -> Resource.Error(type = ErrorType.GENERIC, message = R.string.placeholder_text_error_generic, extraMessage = response.resultCode.toString())
             }
         } catch (e: Exception){
-            return Resource.Error(type = ErrorType.EXCEPTION, message = e.message ?: "Неизвестная ошибка.")
+            return Resource.Error(type = ErrorType.EXCEPTION, message = R.string.placeholder_text_error_exception, extraMessage = e.message)
         }
     }
 }

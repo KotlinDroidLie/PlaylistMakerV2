@@ -53,7 +53,7 @@ object Creator {
         return ExternalNavigator(context)
     }
     fun getSharingUseCase(context: Context): ISharingUseCase {
-        return SharingUseCase(getExternalNavigator(context))
+        return SharingUseCase(getExternalNavigator(context), context)
     }
 
     fun getHistoryUseCase(context: Context): IHistoryUseCase {

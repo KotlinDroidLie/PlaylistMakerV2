@@ -19,6 +19,13 @@ import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
+    private val cornerRadius by lazy {
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            this.resources.displayMetrics
+        ).toInt()
+    }
     private lateinit var binding: ActivityAudioPlayerBinding
     private lateinit var viewModel: PlayerViewModel
 
@@ -103,13 +110,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(cornerRadius))
             .placeholder(R.drawable.ic_placeholder_312)
             .into(binding.ivPosterSongPlayer)
-    }
-    private val cornerRadius by lazy {
-        TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            8f,
-            this.resources.displayMetrics
-        ).toInt()
     }
     companion object{
         const val KEY_TRACK = "track"

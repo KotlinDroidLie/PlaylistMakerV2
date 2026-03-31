@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         viewModel = ViewModelProvider(this, SettingsViewModel.getViewModelFactory(
             Creator.getSettingsUseCase(applicationContext),
-            Creator.getSharingUseCase(this)
+            Creator.getSharingUseCase(applicationContext)
         )).get(SettingsViewModel::class.java)
 
         viewModel.themeSwitcher.observe(this){
