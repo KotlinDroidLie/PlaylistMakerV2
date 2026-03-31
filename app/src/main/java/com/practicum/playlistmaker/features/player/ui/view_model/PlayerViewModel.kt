@@ -15,27 +15,28 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase) : ViewModel() {
-    private val formattedTrack: PlayerUiModel
+    private val formattedTrack = prepareFormattedTrack(model, formatTrackUseCase)
     private val mediaPlayer = MediaPlayer()
-
-    init {
-        formattedTrack = prepareFormattedTrack(model, formatTrackUseCase)
-        preparedPlayer()
-    }
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val _state = MutableLiveData<PlayerState>(
+        PlayerState(
+            track = formattedTrack,
+            playerStatus = STATE_DEFAULT,
+            timer = TIMER_DEFAULT_VALUE
+        )
+    )
+    val state: LiveData<PlayerState> = _state
 
     private val runnable = Runnable {
-        if (playerState.value == STATE_PLAYING) {
+        if (_state.value?.playerStatus == STATE_PLAYING) {
             startTimer()
         }
     }
 
-    private val mainHandler = Handler(Looper.getMainLooper())
-    private val _playerState = MutableLiveData<Int>(STATE_DEFAULT)
-    val playerState: LiveData<Int> = _playerState
-    private val _timer = MutableLiveData<String>(TIMER_DEFAULT_VALUE)
-    val timer: LiveData<String> = _timer
-    private val _track = MutableLiveData<PlayerUiModel>(formattedTrack)
-    val track: LiveData<PlayerUiModel> = _track
+    init {
+        preparedPlayer()
+    }
+
     private fun prepareFormattedTrack(
         model: TrackModel,
         formatTrackUseCase: IFormatTrackUseCase
@@ -55,13 +56,13 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
 
     private fun preparedPlayer() {
         with(mediaPlayer) {
-            setDataSource(formattedTrack.audioPreviewUrl)
+            setDataSource(_state.value?.track?.audioPreviewUrl)
             prepareAsync()
             setOnPreparedListener {
-                _playerState.postValue(STATE_PREPARED)
+                _state.value = _state.value?.copy(playerStatus = STATE_PREPARED)
             }
             setOnCompletionListener {
-                _playerState.postValue(STATE_PREPARED)
+                _state.value = _state.value?.copy(playerStatus = STATE_PREPARED)
                 resetTimer()
             }
         }
@@ -70,7 +71,7 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
     private fun startTimer() {
         val currentPosition =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        _timer.postValue(currentPosition)
+        _state.value = _state.value?.copy(timer = currentPosition)
         mainHandler.postDelayed(runnable, 500)
     }
 
@@ -80,19 +81,18 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
 
     private fun resetTimer() {
         mainHandler.removeCallbacks(runnable)
-        _timer.postValue(TIMER_DEFAULT_VALUE)
+        _state.value = _state.value?.copy(timer = TIMER_DEFAULT_VALUE)
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        _playerState.postValue(STATE_PLAYING)
+        _state.value = _state.value?.copy(playerStatus = STATE_PLAYING)
         startTimer()
-
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        _playerState.postValue(STATE_PAUSED)
+        _state.value = _state.value?.copy(playerStatus = STATE_PAUSED)
         pauseTimer()
     }
 
@@ -101,7 +101,7 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
     }
 
     fun playerControl() {
-        when (playerState.value) {
+        when (_state.value?.playerStatus) {
             STATE_PAUSED, STATE_PREPARED -> startPlayer()
             STATE_PLAYING -> pausePlayer()
         }
@@ -116,9 +116,9 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
     companion object {
         private const val TIMER_DEFAULT_VALUE = "00:00"
         const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
+        const val STATE_PREPARED = 1
         const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
+        const val STATE_PAUSED = 3
         fun getViewModelFactory(
             track: TrackModel,
             formatTrackUseCase: IFormatTrackUseCase

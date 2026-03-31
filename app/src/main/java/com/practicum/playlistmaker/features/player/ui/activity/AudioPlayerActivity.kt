@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.practicum.playlistmaker.features.player.ui.view_model.PlayerState
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 
@@ -55,15 +56,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.btnAudioPlayerBack.setNavigationOnClickListener {
             finish()
         }
-        viewModel.track.observe(this){
-            initView(it)
-        }
-        viewModel.playerState.observe(this){
-            updatePlayButtonIcon(it == PlayerViewModel.STATE_PLAYING)
-            enableButton( it != PlayerViewModel.STATE_DEFAULT)
-        }
-        viewModel.timer.observe(this){
-            updateTimer(it)
+        viewModel.state.observe(this){
+            render(it)
         }
     }
 
@@ -110,6 +104,12 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(cornerRadius))
             .placeholder(R.drawable.ic_placeholder_312)
             .into(binding.ivPosterSongPlayer)
+    }
+    private fun render(state: PlayerState){
+        initView(state.track)
+        enableButton(state.playerStatus != PlayerViewModel.STATE_DEFAULT)
+        updatePlayButtonIcon(state.playerStatus == PlayerViewModel.STATE_PLAYING)
+        updateTimer(state.timer)
     }
     companion object{
         const val KEY_TRACK = "track"
