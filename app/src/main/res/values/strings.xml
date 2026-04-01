@@ -23,4 +23,7 @@
     <string name="year">Год</string>
     <string name="country">Страна</string>
     <string name="error_failed_load_track">"Не удалось загрузить трек"</string>
+    <string name="placeholder_text_error_network">Отсутствует подключение к интернету!</string>
+    <string name="placeholder_text_error_generic">Ошибка сервера %1$d</string>
+    <string name="placeholder_text_error_exception">Неизвестная ошибка %1$s</string>
 </resources>

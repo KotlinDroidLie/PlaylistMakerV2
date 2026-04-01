@@ -5,6 +5,9 @@ plugins {
 }
 
 android {
+    buildFeatures{
+        viewBinding = true
+    }
     namespace = "com.practicum.playlistmaker"
     compileSdk {
         version = release(36)
@@ -39,6 +42,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.logging.interceptor)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.gson)
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.retrofit)

@@ -1,0 +1,29 @@
+package com.practicum.playlistmaker.features.search.data.impl
+
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.features.search.data.api.NetworkClient
+import com.practicum.playlistmaker.features.search.data.dto.ErrorType
+import com.practicum.playlistmaker.features.search.data.dto.Resource
+import com.practicum.playlistmaker.features.search.data.dto.TrackRequest
+import com.practicum.playlistmaker.features.search.data.dto.TrackResponse
+import com.practicum.playlistmaker.features.search.data.extensions.toDomainModels
+import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
+
+class RemoteTrackRepository(private val networkClient: NetworkClient): IRemoteTrackRepository {
+    override fun doRequest(expression: String): Resource<List<TrackModel>> {
+        return try{
+            val response = networkClient.requestTracks(TrackRequest(expression))
+            when(response.resultCode){
+                200 ->{
+                    val tracks = (response as TrackResponse).toDomainModels()
+                    Resource.Success(tracks)
+                }
+                -1 -> Resource.Error(type = ErrorType.NETWORK, message = R.string.placeholder_text_error_network)
+                else -> Resource.Error(type = ErrorType.GENERIC, message = R.string.placeholder_text_error_generic, extraMessage = response.resultCode.toString())
+            }
+        } catch (e: Exception){
+            return Resource.Error(type = ErrorType.EXCEPTION, message = R.string.placeholder_text_error_exception, extraMessage = e.message)
+        }
+    }
+}
