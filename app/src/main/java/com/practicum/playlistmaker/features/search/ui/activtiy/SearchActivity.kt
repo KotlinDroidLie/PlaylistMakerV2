@@ -17,20 +17,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerActivity
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchState
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
     private lateinit var textConnectionProblem: MaterialTextView
     private var isClickAllowed = true
     private lateinit var recyclerView: RecyclerView
@@ -57,11 +56,6 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory(
-            Creator.getHistoryUseCase(applicationContext),
-            Creator.getSearchTracksUseCase(applicationContext)
-        )).get(SearchViewModel::class.java)
-
 
         val onItemClickListener = object : OnItemClickListener {
             override fun addToSearchHistory(track: TrackModel) {

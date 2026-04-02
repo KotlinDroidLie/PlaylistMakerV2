@@ -1,17 +1,10 @@
 package com.practicum.playlistmaker.features.search.ui.view_model
 
-import android.content.Context
 import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.features.search.data.dto.ErrorType
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
@@ -19,7 +12,8 @@ import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTra
 
 class SearchViewModel(
     private val historyUseCase: IHistoryUseCase,
-    private val searchTracksUseCase: ISearchTracksUseCase
+    private val searchTracksUseCase: ISearchTracksUseCase,
+    private val handler : Handler
 ) : ViewModel() {
     private val _state = MutableLiveData<SearchState>(
         SearchState.History(historyUseCase.getHistory())
@@ -27,7 +21,6 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
-    private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable {
         if (lastSearchText.isNotEmpty()) {
             executeSearch(lastSearchText)
@@ -108,15 +101,6 @@ class SearchViewModel(
     }
 
     companion object {
-        fun getViewModelFactory(
-            historyUseCase: IHistoryUseCase,
-            searchTracksUseCase: ISearchTracksUseCase
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(historyUseCase, searchTracksUseCase)
-            }
-        }
-
         private const val SEARCH_DELAY = 2000L
     }
 }

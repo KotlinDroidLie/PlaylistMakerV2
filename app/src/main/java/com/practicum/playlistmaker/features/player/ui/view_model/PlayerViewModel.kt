@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.features.player.ui.view_model
 
 import android.media.MediaPlayer
 import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,10 +10,13 @@ import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCas
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase) : ViewModel() {
+class PlayerViewModel(
+    model: TrackModel,
+    formatTrackUseCase: IFormatTrackUseCase,
+    private val mediaPlayer: MediaPlayer,
+    private val mainHandler: Handler
+) : ViewModel() {
     private val formattedTrack = prepareFormattedTrack(model, formatTrackUseCase)
-    private val mediaPlayer = MediaPlayer()
-    private val mainHandler = Handler(Looper.getMainLooper())
     private val _state = MutableLiveData<PlayerState>(
         PlayerState(
             track = formattedTrack,
