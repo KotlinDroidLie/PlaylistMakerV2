@@ -6,9 +6,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import java.text.SimpleDateFormat
@@ -119,13 +116,5 @@ class PlayerViewModel(model: TrackModel, formatTrackUseCase: IFormatTrackUseCase
         const val STATE_PREPARED = 1
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
-        fun getViewModelFactory(
-            track: TrackModel,
-            formatTrackUseCase: IFormatTrackUseCase
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(track, formatTrackUseCase)
-            }
-        }
     }
 }

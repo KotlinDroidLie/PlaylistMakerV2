@@ -2,22 +2,20 @@ package com.practicum.playlistmaker.features.player.ui.activity
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.features.search.domain.model.TrackModel
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerState
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AudioPlayerActivity : AppCompatActivity() {
     private val cornerRadius by lazy {
@@ -28,7 +26,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         ).toInt()
     }
     private lateinit var binding: ActivityAudioPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel{
+        parametersOf(intent.getParcelableExtra(KEY_TRACK))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +40,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val track: TrackModel? = intent.getParcelableExtra(KEY_TRACK)
-        track ?: run {
-            Toast.makeText(this, resources.getString(R.string.error_failed_load_track), Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track, Creator.getFormatTrackUseCase()))
-            .get(PlayerViewModel::class.java)
 
         binding.ibtnMusic.setOnClickListener {
             viewModel.playerControl()

@@ -67,7 +67,4 @@ object Creator {
     fun getSettingsUseCase(context: Context): ISettingsUseCase {
         return SettingsUseCase(getSettingsRepository(context))
     }
-    fun getFormatTrackUseCase(): IFormatTrackUseCase {
-        return FormatTrackUseCase()
-    }
 }
