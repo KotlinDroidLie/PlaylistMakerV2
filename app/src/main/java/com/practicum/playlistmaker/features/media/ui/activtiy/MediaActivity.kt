@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media
+package com.practicum.playlistmaker.features.media.ui.activtiy
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -23,13 +23,18 @@ class MediaActivity : AppCompatActivity() {
             insets
         }
         binding.vp2Media.adapter = MediaViewPagerAdapter(supportFragmentManager, lifecycle)
-        tabLayoutMediator = TabLayoutMediator(binding.tabLayoutMedia, binding.vp2Media){ tab, position ->
-            when(position){
-                0 ->{}
-                1 ->{}
+        tabLayoutMediator =
+            TabLayoutMediator(binding.tabLayoutMedia, binding.vp2Media) { tab, position ->
+                when (position) {
+                    0 -> tab.text = getString(R.string.favourite_tracks)
+                    1 -> tab.text = getString(R.string.playlists)
+                }
             }
-        }
         tabLayoutMediator.attach()
+
+        binding.btnMediaBack.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     override fun onDestroy() {

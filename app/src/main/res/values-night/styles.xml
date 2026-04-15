@@ -200,8 +200,16 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="IncludeViewStatusMediaPlaylistMessage" parent="IncludeViewStatusMediaMessage">
-        <item name="android:layout_marginTop">@dimen/standard_layout_margin</item>
-        <item name="android:layout_marginHorizontal">@dimen/margin_text_status_media_message_horizontal</item>
+    <style name="MediaTabLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabTextAppearance">@style/TabTextAppearanceMedia</item>
+        <item name="tabTextColor">@color/white</item>
+    </style>
+
+    <style name="TabTextAppearanceMedia" parent="MessageTextStyleYSMedium">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

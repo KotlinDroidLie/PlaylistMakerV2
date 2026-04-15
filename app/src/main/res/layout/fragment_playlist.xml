@@ -3,16 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_playlist_media"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"/>
+        android:orientation="vertical">
 
-    <include style="@style/IncludeViewStatusMediaPlaylistMessage"
-        android:id="@+id/view_media_status_is_empty"
-        android:visibility="gone"
-        layout="@layout/playlist_media_is_empty_view"/>
+        <Button
+            android:id="@+id/btn_add_new_playlist"
+            style="@style/ButtonPlaylistView"
+            android:layout_marginTop="24dp"
+            android:text="@string/new_playlist"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_playlist_media"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <include style="@style/IncludeViewStatusMediaMessage"
+        layout="@layout/playlist_media_is_empty_view"
+        android:id="@+id/view_media_playlist_status_is_empty"
+        android:visibility="gone"/>
 
 </FrameLayout>
