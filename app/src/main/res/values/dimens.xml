@@ -20,4 +20,6 @@
     <dimen name="padding_drawable_status_search_message">16dp</dimen>
     <dimen name="margin_top_status_search_message">102dp</dimen>
     <dimen name="recycler_view_margin_horizontal">12dp</dimen>
+    <dimen name="margin_text_status_media_message_horizontal">24dp</dimen>
+    <dimen name="margin_top_status_media_message">106dp</dimen>
 </resources>

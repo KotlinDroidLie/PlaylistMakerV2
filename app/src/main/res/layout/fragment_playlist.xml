@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_playlist_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"/>
+
+    <include style="@style/IncludeViewStatusMediaPlaylistMessage"
+        android:id="@+id/view_media_status_is_empty"
+        android:visibility="gone"
+        layout="@layout/playlist_media_is_empty_view"/>
+
+</FrameLayout>

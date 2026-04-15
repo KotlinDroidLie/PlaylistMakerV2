@@ -7,4 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".MediaActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
+        android:id="@+id/btn_media_back"
+        app:navigationIcon="@drawable/ic_arrow_back_16"
+        app:title="@string/text_media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/vp2_media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_media_back" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp2_media"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout_media" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
