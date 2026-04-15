@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_add_new_playlist"
+            style="@style/ButtonPlaylistView"
+            android:layout_marginTop="24dp"
+            android:text="@string/new_playlist"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_playlist_media"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <include style="@style/IncludeViewStatusMediaMessage"
+        layout="@layout/playlist_media_is_empty_view"
+        android:id="@+id/view_media_playlist_status_is_empty"
+        android:visibility="gone"/>
+
+</FrameLayout>

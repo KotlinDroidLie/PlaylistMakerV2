@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.textview.MaterialTextView style="@style/TextViewStatusMediaMessage"
+    android:drawableTop="@drawable/ic_search_nothing_120"
+    android:text="@string/no_playlist_has_been_created"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>

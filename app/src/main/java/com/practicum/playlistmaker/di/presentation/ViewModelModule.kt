@@ -4,6 +4,8 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import com.practicum.playlistmaker.di.domain.useCaseModule
+import com.practicum.playlistmaker.features.media.ui.viewModel.FavouriteTracksViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.PlaylistViewModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
@@ -50,6 +52,14 @@ val viewModelModule = module{
             get<ISettingsUseCase>(),
             get<ISharingUseCase>()
         )
+    }
+
+    viewModel {
+        FavouriteTracksViewModel()
+    }
+
+    viewModel {
+        PlaylistViewModel()
     }
 
 

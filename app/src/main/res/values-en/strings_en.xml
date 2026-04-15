@@ -20,4 +20,12 @@
     <string name="year">Year</string>
     <string name="country">Country</string>
     <string name="error_failed_load_track">Failed to load the track</string>
+    <string name="placeholder_text_error_network">There is no internet connection!</string>
+    <string name="placeholder_text_error_generic">Server error %1$d</string>
+    <string name="placeholder_text_error_exception">Unknown error %1$s</string>
+    <string name="media_is_empty">Your library is empty</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="no_playlist_has_been_created">You haven\'t created\n any playlists</string>
+    <string name="favourite_tracks">Favorite tracks</string>
+    <string name="playlists">Playlists</string>
 </resources>
