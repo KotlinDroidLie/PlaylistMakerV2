@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/MainLayoutBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_layout_main_activity">
+
+    <com.google.android.material.appbar.MaterialToolbar style="@style/MainToolBarStyle"
+        android:paddingStart="@dimen/standard_padding"
+        android:paddingEnd="@dimen/standard_padding"
+        app:title="@string/app_name"/>
+
+    <Button style="@style/ButtonMainStyle"
+        android:id="@+id/btn_search"
+        android:text="@string/text_search"
+        app:icon="@drawable/ic_light_mode_search_24"
+        android:layout_marginTop="@dimen/standard_layout_margin"/>
+
+    <Button style="@style/ButtonMainStyle"
+        android:id="@+id/btn_media"
+        android:text="@string/text_media"
+        app:icon="@drawable/ic_light_mode_media_24" />
+
+    <Button style="@style/ButtonMainStyle"
+        android:id="@+id/btn_settings"
+        android:text="@string/text_settings"
+        app:icon="@drawable/ic_light_mode_setting_24"
+        android:layout_marginBottom="@dimen/standard_layout_margin"/>
+
+</LinearLayout>

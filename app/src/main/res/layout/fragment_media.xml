@@ -6,7 +6,7 @@
     android:id="@+id/media"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.media.ui.activtiy.MediaActivity">
+    tools:context=".features.media.ui.activtiy.MediaFragment">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_media_back"
