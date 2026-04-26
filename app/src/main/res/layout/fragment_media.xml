@@ -2,11 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout style="@style/SecondLayoutBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/media"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".features.media.ui.activtiy.MediaFragment">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_media_back"

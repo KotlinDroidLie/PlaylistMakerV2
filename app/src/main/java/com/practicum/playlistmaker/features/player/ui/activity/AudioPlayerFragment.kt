@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -23,7 +24,7 @@ class AudioPlayerFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PlayerViewModel by viewModel{
-        parametersOf(requireArguments().getParcelable<TrackModel>(KEY_TRACK))
+        parametersOf(requireArguments().getParcelable<TrackModel>(ARGS_TRACK))
     }
 
     private val cornerRadius by lazy {
@@ -50,7 +51,7 @@ class AudioPlayerFragment : Fragment() {
             viewModel.playerControl()
         }
         binding.btnAudioPlayerBack.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
 
         viewModel.state.observe(viewLifecycleOwner){
@@ -116,12 +117,10 @@ class AudioPlayerFragment : Fragment() {
         updateTimer(state.timer)
     }
     companion object{
-        private const val KEY_TRACK = "track"
+        private const val ARGS_TRACK = "track"
 
-        fun newInstance(model: TrackModel) = AudioPlayerFragment().apply {
-            arguments  = Bundle().apply {
-                putParcelable(KEY_TRACK, model)
-            }
+        fun createARgs(model: TrackModel) = Bundle().apply {
+                putParcelable(ARGS_TRACK, model)
         }
     }
 }

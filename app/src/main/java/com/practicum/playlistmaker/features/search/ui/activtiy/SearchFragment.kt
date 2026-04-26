@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -36,15 +37,31 @@ class SearchFragment : Fragment() {
 
     private var _statusNothingFoundBinding: SearchStatusNothingFoundViewBinding? = null
     private val statusNothingFoundBinding get() = _statusNothingFoundBinding!!
-
-
-
-
     private val viewModel: SearchViewModel by viewModel()
     private var isClickAllowed = true
-    lateinit var adapter: SearchTrackAdapter
     private val mainHandler = Handler(Looper.getMainLooper())
+    private lateinit var adapter: SearchTrackAdapter
     private lateinit var historyAdapter: SearchHistoryAdapter
+    private val onItemClickListener = object : OnItemClickListener {
+        override fun addToSearchHistory(track: TrackModel) {
+            viewModel.saveToHistory(track)
+        }
+
+        override fun openAudioPlayer(track: TrackModel) {
+            if (clickDebounce()){
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_audioPlayerFragment,
+                    AudioPlayerFragment.createARgs(track)
+                )
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = SearchTrackAdapter(onItemClickListener)
+        historyAdapter = SearchHistoryAdapter(onItemClickListener)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,28 +78,10 @@ class SearchFragment : Fragment() {
         _statusHistoryBinding = SearchStatusHistoryViewBinding.bind(mainBinding.viewSearchHistory.root)
         _statusNothingFoundBinding = SearchStatusNothingFoundViewBinding.bind(mainBinding.viewNothingFound.root)
 
-        val onItemClickListener = object : OnItemClickListener {
-            override fun addToSearchHistory(track: TrackModel) {
-                viewModel.saveToHistory(track)
-            }
-
-            override fun openAudioPlayer(track: TrackModel) {
-                if (clickDebounce()){
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fcv_main, AudioPlayerFragment.newInstance(track))
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit()
-                }
-            }
-        }
-
         statusHistoryBinding.rvHistorySongsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        historyAdapter = SearchHistoryAdapter(onItemClickListener)
         statusHistoryBinding.rvHistorySongsList.adapter  = historyAdapter
 
         mainBinding.rvSongsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        adapter = SearchTrackAdapter(onItemClickListener)
         mainBinding.rvSongsList.adapter  = adapter
 
         viewModel.state.observe(viewLifecycleOwner){
@@ -90,7 +89,7 @@ class SearchFragment : Fragment() {
         }
 
         mainBinding.btnSearchBack.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
 
         statusHistoryBinding.btnClearHistory.setOnClickListener {
@@ -129,6 +128,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         mainHandler.removeCallbacks(clickAllowedRunnable)
+        isClickAllowed = true
         _mainBinding = null
         _statusConnectionBinding = null
         _statusHistoryBinding = null

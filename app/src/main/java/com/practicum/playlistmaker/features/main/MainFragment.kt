@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
-import com.practicum.playlistmaker.features.media.ui.activtiy.MediaFragment
-import com.practicum.playlistmaker.features.search.ui.activtiy.SearchFragment
-import com.practicum.playlistmaker.features.settings.ui.activity.SettingsFragment
 
 
 class MainFragment : Fragment() {
@@ -26,27 +24,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnSearch.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fcv_main, SearchFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
         }
 
         binding.btnMedia.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fcv_main, MediaFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_mainFragment_to_mediaFragment)
         }
 
         binding.btnSettings.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fcv_main, SettingsFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 
