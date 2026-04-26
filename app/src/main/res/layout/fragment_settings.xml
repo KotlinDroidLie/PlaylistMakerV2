@@ -6,13 +6,14 @@
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_settings_back"
-        app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_settings"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial style="@style/TextViewStyleSettings"
         android:id="@+id/sw_theme"
         android:layout_width="match_parent"
         android:text="@string/themes_dark"
+        app:trackTint="@color/switcher_color"
+        app:thumbTint="@color/switcher_color"
         android:layout_marginTop="24dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,15 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout style="@style/SecondLayoutBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/media"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".features.media.ui.activtiy.MediaActivity">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_media_back"
-        app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_media"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -6,7 +6,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_search_back"
-        app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_search"/>
 
     <FrameLayout
