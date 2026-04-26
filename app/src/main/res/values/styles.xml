@@ -212,5 +212,16 @@
         <item name="tabIndicatorColor">@color/YP_black</item>
         <item name="tabTextAppearance">@style/TabTextAppearanceMedia</item>
     </style>
+
+    <style name="BottomNavText" parent="MessageTextStyleYSRegular">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="SecondLayoutBackground">
+        <item name="itemTextAppearanceActive">@style/BottomNavText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavText</item>
+        <item name="itemTextColor">@color/nav_text</item>
+        <item name="itemIconTint">@color/nav_icon</item>
+    </style>
     
 </resources>
