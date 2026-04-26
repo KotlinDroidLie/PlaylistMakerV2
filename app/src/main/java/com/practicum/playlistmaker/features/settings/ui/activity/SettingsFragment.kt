@@ -35,10 +35,6 @@ class SettingsFragment : Fragment() {
             viewModel.switchTheme(isChecked)
         }
 
-        binding.btnSettingsBack.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.btnShareApp.setOnClickListener {
             viewModel.shareApp()
         }

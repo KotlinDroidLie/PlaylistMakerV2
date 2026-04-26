@@ -8,7 +8,6 @@
 
     <com.google.android.material.appbar.MaterialToolbar style="@style/ToolBarStyle"
         android:id="@+id/btn_media_back"
-        app:navigationIcon="@drawable/ic_arrow_back_16"
         app:title="@string/text_media"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

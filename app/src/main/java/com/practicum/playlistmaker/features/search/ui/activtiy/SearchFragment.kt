@@ -88,10 +88,6 @@ class SearchFragment : Fragment() {
             render(it)
         }
 
-        mainBinding.btnSearchBack.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-
         statusHistoryBinding.btnClearHistory.setOnClickListener {
             viewModel.clearHistory()
             showDefault()

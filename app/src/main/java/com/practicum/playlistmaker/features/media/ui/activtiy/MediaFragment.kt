@@ -34,10 +34,6 @@ class MediaFragment : Fragment() {
                 }
             }
         tabLayoutMediator.attach()
-
-        binding.btnMediaBack.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
     override fun onDestroyView() {

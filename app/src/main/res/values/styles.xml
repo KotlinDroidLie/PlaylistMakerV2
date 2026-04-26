@@ -196,10 +196,13 @@
     </style>
 
     <style name="BottomNavigationView" parent="SecondLayoutBackground">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="itemTextAppearanceActive">@style/BottomNavText</item>
         <item name="itemTextAppearanceInactive">@style/BottomNavText</item>
         <item name="itemTextColor">@color/nav_text</item>
         <item name="itemIconTint">@color/nav_icon</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
     </style>
     
 </resources>
