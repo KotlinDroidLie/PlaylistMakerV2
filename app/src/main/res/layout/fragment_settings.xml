@@ -12,6 +12,8 @@
         android:id="@+id/sw_theme"
         android:layout_width="match_parent"
         android:text="@string/themes_dark"
+        app:trackTint="@color/switcher_color"
+        app:thumbTint="@color/switcher_color"
         android:layout_marginTop="24dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
