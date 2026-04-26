@@ -13,10 +13,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.databinding.SearchStatusConnectionProblemsViewBinding
 import com.practicum.playlistmaker.databinding.SearchStatusHistoryViewBinding
 import com.practicum.playlistmaker.databinding.SearchStatusNothingFoundViewBinding
+import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragment
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchState
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
@@ -66,11 +68,11 @@ class SearchFragment : Fragment() {
 
             override fun openAudioPlayer(track: TrackModel) {
                 if (clickDebounce()){
-//                    val intent = Intent(this@SearchFragment, AudioPlayerActivity::class.java).apply {
-//                        putExtra(AudioPlayerActivity.KEY_TRACK, track)
-//                    }
-//                    startActivity(intent)
-                    TODO()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fcv_main, AudioPlayerFragment.newInstance(track))
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }
@@ -88,8 +90,7 @@ class SearchFragment : Fragment() {
         }
 
         mainBinding.btnSearchBack.setNavigationOnClickListener {
-//            finish()
-            TODO()
+            parentFragmentManager.popBackStack()
         }
 
         statusHistoryBinding.btnClearHistory.setOnClickListener {

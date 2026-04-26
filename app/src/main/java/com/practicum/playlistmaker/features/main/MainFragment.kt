@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
+import com.practicum.playlistmaker.features.media.ui.activtiy.MediaFragment
 import com.practicum.playlistmaker.features.search.ui.activtiy.SearchFragment
 import com.practicum.playlistmaker.features.settings.ui.activity.SettingsFragment
 
@@ -33,10 +34,11 @@ class MainFragment : Fragment() {
         }
 
         binding.btnMedia.setOnClickListener {
-//            val intentMedia = Intent(this@MainActivity, MediaActivity::class.java)
-//            startActivity(intentMedia)
-            TODO()
-
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fcv_main, MediaFragment())
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.btnSettings.setOnClickListener {

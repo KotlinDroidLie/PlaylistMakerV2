@@ -35,8 +35,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.btnSettingsBack.setNavigationOnClickListener {
-//            finish()
-            TODO()
+            parentFragmentManager.popBackStack()
         }
 
         binding.btnShareApp.setOnClickListener {

@@ -35,8 +35,7 @@ class MediaFragment : Fragment() {
         tabLayoutMediator.attach()
 
         binding.btnMediaBack.setNavigationOnClickListener {
-//            finish()
-            TODO()
+            parentFragmentManager.popBackStack()
         }
     }
 
