@@ -13,24 +13,6 @@
         <item name="titleTextAppearance">@style/MessageTextStyleYSMedium</item>
     </style>
 
-    <style name="ButtonMainStyle"  parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="backgroundTint">@color/white</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textColor">@color/YP_black</item>
-        <item name="android:textAppearance">@style/MessageTextStyleYSMedium</item>
-        <item name="cornerRadius">@dimen/radius_button</item>
-        <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/icon_padding</item>
-        <item name="iconTint">@color/YP_black</item>
-        <item name="android:layout_marginTop">@dimen/standard_padding</item>
-        <item name="android:layout_marginStart">@dimen/standard_padding</item>
-        <item name="android:layout_marginEnd">@dimen/standard_padding</item>
-    </style>
-
     <style name="TextViewStyleSettings" parent="MessageTextStyleYSRegular">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -53,15 +35,11 @@
         <item name="android:textSize">@dimen/text_standard</item>
     </style>
 
-    <style name="SecondLayoutBackground" parent="MainLayoutBackground">
+    <style name="SecondLayoutBackground">
         <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="MainLayoutBackground">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:background">@color/blue</item>
     </style>
 
     <style name="ButtonSettingsStyle">
