@@ -78,8 +78,8 @@ class AudioPlayerFragment : Fragment() {
     }
     private fun updatePlayButtonIcon(flag: Boolean) {
         val icon = when (flag) {
-            true -> R.drawable.ic_button_pause_music_100
-            false -> R.drawable.ic_button_play_music_100
+            false -> R.drawable.ic_button_pause_music_100
+            true -> R.drawable.ic_button_play_music_100
         }
         binding.ibtnMusic.setImageResource(icon)
     }
@@ -112,9 +112,9 @@ class AudioPlayerFragment : Fragment() {
     }
     private fun render(state: PlayerState){
         initView(state.track)
-        enableButton(state.playerStatus != PlayerViewModel.STATE_DEFAULT)
-        updatePlayButtonIcon(state.playerStatus == PlayerViewModel.STATE_PLAYING)
-        updateTimer(state.timer)
+        enableButton(state.buttonIsEnable)
+        updatePlayButtonIcon(state.buttonIsPlayIcon)
+        updateTimer(state.progress)
     }
     companion object{
         private const val ARGS_TRACK = "track"
