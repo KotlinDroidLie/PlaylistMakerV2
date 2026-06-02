@@ -66,9 +66,10 @@ class PlayerViewModel(
     }
 
     private fun startTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying){
-                delay(300L)
+                delay(TIMER_CHANGE_DELAY)
                 _state.postValue(PlayerState.Playing(track,getCurrentPlayerPosition()))
             }
         }
@@ -123,5 +124,9 @@ class PlayerViewModel(
     override fun onCleared() {
         super.onCleared()
         releasePlayer()
+    }
+
+    companion object{
+        private const val TIMER_CHANGE_DELAY = 300L
     }
 }
