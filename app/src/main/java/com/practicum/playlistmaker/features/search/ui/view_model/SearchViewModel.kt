@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.features.search.data.dto.ErrorType
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.SearchResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -40,34 +40,28 @@ class SearchViewModel(
 
     private fun executeSearch(searchText: String) {
         renderState(SearchState.Loading)
-        searchTracksUseCase.searchTracks(searchText, object : ISearchTracksUseCase.TracksConsumer {
-            override fun consume(
-                foundTracks: List<TrackModel>?,
-                errorMessage: Int?,
-                typeError: ErrorType?,
-                extraMessage: String?
-            ) {
-                when {
-                    errorMessage != null -> {
-                        renderState(
-                            SearchState.Error(R.string.connection_problems)
-                        )
-                        lastErrorSearch = searchText
-                    }
-
-                    foundTracks.isNullOrEmpty() -> {
-                        renderState(SearchState.Empty(R.string.nothing_found))
-                        lastErrorSearch = null
-                    }
-
-                    else -> {
-                        renderState(SearchState.Content(foundTracks))
-                        lastErrorSearch = null
-                    }
-                }
+        viewModelScope.launch {
+            searchTracksUseCase.searchTracks(searchText).collect { result: SearchResult ->
+                processResult(result, searchText)
             }
+        }
+    }
 
-        })
+    private fun processResult(result: SearchResult, searchText: String){
+        when(result){
+            is SearchResult.Success -> {
+                if(result.tracks.isNullOrEmpty()){
+                    renderState(SearchState.Empty(R.string.nothing_found))
+                } else{
+                    renderState(SearchState.Content(result.tracks))
+                }
+                lastErrorSearch = null
+            }
+            is SearchResult.Error -> {
+                renderState(SearchState.Error(R.string.connection_problems))
+                lastErrorSearch = searchText
+            }
+        }
     }
 
     fun searchDebounce(text: String) {
