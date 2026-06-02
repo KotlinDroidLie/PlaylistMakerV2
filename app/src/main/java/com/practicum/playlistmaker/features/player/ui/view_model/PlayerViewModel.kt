@@ -23,6 +23,7 @@ class PlayerViewModel(
     private val _state = MutableLiveData<PlayerState>(
         PlayerState.Default(
             track = track,
+            DEFAULT_PROGRESS
         )
     )
     val state: LiveData<PlayerState> = _state
@@ -55,7 +56,7 @@ class PlayerViewModel(
             setDataSource(_state.value?.track?.audioPreviewUrl)
             prepareAsync()
             setOnPreparedListener {
-                _state.postValue(PlayerState.Prepared(track))
+                _state.postValue(PlayerState.Prepared(track, DEFAULT_PROGRESS))
             }
             setOnCompletionListener {
                 viewModelScope.launch {
@@ -89,7 +90,7 @@ class PlayerViewModel(
     }
 
     private fun resetTimer() {
-        _state.postValue(PlayerState.Prepared(track))
+        _state.postValue(PlayerState.Prepared(track, DEFAULT_PROGRESS))
     }
 
     private fun startPlayer() {
@@ -128,5 +129,6 @@ class PlayerViewModel(
 
     companion object{
         private const val TIMER_CHANGE_DELAY = 300L
+        private const val DEFAULT_PROGRESS = "00:00"
     }
 }
