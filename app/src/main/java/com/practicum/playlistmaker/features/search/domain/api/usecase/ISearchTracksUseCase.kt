@@ -1,12 +1,14 @@
 package com.practicum.playlistmaker.features.search.domain.api.usecase
 
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
-import com.practicum.playlistmaker.features.search.data.dto.ErrorType
+import kotlinx.coroutines.flow.Flow
 
 interface ISearchTracksUseCase {
-    fun searchTracks(expression: String, consumer: TracksConsumer)
+    fun searchTracks(expression: String) : Flow<SearchResult>
+}
 
-    interface TracksConsumer{
-        fun consume(foundTracks: List<TrackModel>?, errorMessage: Int?, typeError: ErrorType?, extraMessage: String?)
-    }
+
+sealed class SearchResult{
+    data class Success(val tracks: List<TrackModel>?) : SearchResult()
+    data class Error(val errorMessage: Int?, val extraMessage: String?) : SearchResult()
 }

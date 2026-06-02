@@ -2,8 +2,6 @@ package com.practicum.playlistmaker.features.search.ui.activtiy
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +22,8 @@ import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragme
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchState
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -39,7 +40,6 @@ class SearchFragment : Fragment() {
     private val statusNothingFoundBinding get() = _statusNothingFoundBinding!!
     private val viewModel: SearchViewModel by viewModel()
     private var isClickAllowed = true
-    private val mainHandler = Handler(Looper.getMainLooper())
     private lateinit var adapter: SearchTrackAdapter
     private lateinit var historyAdapter: SearchHistoryAdapter
     private val onItemClickListener = object : OnItemClickListener {
@@ -123,7 +123,6 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mainHandler.removeCallbacks(clickAllowedRunnable)
         isClickAllowed = true
         _mainBinding = null
         _statusConnectionBinding = null
@@ -198,15 +197,14 @@ class SearchFragment : Fragment() {
         historyAdapter.trackHistory.addAll(newHistoryList)
         historyAdapter.notifyDataSetChanged()
     }
-
-    private val clickAllowedRunnable = Runnable {
-        isClickAllowed = true
-    }
     private fun clickDebounce(): Boolean{
         val current = isClickAllowed
         if (current){
             isClickAllowed = false
-            mainHandler.postDelayed(clickAllowedRunnable, CLICK_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }

@@ -1,19 +1,21 @@
 package com.practicum.playlistmaker.features.search.ui.view_model
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.features.search.data.dto.ErrorType
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
+import com.practicum.playlistmaker.features.search.domain.api.usecase.SearchResult
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val historyUseCase: IHistoryUseCase,
     private val searchTracksUseCase: ISearchTracksUseCase,
-    private val handler : Handler
 ) : ViewModel() {
     private val _state = MutableLiveData<SearchState>(
         SearchState.History(historyUseCase.getHistory())
@@ -21,12 +23,7 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
-    private val searchRunnable = Runnable {
-        if (lastSearchText.isNotEmpty()) {
-            executeSearch(lastSearchText)
-        }
-    }
-
+    private var searchJob: Job? = null
     fun saveToHistory(track: TrackModel) {
         historyUseCase.saveToHistory(track)
         _state.postValue(
@@ -43,34 +40,28 @@ class SearchViewModel(
 
     private fun executeSearch(searchText: String) {
         renderState(SearchState.Loading)
-        searchTracksUseCase.searchTracks(searchText, object : ISearchTracksUseCase.TracksConsumer {
-            override fun consume(
-                foundTracks: List<TrackModel>?,
-                errorMessage: Int?,
-                typeError: ErrorType?,
-                extraMessage: String?
-            ) {
-                when {
-                    errorMessage != null -> {
-                        renderState(
-                            SearchState.Error(R.string.connection_problems)
-                        )
-                        lastErrorSearch = searchText
-                    }
-
-                    foundTracks.isNullOrEmpty() -> {
-                        renderState(SearchState.Empty(R.string.nothing_found))
-                        lastErrorSearch = null
-                    }
-
-                    else -> {
-                        renderState(SearchState.Content(foundTracks))
-                        lastErrorSearch = null
-                    }
-                }
+        viewModelScope.launch {
+            searchTracksUseCase.searchTracks(searchText).collect { result: SearchResult ->
+                processResult(result, searchText)
             }
+        }
+    }
 
-        })
+    private fun processResult(result: SearchResult, searchText: String){
+        when(result){
+            is SearchResult.Success -> {
+                if(result.tracks.isNullOrEmpty()){
+                    renderState(SearchState.Empty(R.string.nothing_found))
+                } else{
+                    renderState(SearchState.Content(result.tracks))
+                }
+                lastErrorSearch = null
+            }
+            is SearchResult.Error -> {
+                renderState(SearchState.Error(R.string.connection_problems))
+                lastErrorSearch = searchText
+            }
+        }
     }
 
     fun searchDebounce(text: String) {
@@ -78,16 +69,25 @@ class SearchViewModel(
             return
         }
         lastSearchText = text
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DELAY)
+        searchJob = viewModelScope.launch {
+            searchJob?.cancel()
+            delay(SEARCH_DELAY)
+            if (lastSearchText.isNotEmpty()) {
+                executeSearch(lastSearchText)
+            }
+        }
     }
 
     fun retryErrorSearch() {
         val lastError = lastErrorSearch
         if (lastError != null) {
             lastSearchText = lastError
-            handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DELAY)
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                if (lastSearchText.isNotEmpty()) {
+                    executeSearch(lastSearchText)
+                }
+            }
         }
     }
 
@@ -97,7 +97,6 @@ class SearchViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        handler.removeCallbacks(searchRunnable)
     }
 
     companion object {

@@ -33,9 +33,7 @@ val viewModelModule = module{
         PlayerViewModel(
             model,
             get<IFormatTrackUseCase>(),
-            get<MediaPlayer>(),
-            get<Handler>(),
-
+            get<MediaPlayer>()
         )
     }
 
@@ -43,7 +41,6 @@ val viewModelModule = module{
         SearchViewModel(
             get<IHistoryUseCase>(),
             get<ISearchTracksUseCase>(),
-            get<Handler>()
         )
     }
 
