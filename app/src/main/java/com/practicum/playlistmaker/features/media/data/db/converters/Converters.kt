@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.data.converters
+package com.practicum.playlistmaker.features.media.data.db.converters
 
 import androidx.room.TypeConverter
 import java.util.Date
