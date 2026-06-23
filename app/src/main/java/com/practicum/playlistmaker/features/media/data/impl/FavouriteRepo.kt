@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.features.media.data.impl
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.media.data.db.entity.toEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toModel
-import com.practicum.playlistmaker.features.media.domain.repo.IFavouriteRepo
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

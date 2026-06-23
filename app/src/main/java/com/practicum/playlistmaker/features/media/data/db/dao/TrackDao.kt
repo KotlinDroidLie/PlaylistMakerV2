@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.features.media.data.db.entity.TrackEntity
 
 @Dao
 interface TrackDao {
-    @Insert(onConflict = OnConflictStrategy.Companion.NONE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(track: TrackEntity)
 
     @Delete
@@ -19,5 +19,5 @@ interface TrackDao {
     suspend fun getFavouriteTracks() : List<TrackEntity>
 
     @Query("SELECT trackId FROM track_table")
-    suspend fun getFavouriteTracksId(): List<Int>
+    suspend fun getFavouriteTracksIds(): List<Int>
 }
