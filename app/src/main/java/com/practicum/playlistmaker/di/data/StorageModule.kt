@@ -2,8 +2,10 @@ package com.practicum.playlistmaker.di.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.features.media.data.AppDataBase
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.features.search.data.impl.SharedPrefStorageClient
@@ -39,5 +41,9 @@ val storageModule = module {
             gson = get<Gson>(),
             sharedPref = get<SharedPreferences>()
         )
+    }
+
+    single<AppDataBase>{
+        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "track.db").build()
     }
 }
