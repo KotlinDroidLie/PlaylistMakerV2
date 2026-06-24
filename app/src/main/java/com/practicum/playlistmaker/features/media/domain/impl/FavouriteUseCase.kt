@@ -17,7 +17,7 @@ class FavouriteUseCase(
         repo.removeTrack(track)
     }
 
-    override suspend fun getTracks(): Flow<List<TrackModel>> {
+    override fun getTracks(): Flow<List<TrackModel>> {
         return repo.getTracks().map { tracks -> tracks.reversed() }
     }
 }
