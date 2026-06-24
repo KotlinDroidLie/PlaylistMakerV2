@@ -9,5 +9,6 @@ data class PlayerUiModel(
     val country: String,
     val trackDuration: String,
     val trackImage: String,
-    val audioPreviewUrl: String
+    val audioPreviewUrl: String,
+    var isFavourite: Boolean
 )

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteUseCase
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import kotlinx.coroutines.Job
@@ -15,9 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
-    model: TrackModel,
+    private val model: TrackModel,
     formatTrackUseCase: IFormatTrackUseCase,
-    private val mediaPlayer: MediaPlayer
+    private val mediaPlayer: MediaPlayer,
+    private val favouriteUseCase: IFavouriteUseCase
 ) : ViewModel() {
     private val track = prepareFormattedTrack(model, formatTrackUseCase)
     private val _state = MutableLiveData<PlayerState>(
@@ -47,7 +49,8 @@ class PlayerViewModel(
             country = model.country,
             trackDuration = formatTrackUseCase.getTrackDuration(model.trackDuration),
             trackImage = formatTrackUseCase.getCoverArtwork(model.trackImage),
-            audioPreviewUrl = model.audioPreviewUrl
+            audioPreviewUrl = model.audioPreviewUrl,
+            isFavourite =  model.isFavourite
         )
     }
 
@@ -114,6 +117,27 @@ class PlayerViewModel(
             is PlayerState.Prepared, is PlayerState.Paused -> startPlayer()
             is PlayerState.Playing -> pausePlayer()
             else -> {}
+        }
+    }
+
+    fun onFavoriteClicked(){
+        viewModelScope.launch {
+            if(track.isFavourite){
+                favouriteUseCase.removeTrack(model)
+            } else {
+                favouriteUseCase.insertTrack(model)
+            }
+            val updatedTrack = track.copy(isFavourite = !track.isFavourite)
+            _state.value = _state.value?.updateTrack(updatedTrack)
+        }
+    }
+
+    private fun PlayerState.updateTrack(updatedTrack: PlayerUiModel): PlayerState{
+        return when(this){
+            is PlayerState.Default -> PlayerState.Default(updatedTrack, DEFAULT_PROGRESS)
+            is PlayerState.Paused -> PlayerState.Paused(updatedTrack, progress)
+            is PlayerState.Playing -> PlayerState.Playing(updatedTrack, progress)
+            is PlayerState.Prepared -> PlayerState.Paused(updatedTrack, DEFAULT_PROGRESS)
         }
     }
 
