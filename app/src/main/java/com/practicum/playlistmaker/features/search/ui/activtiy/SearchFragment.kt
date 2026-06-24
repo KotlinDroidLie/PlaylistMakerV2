@@ -42,11 +42,7 @@ class SearchFragment : Fragment() {
     private var isClickAllowed = true
     private lateinit var adapter: SearchTrackAdapter
     private lateinit var historyAdapter: SearchHistoryAdapter
-    private val onItemClickListener = object : OnItemClickListener {
-        override fun addToSearchHistory(track: TrackModel) {
-            viewModel.saveToHistory(track)
-        }
-
+    private val onTrackClickListener = object : OnTrackClickListener {
         override fun openAudioPlayer(track: TrackModel) {
             if (clickDebounce()){
                 findNavController().navigate(
@@ -57,10 +53,17 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private val onTrackHistoryClickListener = object : OnTrackHistoryClickListener{
+        override fun addToSearchHistory(track: TrackModel) {
+            viewModel.saveToHistory(track)
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = SearchTrackAdapter(onItemClickListener)
-        historyAdapter = SearchHistoryAdapter(onItemClickListener)
+        adapter = SearchTrackAdapter(onTrackClickListener, onTrackHistoryClickListener)
+        historyAdapter = SearchHistoryAdapter(onTrackClickListener)
     }
 
     override fun onCreateView(
@@ -107,7 +110,7 @@ class SearchFragment : Fragment() {
         mainBinding.etSearch.addTextChangedListener(
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 mainBinding.ivClearText.isVisible = if (s.isNullOrEmpty()) false else true
-                if (mainBinding.etSearch.hasFocus() && s.isNullOrEmpty() && historyAdapter.trackHistory.isNotEmpty()){
+                if (mainBinding.etSearch.hasFocus() && s.isNullOrEmpty() && historyAdapter.tracks.isNotEmpty()){
                     showHistory()
                 }
                 viewModel.searchDebounce(s?.toString()?.trim() ?: "")
@@ -115,7 +118,7 @@ class SearchFragment : Fragment() {
         )
 
         mainBinding.etSearch.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && mainBinding.etSearch.text.isEmpty() && historyAdapter.trackHistory.isNotEmpty()){
+            if (hasFocus && mainBinding.etSearch.text.isEmpty() && historyAdapter.tracks.isNotEmpty()){
                 showHistory()
             }
         }
@@ -165,9 +168,7 @@ class SearchFragment : Fragment() {
         statusHistoryBinding.root.isVisible = false
         mainBinding.pbSearch.isVisible = false
 
-        adapter.trackList.clear()
-        adapter.trackList.addAll(newSearchList)
-        adapter.notifyDataSetChanged()
+        updateSearchList(newSearchList)
     }
     private fun showEmpty(emptyMessage: Int){
         mainBinding.rvSongsList.isVisible = false
@@ -193,9 +194,14 @@ class SearchFragment : Fragment() {
         mainBinding.pbSearch.isVisible = true
     }
     private fun updateHistoryList(newHistoryList: List<TrackModel>){
-        historyAdapter.trackHistory.clear()
-        historyAdapter.trackHistory.addAll(newHistoryList)
+        historyAdapter.tracks.clear()
+        historyAdapter.tracks.addAll(newHistoryList)
         historyAdapter.notifyDataSetChanged()
+    }
+    private fun updateSearchList(newSearchList: List<TrackModel>){
+        adapter.trackList.clear()
+        adapter.trackList.addAll(newSearchList)
+        adapter.notifyDataSetChanged()
     }
     private fun clickDebounce(): Boolean{
         val current = isClickAllowed
