@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.features.search.data.impl
 
+import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.features.search.data.extensions.toDomain
@@ -7,8 +8,10 @@ import com.practicum.playlistmaker.features.search.data.extensions.toDto
 import com.practicum.playlistmaker.features.search.domain.api.repo.ISearchHistoryRepository
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 
-class SearchHistoryRepository(private val storage: StorageClient<MutableList<TrackHistoryDto>>):
-    ISearchHistoryRepository {
+class SearchHistoryRepository(
+    private val storage: StorageClient<MutableList<TrackHistoryDto>>,
+    private val appDataBase: AppDataBase
+): ISearchHistoryRepository {
 
     override fun saveToHistory(m: TrackModel) {
         val dto = m.toDto()
@@ -23,10 +26,14 @@ class SearchHistoryRepository(private val storage: StorageClient<MutableList<Tra
         storage.storeData(trackHistory)
     }
 
-    override fun getHistory(): List<TrackModel> {
-        val trackHistory = storage.getData() ?: listOf()
-        val model = trackHistory.map { it.toDomain() }
-        return model
+    override suspend fun getHistory(): List<TrackModel> {
+        val tracksDto = storage.getData() ?: listOf()
+        val tracks = tracksDto.map { it.toDomain() }
+        val favouriteTrackIds = appDataBase.trackDao().getFavouriteTracksIds()
+        tracks.forEach { track ->
+            track.isFavourite = track.trackId in favouriteTrackIds
+        }
+        return tracks
     }
 
     override fun clearHistory() {

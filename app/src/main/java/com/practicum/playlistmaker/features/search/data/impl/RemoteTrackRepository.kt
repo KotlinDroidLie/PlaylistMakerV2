@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.features.search.data.impl
 
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.search.data.api.NetworkClient
 import com.practicum.playlistmaker.features.search.data.dto.ErrorType
 import com.practicum.playlistmaker.features.search.data.dto.Resource
@@ -12,12 +13,19 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class RemoteTrackRepository(private val networkClient: NetworkClient) : IRemoteTrackRepository {
+class RemoteTrackRepository(
+    private val networkClient: NetworkClient,
+    private val appDataBase: AppDataBase
+) : IRemoteTrackRepository {
     override fun doRequest(expression: String): Flow<Resource<List<TrackModel>>> = flow {
         val response = networkClient.requestTracks(TrackRequest(expression))
         when (response.resultCode) {
             200 -> {
                 val tracks = (response as TrackResponse).toDomainModels()
+                val favouriteTrackIds = appDataBase.trackDao().getFavouriteTracksIds()
+                tracks.forEach { track ->
+                    track.isFavourite = track.trackId in favouriteTrackIds
+                }
                 emit(Resource.Success(tracks))
             }
 

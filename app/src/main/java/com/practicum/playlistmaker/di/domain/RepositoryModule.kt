@@ -22,11 +22,11 @@ val repositoryModule = module{
     includes(networkModule, storageModule)
 
     single<IRemoteTrackRepository>{
-        RemoteTrackRepository(get<NetworkClient>())
+        RemoteTrackRepository(get<NetworkClient>(), get<AppDataBase>())
     }
 
     single<ISearchHistoryRepository>{
-        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")))
+        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")), get<AppDataBase>())
     }
 
     single<ISettingsRepository>{
