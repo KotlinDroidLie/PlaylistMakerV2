@@ -17,25 +17,23 @@ class SearchViewModel(
     private val historyUseCase: IHistoryUseCase,
     private val searchTracksUseCase: ISearchTracksUseCase,
 ) : ViewModel() {
-    private val _state = MutableLiveData<SearchState>(
-        SearchState.History(historyUseCase.getHistory())
-    )
+    private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
+
+    init {
+        loadHistory()
+    }
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
     private var searchJob: Job? = null
     fun saveToHistory(track: TrackModel) {
         historyUseCase.saveToHistory(track)
-        _state.postValue(
-            SearchState.History(historyUseCase.getHistory())
-        )
+        loadHistory()
     }
 
     fun clearHistory() {
         historyUseCase.clearHistory()
-        _state.postValue(
-            SearchState.History(historyUseCase.getHistory())
-        )
+        loadHistory()
     }
 
     private fun executeSearch(searchText: String) {
@@ -93,6 +91,13 @@ class SearchViewModel(
 
     private fun renderState(state: SearchState) {
         _state.postValue(state)
+    }
+
+    private fun loadHistory(){
+        viewModelScope.launch {
+            val history = historyUseCase.getHistory()
+            _state.value = SearchState.History(history)
+        }
     }
 
     override fun onCleared() {
