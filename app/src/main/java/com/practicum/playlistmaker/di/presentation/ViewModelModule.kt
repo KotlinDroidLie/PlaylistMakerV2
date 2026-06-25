@@ -43,6 +43,7 @@ val viewModelModule = module{
         SearchViewModel(
             get<IHistoryUseCase>(),
             get<ISearchTracksUseCase>(),
+            get<IFavouriteUseCase>()
         )
     }
 

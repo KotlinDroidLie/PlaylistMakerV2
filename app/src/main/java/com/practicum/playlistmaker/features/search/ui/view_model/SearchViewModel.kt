@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteUseCase
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
@@ -16,12 +17,13 @@ import kotlinx.coroutines.launch
 class SearchViewModel(
     private val historyUseCase: IHistoryUseCase,
     private val searchTracksUseCase: ISearchTracksUseCase,
+    private val favouriteTracksUseCase: IFavouriteUseCase
 ) : ViewModel() {
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
 
     init {
-        loadHistory()
+        observeFavourites()
     }
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
@@ -34,6 +36,17 @@ class SearchViewModel(
     fun clearHistory() {
         historyUseCase.clearHistory()
         loadHistory()
+    }
+
+    private fun observeFavourites(){
+        viewModelScope.launch {
+            favouriteTracksUseCase.getTracks().collect {
+                loadHistory()
+                if(lastSearchText.isNotEmpty()){
+                    executeSearch(lastSearchText)
+                }
+            }
+        }
     }
 
     private fun executeSearch(searchText: String) {
