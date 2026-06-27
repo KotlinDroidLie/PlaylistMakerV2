@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface IFavouriteUseCase {
     suspend fun insertTrack(track: TrackModel)
-    suspend fun removeTrack(track: TrackModel)
+    suspend fun removeTrack(trackId: Int)
     fun getTracks(): Flow<List<TrackModel>>
 }

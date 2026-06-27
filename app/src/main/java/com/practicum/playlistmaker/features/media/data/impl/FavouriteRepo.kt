@@ -16,9 +16,8 @@ class FavouriteRepo(
         appDataBase.trackDao().insertTrack(entity)
     }
 
-    override suspend fun removeTrack(track: TrackModel) {
-        val entity = track.toEntity()
-        appDataBase.trackDao().removeTrack(entity)
+    override suspend fun removeTrack(trackId: Int) {
+        appDataBase.trackDao().removeTrack(trackId)
     }
 
     override fun getTracks(): Flow<List<TrackModel>> {

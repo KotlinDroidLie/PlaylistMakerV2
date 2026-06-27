@@ -13,8 +13,8 @@ class FavouriteUseCase(
         repo.insertTrack(track)
     }
 
-    override suspend fun removeTrack(track: TrackModel) {
-        repo.removeTrack(track)
+    override suspend fun removeTrack(trackId: Int) {
+        repo.removeTrack(trackId)
     }
 
     override fun getTracks(): Flow<List<TrackModel>> {

@@ -123,7 +123,7 @@ class PlayerViewModel(
     fun onFavoriteClicked(){
         viewModelScope.launch {
             if(track.isFavourite){
-                favouriteUseCase.removeTrack(model)
+                favouriteUseCase.removeTrack(model.trackId)
             } else {
                 favouriteUseCase.insertTrack(model)
             }
