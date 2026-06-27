@@ -16,5 +16,5 @@ data class TrackModel(
     val trackDuration: Int,
     val trackImage: String,
     val audioPreviewUrl: String,
-    var isFavourite: Boolean = false
+    val isFavourite: Boolean = false
 ) : Parcelable

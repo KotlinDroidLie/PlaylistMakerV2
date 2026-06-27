@@ -28,11 +28,8 @@ class SearchHistoryRepository(
 
     override suspend fun getHistory(): List<TrackModel> {
         val tracksDto = storage.getData() ?: listOf()
-        val tracks = tracksDto.map { it.toDomain() }
         val favouriteTrackIds = appDataBase.trackDao().getFavouriteTracksIds()
-        tracks.forEach { track ->
-            track.isFavourite = track.trackId in favouriteTrackIds
-        }
+        val tracks = tracksDto.map { it.toDomain(favouriteTrackIds) }
         return tracks
     }
 
