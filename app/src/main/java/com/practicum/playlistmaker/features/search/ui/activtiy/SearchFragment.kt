@@ -87,20 +87,24 @@ class SearchFragment : Fragment() {
         mainBinding.rvSongsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         mainBinding.rvSongsList.adapter  = adapter
 
+        viewModel.historyTracks.observe(viewLifecycleOwner){
+            updateHistoryList(it)
+        }
+
         viewModel.state.observe(viewLifecycleOwner){
             render(it)
         }
 
         statusHistoryBinding.btnClearHistory.setOnClickListener {
             viewModel.clearHistory()
-            showDefault()
+            viewModel.resetToDefault()
         }
 
         mainBinding.ivClearText.setOnClickListener {
             mainBinding.etSearch.setText("")
             mainBinding.etSearch.clearFocus()
             hideKeyboard(mainBinding.etSearch)
-            showDefault()
+            viewModel.resetToDefault()
         }
 
         statusConnectionBinding.btnRefresh.setOnClickListener {
@@ -111,7 +115,7 @@ class SearchFragment : Fragment() {
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 mainBinding.ivClearText.isVisible = if (s.isNullOrEmpty()) false else true
                 if (mainBinding.etSearch.hasFocus() && s.isNullOrEmpty() && historyAdapter.tracks.isNotEmpty()){
-                    showHistory()
+                    viewModel.loadHistory()
                 }
                 viewModel.searchDebounce(s?.toString()?.trim() ?: "")
             }
@@ -119,7 +123,7 @@ class SearchFragment : Fragment() {
 
         mainBinding.etSearch.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && mainBinding.etSearch.text.isEmpty() && historyAdapter.tracks.isNotEmpty()){
-                showHistory()
+                viewModel.loadHistory()
             }
         }
     }
@@ -140,11 +144,12 @@ class SearchFragment : Fragment() {
 
     private fun render(state: SearchState){
         when(state){
-            is SearchState.Content -> showContent(state.tracks)
+            is SearchState.SearchResult -> showContent(state.tracks)
             is SearchState.Empty -> showEmpty(state.emptyMessage)
             is SearchState.Error -> showError(state.errorMessage)
             SearchState.Loading -> showLoading()
-            is SearchState.History -> updateHistoryList(state.history)
+            SearchState.HistoryResult -> showHistory()
+            SearchState.Default -> showDefault()
         }
     }
 
@@ -167,7 +172,6 @@ class SearchFragment : Fragment() {
         statusConnectionBinding.root.isVisible = false
         statusHistoryBinding.root.isVisible = false
         mainBinding.pbSearch.isVisible = false
-
         updateSearchList(newSearchList)
     }
     private fun showEmpty(emptyMessage: Int){

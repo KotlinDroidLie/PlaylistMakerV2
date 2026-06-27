@@ -19,34 +19,56 @@ class SearchViewModel(
     private val searchTracksUseCase: ISearchTracksUseCase,
     private val favouriteTracksUseCase: IFavouriteUseCase
 ) : ViewModel() {
+
+    private val _historyTracks = MutableLiveData<List<TrackModel>>()
+    val historyTracks: LiveData<List<TrackModel>> = _historyTracks
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
 
     init {
-        observeFavourites()
+        refreshHistory()
+        updateStatusContent()
     }
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
     private var searchJob: Job? = null
     fun saveToHistory(track: TrackModel) {
         historyUseCase.saveToHistory(track)
-        loadHistory()
     }
 
     fun clearHistory() {
         historyUseCase.clearHistory()
-        loadHistory()
+        refreshHistory()
     }
 
-    private fun observeFavourites(){
+    fun resetToDefault(){
+        renderState(SearchState.Default)
+    }
+
+    fun loadHistory(){
+        renderState(SearchState.HistoryResult)
+    }
+
+    private fun updateStatusContent() {
         viewModelScope.launch {
-            favouriteTracksUseCase.getTracks().collect {
-                loadHistory()
-                if(lastSearchText.isNotEmpty()){
-                    executeSearch(lastSearchText)
+            favouriteTracksUseCase.getTracks().collect { tracks ->
+                val currentState = _state.value
+                if (currentState is SearchState.SearchResult) {
+                    updateSearchResult(tracks, currentState)
                 }
             }
         }
+    }
+
+    private fun updateSearchResult(tracks: List<TrackModel>, currentState: SearchState.SearchResult) {
+        val tracksFavouriteIds = tracks.map { track ->
+            track.trackId
+        }
+        val updatedTracks = currentState.tracks.map { track ->
+            track.copy(isFavourite = track.trackId in tracksFavouriteIds)
+        }
+        val state = SearchState.SearchResult(updatedTracks)
+        renderState(state)
     }
 
     private fun executeSearch(searchText: String) {
@@ -64,7 +86,7 @@ class SearchViewModel(
                 if(result.tracks.isNullOrEmpty()){
                     renderState(SearchState.Empty(R.string.nothing_found))
                 } else{
-                    renderState(SearchState.Content(result.tracks))
+                    renderState(SearchState.SearchResult(result.tracks))
                 }
                 lastErrorSearch = null
             }
@@ -106,10 +128,10 @@ class SearchViewModel(
         _state.postValue(state)
     }
 
-    private fun loadHistory(){
+    private fun refreshHistory(){
         viewModelScope.launch {
             val history = historyUseCase.getHistory()
-            _state.value = SearchState.History(history)
+            _historyTracks.value = history
         }
     }
 
