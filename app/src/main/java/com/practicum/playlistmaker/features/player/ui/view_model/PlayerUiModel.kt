@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.features.player.ui.view_model
 
 data class PlayerUiModel(
+    val id: Int,
     val trackName: String,
     val artistName: String,
     val albumName: String?,
@@ -10,5 +11,5 @@ data class PlayerUiModel(
     val trackDuration: String,
     val trackImage: String,
     val audioPreviewUrl: String,
-    var isFavourite: Boolean
+    val isFavourite: Boolean
 )

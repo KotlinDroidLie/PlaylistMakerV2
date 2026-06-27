@@ -115,7 +115,7 @@ class SearchFragment : Fragment() {
             onTextChanged = { s: CharSequence?, start: Int, before: Int, count: Int ->
                 mainBinding.ivClearText.isVisible = if (s.isNullOrEmpty()) false else true
                 if (mainBinding.etSearch.hasFocus() && s.isNullOrEmpty() && historyAdapter.tracks.isNotEmpty()){
-                    viewModel.loadHistory()
+                    viewModel.displayHistory()
                 }
                 viewModel.searchDebounce(s?.toString()?.trim() ?: "")
             }
@@ -123,7 +123,7 @@ class SearchFragment : Fragment() {
 
         mainBinding.etSearch.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && mainBinding.etSearch.text.isEmpty() && historyAdapter.tracks.isNotEmpty()){
-                viewModel.loadHistory()
+                viewModel.displayHistory()
             }
         }
     }

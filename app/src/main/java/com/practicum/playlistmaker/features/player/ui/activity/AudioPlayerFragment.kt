@@ -58,8 +58,12 @@ class AudioPlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        viewModel.state.observe(viewLifecycleOwner){
-            render(it)
+        viewModel.playbackState.observe(viewLifecycleOwner){
+            renderPlaybackControl(it)
+        }
+
+        viewModel.trackState.observe(viewLifecycleOwner){
+            renderUI(it)
         }
 
     }
@@ -114,12 +118,15 @@ class AudioPlayerFragment : Fragment() {
             .placeholder(R.drawable.ic_placeholder_312)
             .into(binding.ivPosterSongPlayer)
     }
-    private fun render(state: PlayerState){
-        initView(state.track)
+    private fun renderPlaybackControl(state: PlayerState){
         enableButton(state.buttonIsEnable)
         updatePlayButtonIcon(state.buttonIsPlayIcon)
-        updateFavouriteButton(state.track.isFavourite)
         updateTimer(state.progress)
+    }
+
+    private fun renderUI(trackUiModel: PlayerUiModel){
+        initView(trackUiModel)
+        updateFavouriteButton(trackUiModel.isFavourite)
     }
 
     private fun updateFavouriteButton(isFavourite: Boolean) {

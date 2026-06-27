@@ -26,7 +26,8 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
 
     init {
-        updateStatusContent()
+        refreshHistory()
+        observeFavouriteChanges()
     }
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
@@ -45,28 +46,27 @@ class SearchViewModel(
         renderState(SearchState.Default)
     }
 
-    fun loadHistory(){
+    fun displayHistory(){
         renderState(SearchState.HistoryResult)
     }
 
-    private fun updateStatusContent() {
+    private fun observeFavouriteChanges() {
         viewModelScope.launch {
-            favouriteInteractor.getTracks().collect { tracks ->
-                refreshHistory()
+            favouriteInteractor.getTracks().collect { favouriteTracks ->
                 val currentState = _state.value
                 if (currentState is SearchState.SearchResult) {
-                    updateSearchResult(tracks, currentState)
+                    val tracksFavouriteIds = favouriteTracks.map { track ->
+                        track.trackId
+                    }
+                    applyFavouriteStatus(tracksFavouriteIds, currentState)
                 }
             }
         }
     }
 
-    private fun updateSearchResult(tracks: List<TrackModel>, currentState: SearchState.SearchResult) {
-        val tracksFavouriteIds = tracks.map { track ->
-            track.trackId
-        }
+    private fun applyFavouriteStatus(favouriteIds: List<Int>, currentState: SearchState.SearchResult) {
         val updatedTracks = currentState.tracks.map { track ->
-            track.copy(isFavourite = track.trackId in tracksFavouriteIds)
+            track.copy(isFavourite = track.trackId in favouriteIds)
         }
         val state = SearchState.SearchResult(updatedTracks)
         renderState(state)
@@ -132,8 +132,12 @@ class SearchViewModel(
     private fun refreshHistory(){
         viewModelScope.launch {
             val history = historyUseCase.getHistory()
-            _historyTracks.value = history
+            renderHistoryTracks(history)
         }
+    }
+
+    private fun renderHistoryTracks(history: List<TrackModel>){
+        _historyTracks.postValue(history)
     }
 
     override fun onCleared() {
