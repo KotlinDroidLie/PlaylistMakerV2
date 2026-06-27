@@ -26,7 +26,6 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
 
     init {
-        refreshHistory()
         updateStatusContent()
     }
     private var lastSearchText: String = ""
@@ -34,6 +33,7 @@ class SearchViewModel(
     private var searchJob: Job? = null
     fun saveToHistory(track: TrackModel) {
         historyUseCase.saveToHistory(track)
+        refreshHistory()
     }
 
     fun clearHistory() {
@@ -52,6 +52,7 @@ class SearchViewModel(
     private fun updateStatusContent() {
         viewModelScope.launch {
             favouriteTracksUseCase.getTracks().collect { tracks ->
+                refreshHistory()
                 val currentState = _state.value
                 if (currentState is SearchState.SearchResult) {
                     updateSearchResult(tracks, currentState)
