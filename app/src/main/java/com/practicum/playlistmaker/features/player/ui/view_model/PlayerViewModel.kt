@@ -21,7 +21,7 @@ class PlayerViewModel(
     private val mediaPlayer: MediaPlayer,
     private val favouriteUseCase: IFavouriteUseCase
 ) : ViewModel() {
-    private val track = prepareFormattedTrack(model, formatTrackUseCase)
+    private var track = prepareFormattedTrack(model, formatTrackUseCase)
     private val _state = MutableLiveData<PlayerState>(
         PlayerState.Default(
             track = track,
@@ -127,8 +127,8 @@ class PlayerViewModel(
             } else {
                 favouriteUseCase.insertTrack(model)
             }
-            val updatedTrack = track.copy(isFavourite = !track.isFavourite)
-            _state.value = _state.value?.updateTrack(updatedTrack)
+            track = track.copy(isFavourite = !track.isFavourite)
+            _state.value = _state.value?.updateTrack(track)
         }
     }
 
