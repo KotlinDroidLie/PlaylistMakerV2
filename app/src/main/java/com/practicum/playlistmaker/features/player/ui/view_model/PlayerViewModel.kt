@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.features.media.domain.api.IFavouriteUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import kotlinx.coroutines.Job
@@ -19,7 +19,7 @@ class PlayerViewModel(
     private val model: TrackModel,
     formatTrackUseCase: IFormatTrackUseCase,
     private val mediaPlayer: MediaPlayer,
-    private val favouriteUseCase: IFavouriteUseCase
+    private val favouriteInteractor: IFavouriteInteractor
 ) : ViewModel() {
     private var track = prepareFormattedTrack(model, formatTrackUseCase)
     private val _state = MutableLiveData<PlayerState>(
@@ -123,9 +123,9 @@ class PlayerViewModel(
     fun onFavoriteClicked(){
         viewModelScope.launch {
             if(track.isFavourite){
-                favouriteUseCase.removeTrack(model.trackId)
+                favouriteInteractor.removeTrack(model.trackId)
             } else {
-                favouriteUseCase.insertTrack(model)
+                favouriteInteractor.insertTrack(model)
             }
             track = track.copy(isFavourite = !track.isFavourite)
             _state.value = _state.value?.updateTrack(track)

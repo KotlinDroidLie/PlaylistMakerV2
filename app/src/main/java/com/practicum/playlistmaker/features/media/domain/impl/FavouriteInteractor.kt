@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.features.media.domain.impl
 
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
-import com.practicum.playlistmaker.features.media.domain.api.IFavouriteUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class FavouriteUseCase(
+class FavouriteInteractor(
     private val repo: IFavouriteRepo
-): IFavouriteUseCase {
+): IFavouriteInteractor {
     override suspend fun insertTrack(track: TrackModel) {
         repo.insertTrack(track)
     }

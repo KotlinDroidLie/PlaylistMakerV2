@@ -2,8 +2,8 @@ package com.practicum.playlistmaker.di.domain
 
 import com.practicum.playlistmaker.di.data.externalNavigatorModule
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
-import com.practicum.playlistmaker.features.media.domain.api.IFavouriteUseCase
-import com.practicum.playlistmaker.features.media.domain.impl.FavouriteUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
+import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCase
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
@@ -44,7 +44,7 @@ val useCaseModule = module{
         SharingUseCase(get<IExternalNavigator>(), androidContext())
     }
 
-    single<IFavouriteUseCase>{
-        FavouriteUseCase(get<IFavouriteRepo>())
+    single<IFavouriteInteractor>{
+        FavouriteInteractor(get<IFavouriteRepo>())
     }
 }
