@@ -2,6 +2,9 @@ package com.practicum.playlistmaker.di.domain
 
 import com.practicum.playlistmaker.di.data.networkModule
 import com.practicum.playlistmaker.di.data.storageModule
+import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.impl.FavouriteRepo
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.search.data.api.NetworkClient
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
@@ -19,14 +22,18 @@ val repositoryModule = module{
     includes(networkModule, storageModule)
 
     single<IRemoteTrackRepository>{
-        RemoteTrackRepository(get<NetworkClient>())
+        RemoteTrackRepository(get<NetworkClient>(), get<AppDataBase>())
     }
 
     single<ISearchHistoryRepository>{
-        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")))
+        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")), get<AppDataBase>())
     }
 
     single<ISettingsRepository>{
         SettingsRepository(get<StorageClient<SettingsDto>>(named("settings")))
+    }
+
+    single<IFavouriteRepo>{
+        FavouriteRepo(get<AppDataBase>())
     }
 }

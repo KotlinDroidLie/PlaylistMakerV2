@@ -1,9 +1,8 @@
 package com.practicum.playlistmaker.features.search.data.extensions
 
-import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
+import com.practicum.playlistmaker.features.search.data.dto.TrackDto
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
-
-fun TrackHistoryDto.toDomain(favouriteIds: List<Int>): TrackModel{
+fun TrackDto.toDomain(favouriteIds: List<Int>): TrackModel{
     return TrackModel(
         trackId = trackId,
         trackName = trackName,
@@ -18,3 +17,4 @@ fun TrackHistoryDto.toDomain(favouriteIds: List<Int>): TrackModel{
         isFavourite = trackId in favouriteIds
     )
 }
+

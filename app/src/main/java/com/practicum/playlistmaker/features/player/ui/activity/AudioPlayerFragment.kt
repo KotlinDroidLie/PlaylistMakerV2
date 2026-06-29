@@ -47,6 +47,10 @@ class AudioPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.ibtnAddToFavorite.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
         binding.ibtnMusic.setOnClickListener {
             viewModel.playerControl()
         }
@@ -54,8 +58,12 @@ class AudioPlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        viewModel.state.observe(viewLifecycleOwner){
-            render(it)
+        viewModel.playbackState.observe(viewLifecycleOwner){
+            renderPlaybackControl(it)
+        }
+
+        viewModel.trackState.observe(viewLifecycleOwner){
+            renderUI(it)
         }
 
     }
@@ -110,12 +118,25 @@ class AudioPlayerFragment : Fragment() {
             .placeholder(R.drawable.ic_placeholder_312)
             .into(binding.ivPosterSongPlayer)
     }
-    private fun render(state: PlayerState){
-        initView(state.track)
+    private fun renderPlaybackControl(state: PlayerState){
         enableButton(state.buttonIsEnable)
         updatePlayButtonIcon(state.buttonIsPlayIcon)
         updateTimer(state.progress)
     }
+
+    private fun renderUI(trackUiModel: PlayerUiModel){
+        initView(trackUiModel)
+        updateFavouriteButton(trackUiModel.isFavourite)
+    }
+
+    private fun updateFavouriteButton(isFavourite: Boolean) {
+        val icon = when(isFavourite){
+            true -> R.drawable.ic_favourite_button_enable_51
+            false -> R.drawable.ic_button_add_to_favorite_51
+        }
+        binding.ibtnAddToFavorite.setImageResource(icon)
+    }
+
     companion object{
         private const val ARGS_TRACK = "track"
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
@@ -16,26 +17,59 @@ import kotlinx.coroutines.launch
 class SearchViewModel(
     private val historyUseCase: IHistoryUseCase,
     private val searchTracksUseCase: ISearchTracksUseCase,
+    private val favouriteInteractor: IFavouriteInteractor
 ) : ViewModel() {
-    private val _state = MutableLiveData<SearchState>(
-        SearchState.History(historyUseCase.getHistory())
-    )
+
+    private val _historyTracks = MutableLiveData<List<TrackModel>>()
+    val historyTracks: LiveData<List<TrackModel>> = _historyTracks
+    private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
+
+    init {
+        refreshHistory()
+        observeFavouriteChanges()
+    }
     private var lastSearchText: String = ""
     private var lastErrorSearch: String? = null
     private var searchJob: Job? = null
     fun saveToHistory(track: TrackModel) {
         historyUseCase.saveToHistory(track)
-        _state.postValue(
-            SearchState.History(historyUseCase.getHistory())
-        )
+        refreshHistory()
     }
 
     fun clearHistory() {
         historyUseCase.clearHistory()
-        _state.postValue(
-            SearchState.History(historyUseCase.getHistory())
-        )
+        refreshHistory()
+    }
+
+    fun resetToDefault(){
+        renderState(SearchState.Default)
+    }
+
+    fun displayHistory(){
+        renderState(SearchState.HistoryResult)
+    }
+
+    private fun observeFavouriteChanges() {
+        viewModelScope.launch {
+            favouriteInteractor.getTracks().collect { favouriteTracks ->
+                val currentState = _state.value
+                if (currentState is SearchState.SearchResult) {
+                    val tracksFavouriteIds = favouriteTracks.map { track ->
+                        track.trackId
+                    }
+                    applyFavouriteStatus(tracksFavouriteIds, currentState)
+                }
+            }
+        }
+    }
+
+    private fun applyFavouriteStatus(favouriteIds: List<Int>, currentState: SearchState.SearchResult) {
+        val updatedTracks = currentState.tracks.map { track ->
+            track.copy(isFavourite = track.trackId in favouriteIds)
+        }
+        val state = SearchState.SearchResult(updatedTracks)
+        renderState(state)
     }
 
     private fun executeSearch(searchText: String) {
@@ -53,7 +87,7 @@ class SearchViewModel(
                 if(result.tracks.isNullOrEmpty()){
                     renderState(SearchState.Empty(R.string.nothing_found))
                 } else{
-                    renderState(SearchState.Content(result.tracks))
+                    renderState(SearchState.SearchResult(result.tracks))
                 }
                 lastErrorSearch = null
             }
@@ -93,6 +127,17 @@ class SearchViewModel(
 
     private fun renderState(state: SearchState) {
         _state.postValue(state)
+    }
+
+    private fun refreshHistory(){
+        viewModelScope.launch {
+            val history = historyUseCase.getHistory()
+            renderHistoryTracks(history)
+        }
+    }
+
+    private fun renderHistoryTracks(history: List<TrackModel>){
+        _historyTracks.postValue(history)
     }
 
     override fun onCleared() {
