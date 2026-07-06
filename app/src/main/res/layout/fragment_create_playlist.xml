@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".features.media.ui.activtiy.CreatePlaylistFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/padding_horizontal_standard"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/padding_horizontal_standard"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/standard_layout_margin"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/standard_layout_margin"/>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/btn_create_playlist_back"
+        style="@style/ToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back_16"
+        app:title="@string/new_playlist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/placeholder_poster_playlist"
+        app:layout_constraintEnd_toEndOf="@id/right_border_poster"
+        app:layout_constraintStart_toStartOf="@id/left_border_poster"
+        app:layout_constraintTop_toBottomOf="@id/btn_create_playlist_back" />
+
+    <EditText style="@style/InputFieldPlaylistCreation"
+        android:id="@+id/editText"
+        android:layout_marginTop="32dp"
+        android:hint="Название*"
+        app:layout_constraintEnd_toStartOf="@+id/right_border"
+        app:layout_constraintStart_toStartOf="@+id/left_border"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText style="@style/InputFieldPlaylistCreation"
+        android:id="@+id/editText2"
+        android:layout_marginTop="16dp"
+        android:hint="Описание"
+        app:layout_constraintEnd_toStartOf="@+id/right_border"
+        app:layout_constraintStart_toStartOf="@+id/left_border"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+
+    <Button style="@style/ButtonCreatePlaylist"
+        android:id="@+id/button"
+        android:layout_marginBottom="32dp"
+        android:text="@string/create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

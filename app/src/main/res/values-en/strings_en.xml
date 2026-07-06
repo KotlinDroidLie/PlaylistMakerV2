@@ -28,4 +28,5 @@
     <string name="no_playlist_has_been_created">You haven\'t created\n any playlists</string>
     <string name="favourite_tracks">Favorite tracks</string>
     <string name="playlists">Playlists</string>
+    <string name="create">Сreate</string>
 </resources>

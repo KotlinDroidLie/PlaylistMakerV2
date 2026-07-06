@@ -22,4 +22,5 @@
     <dimen name="recycler_view_margin_horizontal">12dp</dimen>
     <dimen name="margin_text_status_media_message_horizontal">24dp</dimen>
     <dimen name="margin_top_status_media_message">106dp</dimen>
+    <dimen name="height_input_text_create_playlist">55dp</dimen>
 </resources>
