@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView style="@style/SecondLayoutBackground"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_create_playlist"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".features.media.ui.activtiy.CreatePlaylistFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -46,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -55,30 +61,46 @@
         app:layout_constraintStart_toStartOf="@id/left_border_poster"
         app:layout_constraintTop_toBottomOf="@id/btn_create_playlist_back" />
 
-    <EditText style="@style/InputFieldPlaylistCreation"
-        android:id="@+id/editText"
+    <com.google.android.material.textfield.TextInputLayout style="@style/InputFieldPlaylistCreation"
+        android:id="@+id/et_title_container"
         android:layout_marginTop="32dp"
-        android:hint="Название*"
+        android:hint="@string/title"
         app:layout_constraintEnd_toStartOf="@+id/right_border"
         app:layout_constraintStart_toStartOf="@+id/left_border"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_poster">
 
-    <EditText style="@style/InputFieldPlaylistCreation"
-        android:id="@+id/editText2"
+        <com.google.android.material.textfield.TextInputEditText style="@style/EditTextPlaylistCreation"
+            android:id="@+id/et_title"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout style="@style/InputFieldPlaylistCreation"
+        android:id="@+id/et_description_container"
         android:layout_marginTop="16dp"
-        android:hint="Описание"
+        android:hint="@string/description"
         app:layout_constraintEnd_toStartOf="@+id/right_border"
         app:layout_constraintStart_toStartOf="@+id/left_border"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/et_title_container">
 
+        <com.google.android.material.textfield.TextInputEditText style="@style/EditTextPlaylistCreation"
+            android:id="@+id/et_description"/>
 
-    <Button style="@style/ButtonCreatePlaylist"
-        android:id="@+id/button"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create_playlist"
+        style="@style/ButtonCreatePlaylist"
+        android:layout_marginTop="160dp"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/button_create_playlist_selector"
+        android:enabled="false"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintStart_toStartOf="@id/left_border" />
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/et_description_container" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

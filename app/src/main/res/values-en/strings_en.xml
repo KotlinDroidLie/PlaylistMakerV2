@@ -29,4 +29,6 @@
     <string name="favourite_tracks">Favorite tracks</string>
     <string name="playlists">Playlists</string>
     <string name="create">Сreate</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>
