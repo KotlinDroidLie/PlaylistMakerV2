@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
-import com.practicum.playlistmaker.features.media.ui.viewModel.PlaylistState
-import com.practicum.playlistmaker.features.media.ui.viewModel.PlaylistViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistsState
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -47,10 +47,10 @@ class PlaylistFragment(): Fragment() {
         _binding = null
     }
 
-    private fun render(state: PlaylistState){
+    private fun render(state: PlaylistsState){
         when(state){
-            is PlaylistState.Content -> showContent()
-            PlaylistState.Empty -> showEmptyMessage()
+            is PlaylistsState.Content -> showContent()
+            PlaylistsState.Empty -> showEmptyMessage()
         }
     }
 

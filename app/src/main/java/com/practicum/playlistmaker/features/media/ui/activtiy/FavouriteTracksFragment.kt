@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavouriteBinding
-import com.practicum.playlistmaker.features.media.ui.viewModel.FavouriteTracksState
-import com.practicum.playlistmaker.features.media.ui.viewModel.FavouriteTracksViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksState
+import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragment
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.activtiy.OnTrackClickListener
