@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
+import com.practicum.playlistmaker.features.main.BottomNavHider
 
 class CreatePlaylistFragment: Fragment() {
     private var _binding: FragmentCreatePlaylistBinding? = null
@@ -20,8 +21,26 @@ class CreatePlaylistFragment: Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideBottomNav()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        showBottomNav()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun hideBottomNav(){
+        (activity as BottomNavHider).hideBottomNav()
+    }
+
+    private fun showBottomNav(){
+        (activity as BottomNavHider).showBottomNav()
     }
 }
