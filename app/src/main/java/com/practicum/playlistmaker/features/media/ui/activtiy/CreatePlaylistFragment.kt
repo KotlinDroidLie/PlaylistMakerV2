@@ -13,7 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
-import com.practicum.playlistmaker.features.main.BottomNavHider
+import com.practicum.playlistmaker.features.main.BottomNavigationOwner
+import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistState
+import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistUiModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatePlaylistFragment: Fragment() {
     private var _binding: FragmentCreatePlaylistBinding? = null
@@ -97,11 +101,11 @@ class CreatePlaylistFragment: Fragment() {
     }
 
     private fun hideBottomNav(){
-        (requireActivity() as BottomNavHider).hideBottomNav()
+        (requireActivity() as? BottomNavigationOwner)?.hideBottomNav()
     }
 
     private fun showBottomNav(){
-        (requireActivity() as BottomNavHider).showBottomNav()
+        (requireActivity() as? BottomNavigationOwner)?.showBottomNav()
     }
 
     private fun isButtonEnable(flag: Boolean){

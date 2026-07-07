@@ -11,7 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), BottomNavHider {
+class MainActivity : AppCompatActivity(), BottomNavigationOwner {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

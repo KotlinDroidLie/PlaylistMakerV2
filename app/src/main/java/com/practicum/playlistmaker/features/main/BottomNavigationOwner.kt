@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.main
 
-interface BottomNavHider {
+interface BottomNavigationOwner {
     fun showBottomNav()
     fun hideBottomNav()
 }
