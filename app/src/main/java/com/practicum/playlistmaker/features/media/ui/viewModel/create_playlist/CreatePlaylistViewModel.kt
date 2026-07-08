@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmaker.features.media.domain.api.IPlaylistInteractor
+import com.practicum.playlistmaker.features.media.domain.api.IAddPlaylistUseCase
 
 class CreatePlaylistViewModel(
-    private val playlistInteractor: IPlaylistInteractor
+    private val playlistInteractor: IAddPlaylistUseCase
 ): ViewModel() {
     private val _state = MutableLiveData<CreatePlaylistState>(CreatePlaylistState.Editing(PlaylistUiModel()))
     val state: LiveData<CreatePlaylistState> = _state

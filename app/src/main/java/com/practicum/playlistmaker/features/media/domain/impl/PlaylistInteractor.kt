@@ -8,10 +8,6 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistInteractor(
     private val repo: IPlaylistRepo
 ) : IPlaylistInteractor {
-    override suspend fun insertPlaylist(playlist: PlaylistModel) {
-        repo.insertPlaylist(playlist)
-    }
-
     override fun getPlaylists(): Flow<List<PlaylistModel>> {
         return repo.getPlaylists()
     }
