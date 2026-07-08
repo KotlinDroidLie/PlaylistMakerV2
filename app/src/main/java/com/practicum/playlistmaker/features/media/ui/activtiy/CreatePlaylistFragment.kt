@@ -111,17 +111,24 @@ class CreatePlaylistFragment: Fragment() {
 
     private fun handleState(state: CreatePlaylistState) {
         when(state){
-            is CreatePlaylistState.Created -> navigateBack(state.title)
+            is CreatePlaylistState.Created -> playlistCreated(state.title)
             is CreatePlaylistState.Editing -> updateUi(state.playlist)
-            CreatePlaylistState.Creating -> blockInput()
+            CreatePlaylistState.Creating -> enableInput(false)
+            is CreatePlaylistState.Error -> handleError(state.resIdErrorMessage)
         }
     }
-    private fun blockInput(){
-        isButtonEnable(false)
+
+    private fun handleError(resIdErrorMessage: Int) {
+        enableInput(true)
+        showErrorNotification(resIdErrorMessage)
+    }
+
+    private fun enableInput(enable: Boolean){
+        isButtonEnable(enable)
         binding.apply {
-            etTitleContainer.isEnabled = false
-            etDescriptionContainer.isEnabled = false
-            ivPoster.isEnabled = false
+            etTitleContainer.isEnabled = enable
+            etDescriptionContainer.isEnabled = enable
+            ivPoster.isEnabled = enable
         }
     }
 
@@ -140,8 +147,8 @@ class CreatePlaylistFragment: Fragment() {
             .into(binding.ivPoster)
     }
 
-    private fun navigateBack(title: String) {
-        showSnackBar(title)
+    private fun playlistCreated(title: String) {
+        showCreatedNotification(title)
         findNavController().navigateUp()
     }
 
@@ -164,9 +171,19 @@ class CreatePlaylistFragment: Fragment() {
     private fun showConfirmDialog() {
         confirmDialog.show()
     }
-    private fun showSnackBar(title: String){
-        Snackbar.make(binding.root,
-            getString(R.string.create_playlist_notification, title), Snackbar.LENGTH_SHORT).show()
+    private fun showCreatedNotification(title: String){
+        Snackbar.make(
+            binding.root,
+            getString(R.string.create_playlist_notification, title),
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+    private fun showErrorNotification(resIdErrorMessage: Int){
+        Snackbar.make(
+            binding.root,
+            getString(resIdErrorMessage),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
     private fun hasData(state: CreatePlaylistState): Boolean{
         return when(state){
@@ -180,6 +197,7 @@ class CreatePlaylistFragment: Fragment() {
             }
 
             CreatePlaylistState.Creating -> false
+            is CreatePlaylistState.Error -> true
         }
     }
 }

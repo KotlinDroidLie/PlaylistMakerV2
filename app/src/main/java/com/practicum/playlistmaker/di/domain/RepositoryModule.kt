@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.di.domain
 
 import com.practicum.playlistmaker.di.data.networkModule
 import com.practicum.playlistmaker.di.data.storageModule
-import com.practicum.playlistmaker.features.media.data.api.IExternalStorageClient
+import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.media.data.impl.FavouriteRepo
 import com.practicum.playlistmaker.features.media.data.impl.PlaylistRepo
@@ -43,7 +43,7 @@ val repositoryModule = module{
     single<IPlaylistRepo>{
         PlaylistRepo(
             get<AppDataBase>(),
-            get<IExternalStorageClient>(named("playlist_poster"))
+            get<IFileStorageClient>(named("playlist_poster"))
         )
     }
 }

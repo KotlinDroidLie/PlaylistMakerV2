@@ -7,9 +7,9 @@ import android.os.Environment
 import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.features.media.data.api.IExternalStorageClient
+import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
-import com.practicum.playlistmaker.features.media.data.impl.ExternalPosterStorageClient
+import com.practicum.playlistmaker.features.media.data.impl.FileStorageClient
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.features.search.data.impl.SharedPrefStorageClient
@@ -60,9 +60,9 @@ val storageModule = module {
         Room.databaseBuilder(androidContext(), AppDataBase::class.java, "track.db").build()
     }
 
-    single<IExternalStorageClient>(named("playlist_poster")){
-        ExternalPosterStorageClient(
-            externalFileDir = get(named("external_directory_pictures")),
+    single<IFileStorageClient>(named("playlist_poster")){
+        FileStorageClient(
+            fileDir = get(named("external_directory_pictures")),
             contentResolver = get<ContentResolver>(),
             catalogName = "playlist_poster"
         )

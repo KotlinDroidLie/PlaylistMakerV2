@@ -10,5 +10,4 @@ sealed interface Resource<T> {
 enum class ErrorType{
     NETWORK,
     GENERIC,
-    STORAGE
 }

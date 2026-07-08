@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,51 +16,67 @@ class CreatePlaylistViewModel(
     val state: LiveData<CreatePlaylistState> = _state
 
     fun createPlaylist(){
-        val current = _state.value as? CreatePlaylistState.Editing ?: return
-        val domain = current.playlist.toDomain()
-        renderState(CreatePlaylistState.Creating)
+        val currentState = state.value
         viewModelScope.launch {
+            val playlist = when(currentState){
+                is WithData -> currentState.playlist
+                else -> return@launch
+            }
+            val domain = currentState.playlist.toDomain()
+            renderState(CreatePlaylistState.Creating)
             val result = playlistInteractor.createPlaylist(domain)
-            processResult(result)
+            processResult(result, playlist)
         }
     }
 
     fun onTitleChanged(title: String){
-        val current = _state.value as? CreatePlaylistState.Editing ?: return
-        val updatedPlaylist = current.playlist.copy(
-            title = title,
-            isButtonEnable = title.isNotBlank()
-        )
-        val updatedState = CreatePlaylistState.Editing(updatedPlaylist)
-        renderState(updatedState)
+        updatePlaylist { playlist ->
+            playlist.copy(
+                title = title,
+                isButtonEnable = title.isNotBlank()
+            )
+        }
     }
 
     fun onDescriptionChanged(description: String){
-        val current = _state.value as? CreatePlaylistState.Editing ?: return
-        val updatedPlaylist = current.playlist.copy(
-            description = description
-        )
-        val updatedState = CreatePlaylistState.Editing(updatedPlaylist)
-        renderState(updatedState)
+        updatePlaylist { playlist ->
+            playlist.copy(
+                description = description
+            )
+        }
     }
 
     fun onUriChanged(uri: Uri){
-        val current = _state.value as? CreatePlaylistState.Editing ?: return
-        val updatedPlaylist = current.playlist.copy(
-            coverImagePath = uri.toString()
-        )
-        val updatedState = CreatePlaylistState.Editing(updatedPlaylist)
-        renderState(updatedState)
+       updatePlaylist { playlist ->
+           playlist.copy(
+               coverImagePath = uri.toString()
+           )
+       }
+    }
+
+    private fun updatePlaylist(transform: (PlaylistUiModel) -> PlaylistUiModel){
+        val currentState = state.value
+        if(!isModifiable(currentState)) return
+        val validState = currentState as WithData
+        val updatedPlaylist = transform(validState.playlist)
+        renderState(CreatePlaylistState.Editing(updatedPlaylist))
+    }
+
+    private fun isModifiable(state: CreatePlaylistState?): Boolean{
+        return when(state){
+            is WithData -> true
+            else -> false
+        }
     }
 
     private fun renderState(state: CreatePlaylistState) {
         _state.postValue(state)
     }
 
-    private fun processResult(result: SaveResult){
+    private fun processResult(result: SaveResult, playlist: PlaylistUiModel){
         when(result){
             is SaveResult.Error -> {
-                Log.d("CreatePlaylistError","${result.extraMessage}")
+                renderState(CreatePlaylistState.Error(playlist,result.errorMessage))
             }
             is SaveResult.Success -> {
                 renderState(CreatePlaylistState.Created(result.data))

@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.features.media.data.impl
 
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.features.media.data.api.IExternalStorageClient
+import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.media.data.db.entity.toEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toModel
@@ -9,25 +9,22 @@ import com.practicum.playlistmaker.features.media.data.dto.ResponseStorage
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
-import com.practicum.playlistmaker.features.search.data.dto.ErrorType
-import com.practicum.playlistmaker.features.search.data.dto.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PlaylistRepo(
     private val appDataBase: AppDataBase,
-    private val storageClient: IExternalStorageClient
+    private val storageClient: IFileStorageClient
 ) : IPlaylistRepo {
-    override suspend fun savePosterImage(sourceUri: String): Resource<String> {
-        return when(val response = storageClient.saveImage(sourceUri)){
+    override suspend fun savePosterImage(sourceUri: String): SaveResult {
+        return when(val response = storageClient.saveFile(sourceUri)){
             is ResponseStorage.Error -> {
-                Resource.Error(
-                    message = R.string.placeholder_text_error_storage,
-                    type = ErrorType.STORAGE
+                SaveResult.Error(
+                    errorMessage = R.string.placeholder_text_error_storage
                 )
             }
             is ResponseStorage.Success -> {
-                Resource.Success(response.path)
+                SaveResult.Success(response.path)
             }
         }
     }
@@ -39,7 +36,7 @@ class PlaylistRepo(
             SaveResult.Success(playlist.title)
         } catch (e: Exception){
             SaveResult.Error(
-                errorMessage = R.string.placeholder_text_error_database
+                errorMessage =  R.string.placeholder_text_error_database
             )
         }
 
