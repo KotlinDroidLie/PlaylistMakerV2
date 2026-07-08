@@ -37,12 +37,12 @@ class CreatePlaylistFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setPositiveButton("Завершить") { dialog, which ->
+            .setTitle(getString(R.string.create_playlist_confirm_dialog_title))
+            .setMessage(getString(R.string.create_playlist_confirm_dialog_message))
+            .setPositiveButton(getString(R.string.create_playlist_confirm_dialog_positive_message)) { dialog, which ->
                 findNavController().navigateUp()
             }
-            .setNeutralButton("Отмена", null)
+            .setNeutralButton(getString(R.string.create_playlist_confirm_dialog_neutral_message), null)
 
         onBackCallBack = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -155,7 +155,8 @@ class CreatePlaylistFragment: Fragment() {
         confirmDialog.show()
     }
     private fun showSnackBar(title: String){
-        Snackbar.make(binding.root, "Плейлист $title создан", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root,
+            getString(R.string.create_playlist_notification, title), Snackbar.LENGTH_SHORT).show()
     }
     private fun hasData(state: CreatePlaylistState): Boolean{
         return when(state){
