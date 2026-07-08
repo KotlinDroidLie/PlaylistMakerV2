@@ -15,7 +15,6 @@ fun PlaylistEntity.toModel(): PlaylistModel{
 
 fun PlaylistModel.toEntity(): PlaylistEntity{
     return PlaylistEntity(
-        id = id,
         title = title,
         description = description,
         uri = uri,

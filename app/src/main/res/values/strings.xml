@@ -39,4 +39,6 @@
     <string name="create_playlist_confirm_dialog_positive_message">Завершить</string>
     <string name="create_playlist_confirm_dialog_neutral_message">Отмена</string>
     <string name="create_playlist_notification">Плейлист %1$s создан</string>
+    <string name="placeholder_text_error_storage">Ошибка сохранения обложки</string>
+    <string name="placeholder_text_error_database">"Ошибка сохранения плейлиста"</string>
 </resources>
