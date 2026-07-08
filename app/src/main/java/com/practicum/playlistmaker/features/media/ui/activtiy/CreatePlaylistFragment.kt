@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -86,7 +87,7 @@ class CreatePlaylistFragment: Fragment() {
             requestImage()
         }
         binding.btnCreatePlaylist.setOnClickListener {
-
+            viewModel.createPlaylist()
         }
         viewModel.state.observe(viewLifecycleOwner){
             handleState(it)
@@ -110,15 +111,24 @@ class CreatePlaylistFragment: Fragment() {
 
     private fun handleState(state: CreatePlaylistState) {
         when(state){
-            is CreatePlaylistState.Created -> navigateBack(state.playlist)
+            is CreatePlaylistState.Created -> navigateBack(state.title)
             is CreatePlaylistState.Editing -> updateUi(state.playlist)
+            CreatePlaylistState.Creating -> blockInput()
+        }
+    }
+    private fun blockInput(){
+        isButtonEnable(false)
+        binding.apply {
+            etTitleContainer.isEnabled = false
+            etDescriptionContainer.isEnabled = false
+            ivPoster.isEnabled = false
         }
     }
 
     private fun updateUi(playlist: PlaylistUiModel) {
         isButtonEnable(playlist.isButtonEnable)
-        playlist.uri?.let {
-            setPoster(it)
+        playlist.coverImagePath?.let {
+            setPoster(it.toUri())
         }
     }
 
@@ -130,8 +140,8 @@ class CreatePlaylistFragment: Fragment() {
             .into(binding.ivPoster)
     }
 
-    private fun navigateBack(playlist: PlaylistUiModel) {
-        showSnackBar(playlist.title)
+    private fun navigateBack(title: String) {
+        showSnackBar(title)
         findNavController().navigateUp()
     }
 
@@ -165,9 +175,11 @@ class CreatePlaylistFragment: Fragment() {
                 val playlist = state.playlist
                 val hasTitle = playlist.title.isNotBlank()
                 val hasDescription = playlist.description.isNotBlank()
-                val hasPoster = playlist.uri != null
+                val hasPoster = playlist.coverImagePath != null
                 (hasTitle || hasDescription || hasPoster)
             }
+
+            CreatePlaylistState.Creating -> false
         }
     }
 }

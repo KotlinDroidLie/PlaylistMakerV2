@@ -1,12 +1,10 @@
 package com.practicum.playlistmaker.di.domain
 
 import com.practicum.playlistmaker.di.data.externalNavigatorModule
-import com.practicum.playlistmaker.features.media.domain.api.IAddPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistInteractor
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
-import com.practicum.playlistmaker.features.media.domain.impl.AddPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.impl.PlaylistInteractor
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
@@ -57,7 +55,4 @@ val useCaseModule = module{
         PlaylistInteractor(get<IPlaylistRepo>())
     }
 
-    single<IAddPlaylistUseCase>{
-        AddPlaylistUseCase(get<IPlaylistRepo>())
-    }
 }
