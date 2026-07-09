@@ -8,7 +8,6 @@
     app:behavior_peekHeight="auto"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     android:background="@drawable/bottom_sheet_shape"
-    android:clickable="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -24,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView"
+        android:id="@+id/tv_title_bottom_sheet"
         style="@style/TextViewStyleAddToPlaylist"
         android:layout_marginTop="12dp"
         android:gravity="center"
@@ -40,13 +39,15 @@
         android:text="@string/new_playlist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_bottom_sheet"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_playlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

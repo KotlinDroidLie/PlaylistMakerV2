@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.C
 import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
+import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetViewModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
 import com.practicum.playlistmaker.features.search.domain.api.usecase.ISearchTracksUseCase
@@ -67,6 +68,10 @@ val viewModelModule = module{
 
     viewModel {
         CreatePlaylistViewModel(get<ICreatePlaylistUseCase>())
+    }
+
+    viewModel {
+        PlaylistBottomSheetViewModel(get<IGetPlaylistsUseCase>())
     }
 
 
