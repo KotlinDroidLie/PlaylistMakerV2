@@ -21,7 +21,7 @@ class PlaylistFragment(): Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: PlaylistAdapter
+    private lateinit var adapter: PlaylistGridAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +40,7 @@ class PlaylistFragment(): Fragment() {
             false
         )
 
-        adapter = PlaylistAdapter()
+        adapter = PlaylistGridAdapter()
         binding.rvPlaylistMedia.adapter = adapter
 
         binding.btnAddNewPlaylist.setOnClickListener {

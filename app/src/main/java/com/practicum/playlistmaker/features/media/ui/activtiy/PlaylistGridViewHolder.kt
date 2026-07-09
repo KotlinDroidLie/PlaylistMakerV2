@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistViewGridBinding
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 
-class PlaylistViewHolder(
+class PlaylistGridViewHolder(
     private val binding: PlaylistViewGridBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val cornerRadius = TypedValue.applyDimension(
