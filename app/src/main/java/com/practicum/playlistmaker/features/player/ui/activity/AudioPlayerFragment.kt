@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.features.player.ui.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -73,6 +74,17 @@ class AudioPlayerFragment : Fragment() {
         )
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetBinding.bottomSheet)
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {}
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                val alpha = (slideOffset + 1f) / 2f
+                val colorArgb = Color.argb(alpha,0F,0F,0F)
+                binding.viewOverlay.setBackgroundColor(colorArgb)
+            }
+
+        })
 
         bottomSheetBinding.btnAddNewPlaylist.setOnClickListener {
             findNavController().navigate(
