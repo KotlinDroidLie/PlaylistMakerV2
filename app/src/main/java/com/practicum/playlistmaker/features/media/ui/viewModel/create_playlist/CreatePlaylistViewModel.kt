@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.features.media.domain.api.IPlaylistInteractor
+import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
 import kotlinx.coroutines.launch
 
 class CreatePlaylistViewModel(
-    private val playlistInteractor: IPlaylistInteractor
+    private val createPlaylistUseCase: ICreatePlaylistUseCase
 ): ViewModel() {
     private val _state = MutableLiveData<CreatePlaylistState>(CreatePlaylistState.Editing(PlaylistUiModel()))
     val state: LiveData<CreatePlaylistState> = _state
@@ -24,7 +24,7 @@ class CreatePlaylistViewModel(
             }
             val domain = currentState.playlist.toDomain()
             renderState(CreatePlaylistState.Creating)
-            val result = playlistInteractor.createPlaylist(domain)
+            val result = createPlaylistUseCase(domain)
             processResult(result, playlist)
         }
     }

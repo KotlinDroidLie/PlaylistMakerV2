@@ -3,10 +3,12 @@ package com.practicum.playlistmaker.di.domain
 import com.practicum.playlistmaker.di.data.externalNavigatorModule
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
-import com.practicum.playlistmaker.features.media.domain.api.IPlaylistInteractor
+import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
 import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
-import com.practicum.playlistmaker.features.media.domain.impl.PlaylistInteractor
+import com.practicum.playlistmaker.features.media.domain.impl.CreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistsUseCase
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCase
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
@@ -51,8 +53,12 @@ val useCaseModule = module{
         FavouriteInteractor(get<IFavouriteRepo>())
     }
 
-    single<IPlaylistInteractor>{
-        PlaylistInteractor(get<IPlaylistRepo>())
+    single<ICreatePlaylistUseCase>{
+        CreatePlaylistUseCase(get<IPlaylistRepo>())
+    }
+
+    single<IGetPlaylistsUseCase> {
+        GetPlaylistsUseCase(get<IPlaylistRepo>())
     }
 
 }
