@@ -5,10 +5,12 @@ import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
 import com.practicum.playlistmaker.features.media.data.db.entity.toEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toModel
+import com.practicum.playlistmaker.features.media.data.db.entity.toTracksInPlaylistsEntity
 import com.practicum.playlistmaker.features.media.data.dto.ResponseStorage
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
+import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -36,7 +38,7 @@ class PlaylistRepo(
             SaveResult.Success(playlist.title)
         } catch (e: Exception){
             SaveResult.Error(
-                errorMessage =  R.string.placeholder_text_error_database
+                errorMessage =  R.string.placeholder_text_error_save_playlist_database
             )
         }
 
@@ -46,5 +48,26 @@ class PlaylistRepo(
         return appDataBase.playlistDao()
             .getPlaylists()
             .map { entities -> entities.map { it.toModel() } }
+    }
+
+    override suspend fun insertTrackInPlaylist(
+        track: TrackModel,
+        playlist: PlaylistModel
+    ): SaveResult {
+        return try {
+            val entityTrack = track.toTracksInPlaylistsEntity()
+            appDataBase.tracksInPlaylistsDao().insertTrack(entityTrack)
+            val updatedPlaylist = playlist.copy(
+                totalTracks = playlist.totalTracks + 1,
+                idsTracks = playlist.idsTracks + track.trackId
+            )
+            val entityPlaylist = updatedPlaylist.toEntity()
+            appDataBase.playlistDao().insertPlaylist(entityPlaylist)
+            SaveResult.Success(playlist.title)
+        } catch (e: Exception){
+            SaveResult.Error(
+                errorMessage = R.string.placeholder_text_error_add_track_to_playlist_database
+            )
+        }
     }
 }
