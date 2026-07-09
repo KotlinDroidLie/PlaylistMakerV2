@@ -122,11 +122,15 @@ class CreatePlaylistFragment: Fragment() {
 
     private fun handleState(state: CreatePlaylistState) {
         when(state){
-            is CreatePlaylistState.Created -> playlistCreated(state.title)
-            is CreatePlaylistState.Editing -> updateUi(state.playlist)
-            CreatePlaylistState.Creating -> enableInput(false)
+            is CreatePlaylistState.Created -> handleCreated(state.title)
+            is CreatePlaylistState.Editing -> handleEditing(state.playlist)
+            CreatePlaylistState.Creating -> handleCreating()
             is CreatePlaylistState.Error -> handleError(state.resIdErrorMessage)
         }
+    }
+
+    private fun handleCreating(){
+        enableInput(false)
     }
 
     private fun handleError(resIdErrorMessage: Int) {
@@ -143,7 +147,7 @@ class CreatePlaylistFragment: Fragment() {
         }
     }
 
-    private fun updateUi(playlist: PlaylistUiModel) {
+    private fun handleEditing(playlist: PlaylistUiModel) {
         isButtonEnable(playlist.isButtonEnable)
         playlist.coverImagePath?.let {
             setPoster(it.toUri())
@@ -163,7 +167,7 @@ class CreatePlaylistFragment: Fragment() {
             .into(binding.ivPoster)
     }
 
-    private fun playlistCreated(title: String) {
+    private fun handleCreated(title: String) {
         showCreatedNotification(title)
         findNavController().navigateUp()
     }

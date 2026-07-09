@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
@@ -42,7 +43,9 @@ class AudioPlayerFragment : Fragment() {
         parametersOf(requireArguments().getParcelable<TrackModel>(ARGS_TRACK))
     }
 
-    private val bottomSheetViewModel: PlaylistBottomSheetViewModel by viewModel()
+    private val bottomSheetViewModel: PlaylistBottomSheetViewModel by viewModel{
+        parametersOf(requireArguments().getParcelable<TrackModel>(ARGS_TRACK))
+    }
 
     private val cornerRadius by lazy {
         TypedValue.applyDimension(
@@ -50,6 +53,10 @@ class AudioPlayerFragment : Fragment() {
             8f,
             this.resources.displayMetrics
         ).toInt()
+    }
+
+    private val onTrackClickListener = OnPlaylistClickListener{ playlistModel ->
+        bottomSheetViewModel.addTrackToPlaylist(playlistModel)
     }
 
     override fun onCreateView(
@@ -65,7 +72,7 @@ class AudioPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistAdapter = PlaylistAdapter()
+        playlistAdapter = PlaylistAdapter(onTrackClickListener)
         bottomSheetBinding.rvPlaylist.adapter = playlistAdapter
         bottomSheetBinding.rvPlaylist.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -123,6 +130,7 @@ class AudioPlayerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         hideBottomNav()
+        bottomSheetViewModel.loadContent()
     }
 
     override fun onPause() {
@@ -138,20 +146,70 @@ class AudioPlayerFragment : Fragment() {
     }
     private fun renderBottomSheetUi(state: PlaylistBottomSheetState) {
         when(state){
-            PlaylistBottomSheetState.Empty -> {
-                showBottomSheetEmpty()
-            }
             is PlaylistBottomSheetState.Content ->{
-                showBottomSheetContent(state.playlists)
+                handleContent(state.playlists)
             }
             PlaylistBottomSheetState.Hide ->{
-                hideBottomSheet()
+                handleHide()
+            }
+
+            is PlaylistBottomSheetState.Added ->{
+                handleAdded(state.title)
+            }
+            is PlaylistBottomSheetState.Error ->{
+                handleError(state.resMessage)
+            }
+
+            PlaylistBottomSheetState.Show ->{
+                handleShow()
+            }
+
+            is PlaylistBottomSheetState.AlreadyExists -> {
+                handleAlreadyExists(state.title)
             }
         }
     }
 
-    private fun showBottomSheetEmpty() {
+    private fun handleAlreadyExists(title: String) {
+        showAlreadyExistsNotification(title)
+    }
+
+    private fun handleShow() {
         showBottomSheet()
+    }
+
+    private fun handleError(resMessage: Int) {
+        showErrorNotification(resMessage)
+    }
+
+    private fun handleAdded(title: String) {
+        showAddedNotification(title)
+        hideBottomSheet()
+    }
+
+    private fun handleHide(){
+        hideBottomSheet()
+    }
+    private fun showAlreadyExistsNotification(title: String){
+        Snackbar.make(
+            binding.root,
+            getString(R.string.track_is_already_in_playlist, title),
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+    private fun showAddedNotification(title: String){
+        Snackbar.make(
+            binding.root,
+            getString(R.string.added_track_in_playlist_notification, title),
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+    private fun showErrorNotification(resIdErrorMessage: Int){
+        Snackbar.make(
+            binding.root,
+            getString(resIdErrorMessage),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun showBottomSheet(){
@@ -161,8 +219,7 @@ class AudioPlayerFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun showBottomSheetContent(playlists: List<PlaylistModel>) {
-        showBottomSheet()
+    private fun handleContent(playlists: List<PlaylistModel>) {
         updateBottomSheetContent(playlists)
     }
 

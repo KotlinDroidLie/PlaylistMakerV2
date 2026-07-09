@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import com.practicum.playlistmaker.di.domain.useCaseModule
+import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
@@ -70,8 +71,12 @@ val viewModelModule = module{
         CreatePlaylistViewModel(get<ICreatePlaylistUseCase>())
     }
 
-    viewModel {
-        PlaylistBottomSheetViewModel(get<IGetPlaylistsUseCase>())
+    viewModel { (model: TrackModel) ->
+        PlaylistBottomSheetViewModel(
+            model,
+            get<IGetPlaylistsUseCase>(),
+            get<IAddTrackToPlaylistUseCase>()
+        )
     }
 
 
