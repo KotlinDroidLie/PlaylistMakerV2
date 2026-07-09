@@ -7,11 +7,11 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.PlaylistViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistViewGridBinding
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 
 class PlaylistViewHolder(
-    private val binding: PlaylistViewBinding,
+    private val binding: PlaylistViewGridBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val cornerRadius = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,

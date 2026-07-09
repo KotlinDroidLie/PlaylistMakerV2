@@ -38,6 +38,7 @@
     <string name="create_playlist_notification">"The playlist %1$s has been created.  "</string>
     <string name="placeholder_text_error_storage">Error saving the cover</string>
     <string name="placeholder_text_error_database">Playlist saving error</string>
+    <string name="add_to_playlist">Add to playlist</string>
     <plurals name="tracks_count">
         <item quantity="one">%d track</item>
         <item quantity="other">%d tracks</item>

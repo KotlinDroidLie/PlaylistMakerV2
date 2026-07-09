@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.features.media.ui.activtiy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.databinding.PlaylistViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistViewGridBinding
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 
 class PlaylistAdapter: RecyclerView.Adapter<PlaylistViewHolder>() {
@@ -13,7 +13,7 @@ class PlaylistAdapter: RecyclerView.Adapter<PlaylistViewHolder>() {
         viewType: Int
     ): PlaylistViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = PlaylistViewBinding.inflate(inflater, parent, false )
+        val binding = PlaylistViewGridBinding.inflate(inflater, parent, false )
         return PlaylistViewHolder(binding)
     }
 

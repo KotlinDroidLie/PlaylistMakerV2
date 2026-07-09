@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
-import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistState
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(

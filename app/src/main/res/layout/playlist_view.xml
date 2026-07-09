@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout style="@style/SecondLayoutBackground"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="@dimen/height_song_view"
+    tools:layout_margin="12dp">
 
     <ImageView
         android:id="@+id/iv_poster_playlist"
-        android:layout_width="@dimen/poster_playlist_size"
-        android:layout_height="@dimen/poster_playlist_size"
-        app:layout_constraintBottom_toTopOf="@+id/tv_playlist_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="@dimen/poster_song_size"
+        android:layout_height="@dimen/poster_song_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_placeholder_312" />
+        tools:src="@drawable/ic_placeholder_45" />
 
-    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStylePlaylistDetail"
-        android:id="@+id/tv_playlist_title"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_playlist_total_tracks"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_title_playlist"
+        style="@style/TextViewPlaylistDetail"
+        android:layout_marginTop="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_poster_playlist"
+        app:layout_constraintStart_toEndOf="@+id/iv_poster_playlist"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Summer Party" />
 
-    <com.google.android.material.textview.MaterialTextView style="@style/TextViewStylePlaylistDetail"
-        android:id="@+id/tv_playlist_total_tracks"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_total_tracks_playlist"
+        style="@style/TextViewPlaylistDetail"
+        android:textSize="@dimen/text_small"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_playlist_title"
+        app:layout_constraintStart_toEndOf="@+id/iv_poster_playlist"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_playlist"
         tools:text="157 треков" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
