@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.features.media.ui.activtiy
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
@@ -22,6 +26,7 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.C
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistUiModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.properties.Delegates
 
 class CreatePlaylistFragment: Fragment() {
     private val viewModel: CreatePlaylistViewModel by viewModel()
@@ -29,6 +34,7 @@ class CreatePlaylistFragment: Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackCallBack: OnBackPressedCallback
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private var cornerRadius by Delegates.notNull<Int>()
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){ uri ->
         uri?.let {
@@ -56,6 +62,11 @@ class CreatePlaylistFragment: Fragment() {
                 }
             }
         }
+        cornerRadius = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            requireContext().resources.displayMetrics
+        ).toInt()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,7 +153,12 @@ class CreatePlaylistFragment: Fragment() {
     private fun setPoster(uri: Uri) {
         Glide.with(this)
             .load(uri)
-            .centerCrop()
+            .transform(
+                MultiTransformation(
+                    CenterCrop(),
+                    RoundedCorners(cornerRadius)
+                )
+            )
             .placeholder(R.drawable.placeholder_poster_playlist)
             .into(binding.ivPoster)
     }
