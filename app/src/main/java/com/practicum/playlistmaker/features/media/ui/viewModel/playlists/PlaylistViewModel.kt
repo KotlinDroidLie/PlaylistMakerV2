@@ -28,6 +28,6 @@ class PlaylistViewModel(
         }
     }
     private fun renderState(state: PlaylistsState){
-        _state.postValue(state)
+        _state.value = state
     }
 }

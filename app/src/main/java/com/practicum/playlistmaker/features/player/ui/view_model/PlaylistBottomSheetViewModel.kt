@@ -17,7 +17,7 @@ class PlaylistBottomSheetViewModel(
     private val addTrackToPlaylistUseCase: IAddTrackToPlaylistUseCase
 ) : ViewModel() {
 
-    private var _state = MutableLiveData<PlaylistBottomSheetState>(PlaylistBottomSheetState.Hide)
+    private val _state = MutableLiveData<PlaylistBottomSheetState>(PlaylistBottomSheetState.Hide)
     val state: LiveData<PlaylistBottomSheetState> = _state
 
     fun addTrackToPlaylist(playlist: PlaylistModel) {
@@ -59,6 +59,6 @@ class PlaylistBottomSheetViewModel(
     }
 
     private fun renderState(state: PlaylistBottomSheetState) {
-        _state.postValue(state)
+        _state.value = state
     }
 }

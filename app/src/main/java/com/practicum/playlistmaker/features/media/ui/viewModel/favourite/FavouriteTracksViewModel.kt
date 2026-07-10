@@ -29,6 +29,6 @@ class FavouriteTracksViewModel(
     }
 
     private fun renderState(state: FavouriteTracksState){
-        _state.postValue(state)
+        _state.value = state
     }
 }

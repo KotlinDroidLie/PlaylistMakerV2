@@ -26,7 +26,6 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.C
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistUiModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.properties.Delegates
 
 class CreatePlaylistFragment: Fragment() {
     private val viewModel: CreatePlaylistViewModel by viewModel()
@@ -34,7 +33,13 @@ class CreatePlaylistFragment: Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackCallBack: OnBackPressedCallback
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
-    private var cornerRadius by Delegates.notNull<Int>()
+    private val cornerRadius by lazy {
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            requireContext().resources.displayMetrics
+        ).toInt()
+    }
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){ uri ->
         uri?.let {
@@ -62,11 +67,6 @@ class CreatePlaylistFragment: Fragment() {
                 }
             }
         }
-        cornerRadius = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            8f,
-            requireContext().resources.displayMetrics
-        ).toInt()
     }
     override fun onCreateView(
         inflater: LayoutInflater,

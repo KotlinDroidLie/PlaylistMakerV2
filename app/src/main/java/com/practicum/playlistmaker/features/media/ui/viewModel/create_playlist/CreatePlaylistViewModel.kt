@@ -70,7 +70,7 @@ class CreatePlaylistViewModel(
     }
 
     private fun renderState(state: CreatePlaylistState) {
-        _state.postValue(state)
+        _state.value = state
     }
 
     private fun processResult(result: SaveResult, playlist: PlaylistUiModel){

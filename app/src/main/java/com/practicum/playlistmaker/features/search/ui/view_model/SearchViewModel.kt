@@ -126,7 +126,7 @@ class SearchViewModel(
     }
 
     private fun renderState(state: SearchState) {
-        _state.postValue(state)
+        _state.value = state
     }
 
     private fun refreshHistory(){
