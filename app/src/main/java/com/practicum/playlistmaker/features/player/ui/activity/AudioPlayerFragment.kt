@@ -20,11 +20,12 @@ import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
+import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetContentState
 import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetViewModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerState
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
-import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetState
+import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetUiState
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -121,8 +122,12 @@ class AudioPlayerFragment : Fragment() {
             renderUI(it)
         }
 
-        bottomSheetViewModel.state.observe(viewLifecycleOwner){
+        bottomSheetViewModel.stateUi.observe(viewLifecycleOwner){
             renderBottomSheetUi(it)
+        }
+
+        bottomSheetViewModel.stateContent.observe(viewLifecycleOwner){
+            renderBottomSheetContent(it)
         }
 
     }
@@ -130,7 +135,6 @@ class AudioPlayerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         hideBottomNav()
-        bottomSheetViewModel.loadContent()
     }
 
     override fun onPause() {
@@ -144,28 +148,31 @@ class AudioPlayerFragment : Fragment() {
         _binding = null
         _bottomSheetBinding = null
     }
-    private fun renderBottomSheetUi(state: PlaylistBottomSheetState) {
+
+    private fun renderBottomSheetContent(state: BottomSheetContentState){
         when(state){
-            is PlaylistBottomSheetState.Content ->{
+            is BottomSheetContentState.AlreadyExists -> {
+                handleAlreadyExists(state.title)
+            }
+            is BottomSheetContentState.Content -> {
                 handleContent(state.playlists)
             }
-            PlaylistBottomSheetState.Hide ->{
+            is BottomSheetContentState.Error ->{
+                handleError(state.resMessage)
+            }
+            is BottomSheetContentState.SuccessAdded -> {
+                handleSuccessAdded(state.title)
+            }
+        }
+    }
+    private fun renderBottomSheetUi(state: BottomSheetUiState) {
+        when(state){
+            BottomSheetUiState.Hide ->{
                 handleHide()
             }
 
-            is PlaylistBottomSheetState.Added ->{
-                handleAdded(state.title)
-            }
-            is PlaylistBottomSheetState.Error ->{
-                handleError(state.resMessage)
-            }
-
-            PlaylistBottomSheetState.Show ->{
+            BottomSheetUiState.Show ->{
                 handleShow()
-            }
-
-            is PlaylistBottomSheetState.AlreadyExists -> {
-                handleAlreadyExists(state.title)
             }
         }
     }
@@ -182,7 +189,7 @@ class AudioPlayerFragment : Fragment() {
         showErrorNotification(resMessage)
     }
 
-    private fun handleAdded(title: String) {
+    private fun handleSuccessAdded(title: String) {
         showAddedNotification(title)
         hideBottomSheet()
     }

@@ -12,8 +12,4 @@ class GetPlaylistsUseCase(
     override fun invoke(): Flow<List<PlaylistModel>> {
         return repo.getPlaylists()
     }
-
-    override suspend fun once(): List<PlaylistModel> {
-        return repo.getPlaylists().first()
-    }
 }

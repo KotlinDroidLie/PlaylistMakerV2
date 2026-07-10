@@ -17,48 +17,55 @@ class PlaylistBottomSheetViewModel(
     private val addTrackToPlaylistUseCase: IAddTrackToPlaylistUseCase
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<PlaylistBottomSheetState>(PlaylistBottomSheetState.Hide)
-    val state: LiveData<PlaylistBottomSheetState> = _state
+    private val _stateContent = MutableLiveData<BottomSheetContentState>()
+    val stateContent: LiveData<BottomSheetContentState> = _stateContent
+    private val _stateUi = MutableLiveData<BottomSheetUiState>(BottomSheetUiState.Hide)
+    val stateUi: LiveData<BottomSheetUiState> = _stateUi
+
+    init {
+        viewModelScope.launch {
+            getPlaylistsUseCase().collect { playlistModels ->
+                renderContentState(BottomSheetContentState.Content(playlistModels))
+            }
+        }
+    }
 
     fun addTrackToPlaylist(playlist: PlaylistModel) {
         if (isTrackAlreadyInPlaylist(playlist)) {
-            renderState(PlaylistBottomSheetState.AlreadyExists(playlist.title))
+            renderContentState(BottomSheetContentState.AlreadyExists(playlist.title))
             return
         }
         viewModelScope.launch {
             val result = addTrackToPlaylistUseCase(playlist, track)
-            onAddResult(result)
-        }
-    }
-    fun loadContent(){
-        viewModelScope.launch {
-            val result = getPlaylistsUseCase.once()
-            renderState(PlaylistBottomSheetState.Content(result))
+            onAddedResult(result)
         }
     }
 
     fun openBottomSheet() {
-        loadContent()
-        renderState(PlaylistBottomSheetState.Show)
+        renderUiState(BottomSheetUiState.Show)
     }
 
     private fun isTrackAlreadyInPlaylist(playlist: PlaylistModel) =
         track.trackId in playlist.idsTracks
 
 
-    private fun onAddResult(result: SaveResult) {
+    private fun onAddedResult(result: SaveResult) {
         when (result) {
             is SaveResult.Error -> {
-                renderState(PlaylistBottomSheetState.Error(result.errorMessage))
+                renderContentState(BottomSheetContentState.Error(result.errorMessage))
             }
 
             is SaveResult.Success -> {
-                renderState(PlaylistBottomSheetState.Added(result.data))
+                renderContentState(BottomSheetContentState.SuccessAdded(result.data))
             }
         }
     }
 
-    private fun renderState(state: PlaylistBottomSheetState) {
-        _state.value = state
+    private fun renderUiState(state: BottomSheetUiState) {
+        _stateUi.value = state
+    }
+
+    private fun renderContentState(state: BottomSheetContentState){
+        _stateContent.value = state
     }
 }

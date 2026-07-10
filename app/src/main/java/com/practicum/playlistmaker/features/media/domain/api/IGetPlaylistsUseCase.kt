@@ -5,5 +5,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface IGetPlaylistsUseCase {
     operator fun invoke(): Flow<List<PlaylistModel>>
-    suspend fun once(): List<PlaylistModel>
 }
