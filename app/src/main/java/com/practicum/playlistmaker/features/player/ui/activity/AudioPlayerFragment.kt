@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -27,6 +28,8 @@ import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetUiState
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -39,6 +42,8 @@ class AudioPlayerFragment : Fragment() {
     private var _binding: FragmentAudioPlayerBinding? = null
     private val binding get() = _binding!!
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private var isClickAllowed = true
 
     private val viewModel: PlayerViewModel by viewModel{
         parametersOf(requireArguments().getParcelable<TrackModel>(ARGS_TRACK))
@@ -57,7 +62,9 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private val onTrackClickListener = OnPlaylistClickListener{ playlistModel ->
-        bottomSheetViewModel.addTrackToPlaylist(playlistModel)
+        if (clickDebounce()) {
+            bottomSheetViewModel.addTrackToPlaylist(playlistModel)
+        }
     }
 
     override fun onCreateView(
@@ -145,6 +152,7 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isClickAllowed = true
         _binding = null
         _bottomSheetBinding = null
     }
@@ -301,7 +309,20 @@ class AudioPlayerFragment : Fragment() {
         (requireActivity() as? BottomNavigationOwner)?.showBottomNav()
     }
 
+    private fun clickDebounce(): Boolean{
+        val current = isClickAllowed
+        if(current){
+            viewLifecycleOwner.lifecycleScope.launch {
+                isClickAllowed = false
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
     companion object{
+        private const val CLICK_DEBOUNCE_DELAY = 500L
         private const val ARGS_TRACK = "track"
 
         fun createARgs(model: TrackModel) = Bundle().apply {
