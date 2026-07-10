@@ -31,4 +31,23 @@
     <string name="no_playlist_has_been_created">Вы не создали\nни одного плейлиста</string>
     <string name="favourite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="create">Создать</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="create_playlist_confirm_dialog_title">Завершить создание плейлиста?</string>
+    <string name="create_playlist_confirm_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="create_playlist_confirm_dialog_positive_message">Завершить</string>
+    <string name="create_playlist_confirm_dialog_neutral_message">Отмена</string>
+    <string name="create_playlist_notification">Плейлист %1$s создан</string>
+    <string name="placeholder_text_error_storage">Ошибка сохранения обложки</string>
+    <string name="added_track_in_playlist_notification">Добавлено в плейлист %1$s</string>
+    <string name="placeholder_text_error_save_playlist_database">"Ошибка сохранения плейлиста"</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="placeholder_text_error_add_track_to_playlist_database">Ошибка добавления трека</string>
+    <string name="track_is_already_in_playlist">Трек уже добавлен в плейлист %1$s</string>
+    <plurals name="tracks_count">
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="other">%d треков</item>
+    </plurals>
 </resources>

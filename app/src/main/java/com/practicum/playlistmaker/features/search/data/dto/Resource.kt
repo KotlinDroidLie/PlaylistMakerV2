@@ -2,12 +2,12 @@ package com.practicum.playlistmaker.features.search.data.dto
 
 import androidx.annotation.StringRes
 
-sealed class Resource<T>(val data: T? = null, val message: Int? = null, val extraMessage: String? = null) {
-    class Success<T>(data: T): Resource<T>(data)
-    class Error<T>(@StringRes message: Int, data: T? = null, type:ErrorType, extraMessage: String? = null): Resource<T>(data, message, extraMessage)
+sealed interface Resource<T> {
+    class Success<T>(val data: T): Resource<T>
+    class Error<T>(@param:StringRes val message: Int, val data: T? = null, val type:ErrorType, val extraMessage: String? = null): Resource<T>
 }
 
 enum class ErrorType{
     NETWORK,
-    GENERIC
+    GENERIC,
 }

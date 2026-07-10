@@ -9,4 +9,15 @@ class Converters {
 
     @TypeConverter
     fun toDate(time: Long?): Date? = time?.let { Date(it) }
+
+    @TypeConverter
+    fun fromList(list: List<Int>): String{
+        return list.joinToString(",")
+    }
+
+    @TypeConverter
+    fun toList(string: String): List<Int>{
+        if(string.isBlank()) return emptyList()
+        return string.split(",").map { it.toInt() }
+    }
 }

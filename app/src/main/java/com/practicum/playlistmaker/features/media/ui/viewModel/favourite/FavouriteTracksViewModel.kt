@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.ui.viewModel
+package com.practicum.playlistmaker.features.media.ui.viewModel.favourite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,6 +29,6 @@ class FavouriteTracksViewModel(
     }
 
     private fun renderState(state: FavouriteTracksState){
-        _state.postValue(state)
+        _state.value = state
     }
 }
