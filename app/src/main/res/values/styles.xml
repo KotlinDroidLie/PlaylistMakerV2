@@ -264,6 +264,20 @@
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
     </style>
 
+    <style name="BottomSheet">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="behavior_hideable">true</item>
+        <item name="behavior_peekHeight">auto</item>
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior</item>
+        <item name="android:background">@drawable/bottom_sheet_shape</item>
+    </style>
 
+    <style name="BottomSheetRectangle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:background">@drawable/bottom_sheet_rectangle</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
     
 </resources>
