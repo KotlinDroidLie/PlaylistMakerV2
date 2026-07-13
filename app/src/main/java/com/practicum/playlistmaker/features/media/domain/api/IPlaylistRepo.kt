@@ -10,4 +10,5 @@ interface IPlaylistRepo {
     suspend fun insertPlaylist(playlist: PlaylistModel): SaveResult
     fun getPlaylists(): Flow<List<PlaylistModel>>
     suspend fun insertTrackInPlaylist(track: TrackModel, playlist: PlaylistModel): SaveResult
+    suspend fun getPlaylistById(playlistId: Int): PlaylistModel
 }

@@ -5,11 +5,13 @@ import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylist
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
 import com.practicum.playlistmaker.features.media.domain.impl.AddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.impl.CreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistByIdUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistsUseCase
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCase
@@ -65,6 +67,10 @@ val useCaseModule = module{
 
     single<IAddTrackToPlaylistUseCase> {
         AddTrackToPlaylistUseCase(get<IPlaylistRepo>())
+    }
+
+    single<IGetPlaylistByIdUseCase>{
+        GetPlaylistByIdUseCase(get<IPlaylistRepo>())
     }
 
 }

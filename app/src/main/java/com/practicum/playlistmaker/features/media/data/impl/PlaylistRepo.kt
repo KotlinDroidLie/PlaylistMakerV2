@@ -70,4 +70,9 @@ class PlaylistRepo(
             )
         }
     }
+
+    override suspend fun getPlaylistById(playlistId: Int): PlaylistModel {
+        val entity = appDataBase.playlistDao().getPlaylistById(playlistId)
+        return entity.toModel()
+    }
 }
