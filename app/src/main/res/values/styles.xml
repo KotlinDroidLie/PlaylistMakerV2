@@ -35,6 +35,12 @@
         <item name="android:textSize">@dimen/text_standard</item>
     </style>
 
+    <style name="MessageTextStyleYSBold">
+        <item name="fontFamily">@font/ys_display_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
     <style name="SecondLayoutBackground">
         <item name="android:background">@color/white</item>
         <item name="android:layout_height">match_parent</item>
@@ -279,5 +285,30 @@
         <item name="android:background">@drawable/bottom_sheet_rectangle</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
+
+    <style name="TextViewStylePlaylistTitle" parent="MessageTextStyleYSBold">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/YP_black</item>
+    </style>
+
+    <style name="TextViewStylePlaylistDescription" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
     
+    <style name="TextViewStylePlaylistProperty" parent="TextViewStylePlaylistDescription">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+    
+    <style name="ButtonPlaylistAction">
+        <item name="android:layout_width">@dimen/icon_size</item>
+        <item name="android:layout_height">@dimen/icon_size</item>
+        <item name="backgroundTint">@color/YP_black</item>
+    </style>
 </resources>

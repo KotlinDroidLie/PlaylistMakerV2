@@ -24,4 +24,5 @@
     <dimen name="margin_top_status_media_message">106dp</dimen>
     <dimen name="height_input_text_create_playlist">55dp</dimen>
     <dimen name="poster_playlist_size">160dp</dimen>
+    <dimen name="playlist_bottom_sheet_height">256dp</dimen>
 </resources>
