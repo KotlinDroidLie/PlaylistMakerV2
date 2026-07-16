@@ -22,6 +22,13 @@ class PlaylistFragment(): Fragment() {
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: PlaylistGridAdapter
+
+    private val onPlaylistClickListener = OnPlaylistClickListener{ playlistId ->
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistDetailFragment,
+            PlaylistDetailFragment.createARgs(playlistId)
+        )
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +47,7 @@ class PlaylistFragment(): Fragment() {
             false
         )
 
-        adapter = PlaylistGridAdapter()
+        adapter = PlaylistGridAdapter(onPlaylistClickListener)
         binding.rvPlaylistMedia.adapter = adapter
 
         binding.btnAddNewPlaylist.setOnClickListener {
