@@ -13,6 +13,23 @@ fun TrackModel.toTracksInPlaylistsEntity():TracksInPlaylistsEntity{
         country = country,
         trackDuration = trackDuration,
         trackImage = trackImage,
-        audioPreviewUrl = audioPreviewUrl
+        audioPreviewUrl = audioPreviewUrl,
+        isFavourite = isFavourite,
     )
+}
+
+fun TracksInPlaylistsEntity.toModel(): TrackModel{
+    return TrackModel(
+        trackId = trackId,
+        trackName = trackName,
+        artistName = artistName,
+        albumName = albumName,
+        releaseDate = releaseDate,
+        genre = genre,
+        country = country,
+        trackDuration = trackDuration,
+        trackImage = trackImage,
+        audioPreviewUrl = audioPreviewUrl,
+        isFavourite = isFavourite,
+        )
 }

@@ -75,4 +75,10 @@ class PlaylistRepo(
         val entity = appDataBase.playlistDao().getPlaylistById(playlistId)
         return entity.toModel()
     }
+
+    override fun getTracksByIds(tracksIds: List<Int>): Flow<List<TrackModel>> {
+        return appDataBase.tracksInPlaylistsDao()
+            .getTracksByIds(tracksIds)
+            .map { entities -> entities.map { it.toModel() } }
+    }
 }

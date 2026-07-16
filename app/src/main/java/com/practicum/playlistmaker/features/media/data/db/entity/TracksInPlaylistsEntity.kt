@@ -17,5 +17,6 @@ data class TracksInPlaylistsEntity(
     val country: String,
     val trackDuration: Int,
     val trackImage: String,
-    val audioPreviewUrl: String
+    val audioPreviewUrl: String,
+    val isFavourite: Boolean
 )
