@@ -7,9 +7,13 @@ import com.practicum.playlistmaker.di.domain.useCaseModule
 import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFormatPlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetViewModel
@@ -76,6 +80,15 @@ val viewModelModule = module{
             model,
             get<IGetPlaylistsUseCase>(),
             get<IAddTrackToPlaylistUseCase>()
+        )
+    }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistDetailViewModel(
+            getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
+            getPlaylistTracks = get<IGetPlaylistTracksUseCase>(),
+            formatPlaylistUseCase = get<IFormatPlaylistUseCase>(),
+            playlistId = playlistId
         )
     }
 
