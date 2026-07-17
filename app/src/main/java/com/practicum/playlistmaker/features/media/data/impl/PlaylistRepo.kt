@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class PlaylistRepo(
@@ -80,5 +81,24 @@ class PlaylistRepo(
         return appDataBase.tracksInPlaylistsDao()
             .getTracksByIds(tracksIds)
             .map { entities -> entities.map { it.toModel() } }
+    }
+
+    override suspend fun removeTrackFromPlaylist(trackId: Int, playlistId: Int) {
+        val playlist = appDataBase.playlistDao().getPlaylistById(playlistId)
+        val updatedTracksIds = playlist.idsTracks.filter { it != trackId }
+        appDataBase.playlistDao().updatePlaylist(
+            playlist.copy(
+                idsTracks = updatedTracksIds,
+                totalTracks = updatedTracksIds.size
+            )
+        )
+        removeUnusedTrack(trackId)
+    }
+    suspend fun removeUnusedTrack(trackId: Int) {
+        val allPlaylists = appDataBase.playlistDao().getPlaylists().first()
+        val isUsed = allPlaylists.any{ it.idsTracks.contains(trackId)}
+        if(!isUsed){
+            appDataBase.tracksInPlaylistsDao().removeTrackById(trackId)
+        }
     }
 }
