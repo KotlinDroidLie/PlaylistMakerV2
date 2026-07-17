@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".features.media.ui.activtiy.PlaylistDetailFragment">
+    tools:context=".features.media.ui.activtiy.playlist_detail.PlaylistDetailFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

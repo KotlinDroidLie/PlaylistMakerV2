@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.ui.activtiy
+package com.practicum.playlistmaker.features.media.ui.activtiy.playlists
 
 import android.util.TypedValue
 import androidx.recyclerview.widget.RecyclerView

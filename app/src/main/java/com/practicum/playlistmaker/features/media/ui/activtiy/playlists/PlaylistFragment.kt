@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.ui.activtiy
+package com.practicum.playlistmaker.features.media.ui.activtiy.playlists
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
-import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistsState
+import com.practicum.playlistmaker.features.media.ui.activtiy.playlist_detail.PlaylistDetailFragment
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 class PlaylistFragment(): Fragment() {
     private val viewModel: PlaylistViewModel by viewModel()
@@ -23,10 +23,10 @@ class PlaylistFragment(): Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: PlaylistGridAdapter
 
-    private val onPlaylistClickListener = OnPlaylistClickListener{ playlistId ->
+    private val onPlaylistClickListener = OnPlaylistClickListener { playlistId ->
         findNavController().navigate(
             R.id.action_mediaFragment_to_playlistDetailFragment,
-            PlaylistDetailFragment.createARgs(playlistId)
+            PlaylistDetailFragment.Companion.createARgs(playlistId)
         )
     }
     override fun onCreateView(
@@ -42,7 +42,7 @@ class PlaylistFragment(): Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.rvPlaylistMedia.layoutManager = GridLayoutManager(
-            requireContext(),2,
+            requireContext(), 2,
             GridLayoutManager.VERTICAL,
             false
         )

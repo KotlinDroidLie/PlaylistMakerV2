@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.ui.activtiy
+package com.practicum.playlistmaker.features.media.ui.activtiy.playlist_detail
 
 import android.graphics.Color
 import android.os.Bundle
@@ -237,7 +237,7 @@ class PlaylistDetailFragment: Fragment() {
         if (clickDebounce()){
             findNavController().navigate(
                 R.id.action_playlistDetailFragment_to_audioPlayerFragment2,
-                AudioPlayerFragment.createARgs(track)
+                AudioPlayerFragment.Companion.createARgs(track)
             )
         }
     }

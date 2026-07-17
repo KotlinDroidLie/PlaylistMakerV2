@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.features.media.ui.activtiy
+package com.practicum.playlistmaker.features.media.ui.activtiy.favourite
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,7 +42,8 @@ class FavouriteTracksFragment(): Fragment() {
                 openAudioPlayer(track)
             }
         )
-        binding.rvFavouriteMedia.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvFavouriteMedia.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvFavouriteMedia.adapter = adapter
         viewModel.state.observe(viewLifecycleOwner){
             render(it)
@@ -58,7 +59,7 @@ class FavouriteTracksFragment(): Fragment() {
         if (clickDebounce()){
             findNavController().navigate(
                 R.id.action_mediaFragment_to_audioPlayerFragment,
-                AudioPlayerFragment.createARgs(track)
+                AudioPlayerFragment.Companion.createARgs(track)
             )
         }
     }
