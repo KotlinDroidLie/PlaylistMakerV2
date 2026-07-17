@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker.features.media.ui.activtiy
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,15 +15,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAboutPlaylistBinding
 import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
+import com.practicum.playlistmaker.databinding.PlaylistMenuBottomSheetBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
+import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistUiModel
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragment
+import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetUiState
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.activtiy.TrackAdapter
 import kotlinx.coroutines.delay
@@ -34,8 +41,14 @@ class PlaylistDetailFragment: Fragment() {
     private val binding get() = _binding!!
     private var _bottomSheetBinding: PlaylistBottomSheetBinding? = null
     private val bottomSheetBinding get() = _bottomSheetBinding!!
+    private var _menuBottomSheetBinding: PlaylistMenuBottomSheetBinding? = null
+    private val menuBottomSheetBinding get() = _menuBottomSheetBinding!!
+    private lateinit var menuBottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var isClickAllowed = true
     private val viewModel: PlaylistDetailViewModel by viewModel {
+        parametersOf(requireArguments().getInt(ARGS_PLAYLIST))
+    }
+    private val menuViewModel: PlaylistDetailMenuViewModel by viewModel{
         parametersOf(requireArguments().getInt(ARGS_PLAYLIST))
     }
 
@@ -55,6 +68,7 @@ class PlaylistDetailFragment: Fragment() {
     ): View {
         _binding = FragmentAboutPlaylistBinding.inflate(inflater, container, false)
         _bottomSheetBinding = PlaylistBottomSheetBinding.bind(binding.playlistBottomSheet.root)
+        _menuBottomSheetBinding = PlaylistMenuBottomSheetBinding.bind(binding.playlistMenuBottomSheet.root)
         return binding.root
     }
 
@@ -74,8 +88,21 @@ class PlaylistDetailFragment: Fragment() {
             LinearLayoutManager.VERTICAL,
             false
         )
+        menuBottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetBinding.root)
+        menuBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {}
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                val alpha = (slideOffset + 1f) / 2f
+                val colorArgb = Color.argb(alpha,0F,0F,0F)
+                binding.viewOverlay.setBackgroundColor(colorArgb)
+            }
+        })
+
         binding.btnBack.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+        binding.btnMenu.setOnClickListener {
+            menuViewModel.openMenu()
         }
         binding.btnShare.setOnClickListener {
             processShare()
@@ -86,6 +113,56 @@ class PlaylistDetailFragment: Fragment() {
         viewModel.tracks.observe(viewLifecycleOwner){
             renderTracks(it)
         }
+        menuViewModel.stateUi.observe(viewLifecycleOwner){
+            renderMenuStateUi(it)
+        }
+        menuViewModel.content.observe(viewLifecycleOwner){
+            renderMenuContent(it)
+        }
+    }
+
+    private fun renderMenuContent(playlist: PlaylistModel) {
+        menuBottomSheetBinding.viewPlaylist.apply {
+            tvTitlePlaylist.text = playlist.title
+            tvTotalTracksPlaylist.text = resources.getQuantityString(
+                R.plurals.tracks_count,
+                playlist.totalTracks,
+                playlist.totalTracks
+            )
+        }
+        showMenuPoster(playlist.uri)
+    }
+
+    private fun showMenuPoster(uri: String?) {
+        Glide.with(this)
+            .load(uri)
+            .transform(
+                MultiTransformation(
+                    CenterCrop(),
+                    RoundedCorners(cornerRadius)
+                )
+            )
+            .placeholder(R.drawable.ic_placeholder_45)
+            .into(menuBottomSheetBinding.viewPlaylist.ivPosterPlaylist)
+    }
+
+    private fun renderMenuStateUi(state: BottomSheetUiState) {
+        when(state){
+            BottomSheetUiState.Hide -> {
+                handleMenuHide()
+            }
+            BottomSheetUiState.Show -> {
+                handleMenuShow()
+            }
+        }
+    }
+
+    private fun handleMenuShow() {
+        menuBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun handleMenuHide() {
+        menuBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun processShare() {
@@ -190,6 +267,7 @@ class PlaylistDetailFragment: Fragment() {
         super.onDestroyView()
         _binding = null
         _bottomSheetBinding = null
+        _menuBottomSheetBinding = null
     }
 
     private fun hideBottomNav(){
