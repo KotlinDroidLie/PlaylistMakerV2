@@ -3,11 +3,13 @@ package com.practicum.playlistmaker.features.media.data.impl
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toModel
 import com.practicum.playlistmaker.features.media.data.db.entity.toTracksInPlaylistsEntity
 import com.practicum.playlistmaker.features.media.data.dto.ResponseStorage
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
+import com.practicum.playlistmaker.features.media.domain.model.DeleteResult
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
@@ -92,10 +94,27 @@ class PlaylistRepo(
                 totalTracks = updatedTracksIds.size
             )
         )
-        removeUnusedTrack(trackId)
-    }
-    suspend fun removeUnusedTrack(trackId: Int) {
         val allPlaylists = appDataBase.playlistDao().getPlaylists().first()
+        removeUnusedTrack(trackId, allPlaylists)
+    }
+
+    override suspend fun deletePlaylist(playlistId: Int): DeleteResult {
+        return try {
+            val playlist = appDataBase.playlistDao().getPlaylistById(playlistId)
+            appDataBase.playlistDao().deletePlaylistById(playlistId)
+            val allPlaylists = appDataBase.playlistDao().getPlaylists().first()
+            playlist.idsTracks.forEach{ trackId ->
+                removeUnusedTrack(trackId, allPlaylists)
+            }
+            DeleteResult.Success
+        } catch (e: Exception){
+            DeleteResult.Error(
+                R.string.placeholder_text_error_delete_playlist_database
+            )
+        }
+    }
+
+    suspend fun removeUnusedTrack(trackId: Int, allPlaylists: List<PlaylistEntity>) {
         val isUsed = allPlaylists.any{ it.idsTracks.contains(trackId)}
         if(!isUsed){
             appDataBase.tracksInPlaylistsDao().removeTrackById(trackId)

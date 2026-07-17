@@ -56,6 +56,7 @@
     <string name="share_playlist">Share</string>
     <string name="edit_playlist">Edit info</string>
     <string name="delete_playlist">Delete playlist</string>
-
-
+    <string name="playlist_detail_empty_notification">This playlist contains no shareable tracks</string>
+    <string name="playlist_detail_confirm_delete_dialog_title">Do you want to delete the %1$s playlist?</string>
+    <string name="placeholder_text_error_delete_playlist_database">Failed to delete playlist</string>
 </resources>
