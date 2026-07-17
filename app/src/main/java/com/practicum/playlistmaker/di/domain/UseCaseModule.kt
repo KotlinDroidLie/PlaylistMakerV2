@@ -5,6 +5,7 @@ import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylist
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IDeletePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IFormatPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
@@ -14,6 +15,7 @@ import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.AddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.impl.CreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.DeletePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.FormatPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistByIdUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistTracksUseCase
@@ -91,6 +93,9 @@ val useCaseModule = module{
     }
     single<IRemoveTrackUseCase>{
         RemoveTrackUseCase(get<IPlaylistRepo>())
+    }
+    single<IDeletePlaylistUseCase>{
+        DeletePlaylistUseCase(get<IPlaylistRepo>())
     }
 
 }
