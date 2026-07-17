@@ -31,8 +31,8 @@ import com.practicum.playlistmaker.features.settings.domain.api.ISettingsReposit
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.settings.domain.impl.SettingsUseCase
 import com.practicum.playlistmaker.features.sharing.domain.api.IExternalNavigator
-import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
-import com.practicum.playlistmaker.features.sharing.domain.impl.SharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
+import com.practicum.playlistmaker.features.sharing.domain.impl.SharingInteractor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -55,8 +55,12 @@ val useCaseModule = module{
         SettingsUseCase(get<ISettingsRepository>())
     }
 
-    single<ISharingUseCase>{
-        SharingUseCase(get<IExternalNavigator>(), androidContext())
+    single<ISharingInteractor>{
+        SharingInteractor(
+            get<IExternalNavigator>(),
+            get<IFormatTrackUseCase>(),
+            androidContext(),
+        )
     }
 
     single<IFavouriteInteractor>{

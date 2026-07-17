@@ -37,4 +37,14 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
         }
         context.startActivity(emailIntent)
     }
+
+    override fun sharePlaylist(message: String) {
+        val sharePlaylistIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, message)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(sharePlaylistIntent)
+    }
 }

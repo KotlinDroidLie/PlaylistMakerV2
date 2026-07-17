@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
-import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
 class SettingsViewModel(
     private val settingsUseCase: ISettingsUseCase,
-    private val sharingUseCase: ISharingUseCase
+    private val sharingUseCase: ISharingInteractor
     ): ViewModel() {
 
     private val _themeSwitcher = MutableLiveData<Boolean>(settingsUseCase.getSettings().isDarkThemeEnable)
