@@ -315,4 +315,14 @@
     <style name="CustomMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorPrimary">@color/blue</item>
     </style>
+
+    <style name="TextViewStyleMenuPlaylist" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/padding_horizontal_standard</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_standard</item>
+    </style>
 </resources>

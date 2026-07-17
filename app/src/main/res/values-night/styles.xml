@@ -242,4 +242,14 @@
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
     </style>
 
+    <style name="TextViewStyleMenuPlaylist" parent="MessageTextStyleYSRegular">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/YP_black</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/padding_horizontal_standard</item>
+        <item name="android:paddingVertical">@dimen/padding_vertical_standard</item>
+    </style>
+
 </resources>

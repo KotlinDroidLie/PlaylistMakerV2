@@ -111,7 +111,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/ButtonPlaylistAction"
-                    android:id="@+id/btn_more"
+                    android:id="@+id/btn_menu"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/ic_more_24"
                     app:layout_constraintBottom_toBottomOf="@id/btn_share"
@@ -127,6 +127,16 @@
     <include
         android:id="@+id/playlist_bottom_sheet"
         layout="@layout/playlist_bottom_sheet" />
+
+    <View
+        android:id="@+id/view_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
+
+    <include android:id="@+id/playlist_menu_bottom_sheet"
+        layout="@layout/playlist_menu_bottom_sheet"
+        tools:visibility="invisible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

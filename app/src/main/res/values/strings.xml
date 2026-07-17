@@ -48,6 +48,9 @@
     <string name="playlist_detail_confirm_dialog_title">Хотите удалить трек?</string>
     <string name="playlist_detail_confirm_dialog_positive_button">ДА</string>
     <string name="playlist_detail_confirm_dialog_negative_button">НЕТ</string>
+    <string name="share_playlist">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
     <plurals name="tracks_count">
         <item quantity="one">%d трек</item>
         <item quantity="few">%d трека</item>
