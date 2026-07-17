@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.databinding.SongViewBinding
 import java.util.Locale
 
-class SearchViewHolder(private val binding: SongViewBinding): RecyclerView.ViewHolder(binding.root) {
+class TrackViewHolder(private val binding: SongViewBinding): RecyclerView.ViewHolder(binding.root) {
     private val cornerRadius = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         2f,

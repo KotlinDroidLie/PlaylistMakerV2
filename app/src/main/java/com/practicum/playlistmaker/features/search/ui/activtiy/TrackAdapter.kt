@@ -6,28 +6,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.databinding.SongViewBinding
 
-class SearchTrackAdapter(
-    private val onTrackClickListener: OnTrackClickListener,
-    private val onTrackHistoryClickListener: OnTrackHistoryClickListener
-): RecyclerView.Adapter<SearchViewHolder>() {
+class TrackAdapter(
+    private val onTrackClickListener: (TrackModel) -> Unit,
+    private val onTrackLongClickListener: ((TrackModel) -> Unit)? = null,
+): RecyclerView.Adapter<TrackViewHolder>() {
     var trackList: MutableList<TrackModel> = mutableListOf()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SearchViewHolder {
+    ): TrackViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = SongViewBinding.inflate(inflater, parent, false)
-        return SearchViewHolder(binding)
+        return TrackViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: SearchViewHolder,
+        holder: TrackViewHolder,
         position: Int
     ) {
         holder.bind(trackList[position])
         holder.itemView.setOnClickListener {
-            onTrackHistoryClickListener.addToSearchHistory(trackList[position])
-            onTrackClickListener.openAudioPlayer(trackList[position])
+            onTrackClickListener(trackList[position])
+        }
+        onTrackLongClickListener?.let {
+            holder.itemView.setOnLongClickListener {
+                it(trackList[position])
+                true
+            }
         }
     }
 

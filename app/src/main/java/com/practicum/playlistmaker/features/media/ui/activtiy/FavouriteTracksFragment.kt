@@ -15,8 +15,7 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.Favouri
 import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
 import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragment
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
-import com.practicum.playlistmaker.features.search.ui.activtiy.OnTrackClickListener
-import com.practicum.playlistmaker.features.search.ui.activtiy.SearchHistoryAdapter
+import com.practicum.playlistmaker.features.search.ui.activtiy.TrackAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,20 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FavouriteTracksFragment(): Fragment() {
     private val viewModel: FavouriteTracksViewModel by viewModel()
     private var _binding: FragmentFavouriteBinding? = null
-    private lateinit var adapter: SearchHistoryAdapter
+    private lateinit var adapter: TrackAdapter
     private var isClickAllowed = true
-
-
-    private val onTrackClickListener = object : OnTrackClickListener {
-        override fun openAudioPlayer(track: TrackModel) {
-            if (clickDebounce()){
-                findNavController().navigate(
-                    R.id.action_mediaFragment_to_audioPlayerFragment,
-                    AudioPlayerFragment.createARgs(track)
-                )
-            }
-        }
-    }
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +37,11 @@ class FavouriteTracksFragment(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = SearchHistoryAdapter(onTrackClickListener)
+        adapter = TrackAdapter(
+            onTrackClickListener = { track ->
+                openAudioPlayer(track)
+            }
+        )
         binding.rvFavouriteMedia.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvFavouriteMedia.adapter = adapter
         viewModel.state.observe(viewLifecycleOwner){
@@ -62,6 +53,14 @@ class FavouriteTracksFragment(): Fragment() {
         super.onDestroyView()
         _binding = null
         isClickAllowed = true
+    }
+    private fun openAudioPlayer(track: TrackModel) {
+        if (clickDebounce()){
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_audioPlayerFragment,
+                AudioPlayerFragment.createARgs(track)
+            )
+        }
     }
     private fun render(state: FavouriteTracksState){
         when(state){
@@ -78,8 +77,8 @@ class FavouriteTracksFragment(): Fragment() {
     }
 
     private fun updateFavouriteList(favouriteTracks: List<TrackModel>) {
-        adapter.tracks.clear()
-        adapter.tracks.addAll(favouriteTracks)
+        adapter.trackList.clear()
+        adapter.trackList.addAll(favouriteTracks)
         adapter.notifyDataSetChanged()
     }
 
