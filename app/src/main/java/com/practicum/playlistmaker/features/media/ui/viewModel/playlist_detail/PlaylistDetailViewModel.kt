@@ -7,21 +7,35 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.features.media.domain.api.IFormatPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.launch
 
 class PlaylistDetailViewModel(
+    private val removeTrackUseCase: IRemoveTrackUseCase,
     private val getPlaylistTracks: IGetPlaylistTracksUseCase,
     private val getPlaylistByIdUseCase: IGetPlaylistByIdUseCase,
     private val formatPlaylistUseCase: IFormatPlaylistUseCase,
     private val playlistId: Int
 ): ViewModel() {
-    private val _model = MutableLiveData<PlaylistUiModel>()
-    val model: LiveData<PlaylistUiModel> = _model
+    private val _playlist = MutableLiveData<PlaylistUiModel>()
+    val playlist: LiveData<PlaylistUiModel> = _playlist
+    private val _tracks = MutableLiveData<List<TrackModel>>()
+    val tracks: LiveData<List<TrackModel>> = _tracks
 
     init {
         loadPlaylist()
+    }
+    fun removeTrack(trackId: Int){
+        viewModelScope.launch {
+            val playlistId = playlist.value?.id ?: return@launch
+            removeTrackUseCase(
+                trackId= trackId,
+                playlistId = playlistId
+            )
+            loadPlaylist()
+        }
     }
 
     private fun loadPlaylist(){
@@ -29,11 +43,15 @@ class PlaylistDetailViewModel(
             val model = getPlaylistByIdUseCase(playlistId)
             getPlaylistTracks(model.idsTracks).collect { tracks ->
                 val uiModel = prepareFormattedPlaylist(model, tracks)
-                renderUiModel(uiModel)
+                renderTracks(tracks)
+                renderPlaylist(uiModel)
             }
         }
     }
 
+    private fun renderTracks(tracks: List<TrackModel>) {
+        _tracks.value = tracks
+    }
 
 
     private fun prepareFormattedPlaylist(
@@ -50,7 +68,7 @@ class PlaylistDetailViewModel(
         )
     }
 
-    private fun renderUiModel(uiModel: PlaylistUiModel) {
-        _model.value = uiModel
+    private fun renderPlaylist(uiModel: PlaylistUiModel) {
+        _playlist.value = uiModel
     }
 }
