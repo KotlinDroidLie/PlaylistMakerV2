@@ -50,5 +50,9 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="playlist_detail_confirm_dialog_title">Do you want to delete a track?</string>
+    <string name="playlist_detail_confirm_dialog_positive_button">YES</string>
+    <string name="playlist_detail_confirm_dialog_negative_button">NO</string>
+
 
 </resources>

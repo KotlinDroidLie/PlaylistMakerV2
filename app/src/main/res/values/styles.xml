@@ -311,4 +311,8 @@
         <item name="android:layout_height">@dimen/icon_size</item>
         <item name="backgroundTint">@color/YP_black</item>
     </style>
+    
+    <style name="CustomMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/blue</item>
+    </style>
 </resources>

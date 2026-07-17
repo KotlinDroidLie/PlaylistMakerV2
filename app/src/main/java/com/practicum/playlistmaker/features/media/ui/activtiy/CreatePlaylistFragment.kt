@@ -48,7 +48,7 @@ class CreatePlaylistFragment: Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+        confirmDialog = MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialAlertDialog)
             .setTitle(getString(R.string.create_playlist_confirm_dialog_title))
             .setMessage(getString(R.string.create_playlist_confirm_dialog_message))
             .setPositiveButton(getString(R.string.create_playlist_confirm_dialog_positive_message)) { dialog, which ->
