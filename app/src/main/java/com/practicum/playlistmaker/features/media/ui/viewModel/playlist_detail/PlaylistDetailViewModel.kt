@@ -10,6 +10,8 @@ import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksU
 import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
+import com.practicum.playlistmaker.features.sharing.domain.model.toShareModel
 import kotlinx.coroutines.launch
 
 class PlaylistDetailViewModel(
@@ -17,6 +19,7 @@ class PlaylistDetailViewModel(
     private val getPlaylistTracks: IGetPlaylistTracksUseCase,
     private val getPlaylistByIdUseCase: IGetPlaylistByIdUseCase,
     private val formatPlaylistUseCase: IFormatPlaylistUseCase,
+    private val sharingInteractor: ISharingInteractor,
     private val playlistId: Int
 ): ViewModel() {
     private val _playlist = MutableLiveData<PlaylistUiModel>()
@@ -36,6 +39,12 @@ class PlaylistDetailViewModel(
             )
             loadPlaylist()
         }
+    }
+
+    fun sharePlaylist(){
+        val tracksShareModel = tracks.value?.map { it.toShareModel() } ?: emptyList()
+        val playlistShareModel = playlist.value?.toShareModel(tracksShareModel) ?: return
+        sharingInteractor.sharePlaylist(playlistShareModel)
     }
 
     private fun loadPlaylist(){

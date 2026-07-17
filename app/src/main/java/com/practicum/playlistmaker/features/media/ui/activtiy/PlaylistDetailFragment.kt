@@ -14,6 +14,7 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentAboutPlaylistBinding
 import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
@@ -76,12 +77,32 @@ class PlaylistDetailFragment: Fragment() {
         binding.btnBack.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        binding.btnShare.setOnClickListener {
+            processShare()
+        }
         viewModel.playlist.observe(viewLifecycleOwner){
             renderPlaylist(it)
         }
         viewModel.tracks.observe(viewLifecycleOwner){
             renderTracks(it)
         }
+    }
+
+    private fun processShare() {
+        val hasTracks = !viewModel.tracks.value.isNullOrEmpty()
+        if(hasTracks){
+            viewModel.sharePlaylist()
+        } else {
+            showEmptyPlaylistNotification()
+        }
+    }
+
+    private fun showEmptyPlaylistNotification() {
+        Snackbar.make(
+            binding.root,
+            "В этом плейлисте нет списка треков, которым можно поделиться",
+            Snackbar.LENGTH_SHORT,
+        ).show()
     }
 
     private fun renderTracks(tracks: List<TrackModel>) {

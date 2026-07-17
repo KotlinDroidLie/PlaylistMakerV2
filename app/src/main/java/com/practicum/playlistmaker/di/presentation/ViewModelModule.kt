@@ -25,7 +25,7 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.settings.ui.view_model.SettingsViewModel
-import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -60,7 +60,7 @@ val viewModelModule = module{
     viewModel{
         SettingsViewModel(
             get<ISettingsUseCase>(),
-            get<ISharingUseCase>()
+            get<ISharingInteractor>()
         )
     }
 
@@ -90,6 +90,7 @@ val viewModelModule = module{
             getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
             getPlaylistTracks = get<IGetPlaylistTracksUseCase>(),
             formatPlaylistUseCase = get<IFormatPlaylistUseCase>(),
+            sharingInteractor = get<ISharingInteractor>(),
             playlistId = playlistId
         )
     }
