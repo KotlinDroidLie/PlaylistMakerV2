@@ -308,6 +308,7 @@ class PlaylistDetailFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isClickAllowed = true
         _binding = null
         _bottomSheetBinding = null
         _menuBottomSheetBinding = null
