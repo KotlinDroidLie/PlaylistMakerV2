@@ -4,19 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.features.media.domain.api.IDeletePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
-import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
+import com.practicum.playlistmaker.features.media.domain.model.DeleteResult
 import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetUiState
 import kotlinx.coroutines.launch
 
 class PlaylistDetailMenuViewModel(
     private val getPlaylistByIdUseCase: IGetPlaylistByIdUseCase,
+    private val deletePlaylistUseCase: IDeletePlaylistUseCase,
     private val playlistId: Int
 ): ViewModel() {
     private val _stateUi = MutableLiveData<BottomSheetUiState>(BottomSheetUiState.Hide)
     val stateUi: LiveData<BottomSheetUiState> = _stateUi
-    private val _content = MutableLiveData<PlaylistModel>()
-    val content: LiveData<PlaylistModel> = _content
+    private val _stateContent = MutableLiveData<PlaylistDetailMenuState>()
+    val stateContent: LiveData<PlaylistDetailMenuState> = _stateContent
     fun openMenu() {
         loadContent()
         renderStateUi(BottomSheetUiState.Show)
@@ -25,14 +27,31 @@ class PlaylistDetailMenuViewModel(
     private fun loadContent() {
         viewModelScope.launch {
             val playlist = getPlaylistByIdUseCase(playlistId)
-            renderContent(playlist)
+            renderContent(PlaylistDetailMenuState.Content(playlist))
         }
     }
     private fun renderStateUi(state: BottomSheetUiState){
         _stateUi.value = state
     }
 
-    private fun renderContent(playlist: PlaylistModel) {
-       _content.value = playlist
+    private fun renderContent(playlist: PlaylistDetailMenuState) {
+       _stateContent.value = playlist
+    }
+    fun deletePlaylist() {
+        viewModelScope.launch {
+            val result = deletePlaylistUseCase(playlistId)
+            processDeleteResult(result)
+        }
+    }
+
+    private fun processDeleteResult(result: DeleteResult) {
+        when(result){
+            is DeleteResult.Error ->{
+                renderContent(PlaylistDetailMenuState.DeleteError(result.errorMessage))
+            }
+            DeleteResult.Success ->{
+                renderContent(PlaylistDetailMenuState.DeleteSuccess)
+            }
+        }
     }
 }

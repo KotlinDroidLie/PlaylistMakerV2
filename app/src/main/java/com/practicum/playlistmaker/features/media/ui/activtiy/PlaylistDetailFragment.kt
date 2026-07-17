@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
 import com.practicum.playlistmaker.databinding.PlaylistMenuBottomSheetBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuState
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistUiModel
@@ -79,7 +80,7 @@ class PlaylistDetailFragment: Fragment() {
                 openAudioPlayer(track)
             },
             onTrackLongClickListener = { track ->
-                showConfirmDialog(track)
+                showRemoveTrackConfirmDialog(track)
             }
         )
         bottomSheetBinding.rvTrack.adapter = bottomSheetAdapter
@@ -97,7 +98,16 @@ class PlaylistDetailFragment: Fragment() {
                 binding.viewOverlay.setBackgroundColor(colorArgb)
             }
         })
-
+        menuBottomSheetBinding.tvRemove.setOnClickListener {
+            val state = menuViewModel.stateContent.value
+            if (state is PlaylistDetailMenuState.Content) {
+                val title = state.playlist.title
+                showDeletePlaylistConfirmDialog(title)
+            }
+        }
+        menuBottomSheetBinding.tvShare.setOnClickListener {
+            processShare()
+        }
         binding.btnBack.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -116,12 +126,45 @@ class PlaylistDetailFragment: Fragment() {
         menuViewModel.stateUi.observe(viewLifecycleOwner){
             renderMenuStateUi(it)
         }
-        menuViewModel.content.observe(viewLifecycleOwner){
+        menuViewModel.stateContent.observe(viewLifecycleOwner){
             renderMenuContent(it)
         }
     }
+    private fun handleDeleteSuccess() {
+        findNavController().navigateUp()
+    }
 
-    private fun renderMenuContent(playlist: PlaylistModel) {
+    private fun handleDeleteError(resMessage: Int) {
+        Snackbar.make(binding.root, getString(resMessage), Snackbar.LENGTH_SHORT).show()
+        findNavController().navigateUp()
+    }
+
+    private fun showDeletePlaylistConfirmDialog(title: String) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialAlertDialog)
+            .setTitle(getString(R.string.playlist_detail_confirm_delete_dialog_title, title))
+            .setPositiveButton(getString(R.string.playlist_detail_confirm_dialog_positive_button)){ dialog, which ->
+                menuViewModel.deletePlaylist()
+            }
+            .setNegativeButton(getString(R.string.playlist_detail_confirm_dialog_negative_button),null)
+            .show()
+    }
+
+    private fun renderMenuContent(state: PlaylistDetailMenuState){
+        when(state){
+            is PlaylistDetailMenuState.Content ->{
+                handleMenuContent(state.playlist)
+            }
+            is PlaylistDetailMenuState.DeleteError ->{
+                handleDeleteError(state.resMessage)
+            }
+            PlaylistDetailMenuState.DeleteSuccess ->{
+                handleDeleteSuccess()
+            }
+
+        }
+    }
+
+    private fun handleMenuContent(playlist: PlaylistModel) {
         menuBottomSheetBinding.viewPlaylist.apply {
             tvTitlePlaylist.text = playlist.title
             tvTotalTracksPlaylist.text = resources.getQuantityString(
@@ -177,7 +220,7 @@ class PlaylistDetailFragment: Fragment() {
     private fun showEmptyPlaylistNotification() {
         Snackbar.make(
             binding.root,
-            "В этом плейлисте нет списка треков, которым можно поделиться",
+            getString(R.string.playlist_detail_empty_notification),
             Snackbar.LENGTH_SHORT,
         ).show()
     }
@@ -198,7 +241,7 @@ class PlaylistDetailFragment: Fragment() {
             )
         }
     }
-    private fun showConfirmDialog(track: TrackModel){
+    private fun showRemoveTrackConfirmDialog(track: TrackModel){
         MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialAlertDialog)
             .setTitle(getString(R.string.playlist_detail_confirm_dialog_title))
             .setPositiveButton(getString(R.string.playlist_detail_confirm_dialog_positive_button)) { dialog, which ->
