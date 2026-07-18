@@ -108,6 +108,7 @@ val viewModelModule = module{
 
     viewModel { (playlistId: Int) ->
         EditPlaylistViewModel(
+            getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
             createPlaylistUseCase = get<ICreatePlaylistUseCase>(),
             playlistId = playlistId
         )

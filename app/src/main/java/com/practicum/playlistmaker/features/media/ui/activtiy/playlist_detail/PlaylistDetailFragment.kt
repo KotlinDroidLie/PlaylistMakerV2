@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
 import com.practicum.playlistmaker.databinding.PlaylistMenuBottomSheetBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
+import com.practicum.playlistmaker.features.media.ui.activtiy.edit_playlist.EditPlaylistFragment
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuState
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
@@ -107,6 +108,13 @@ class PlaylistDetailFragment: Fragment() {
         }
         menuBottomSheetBinding.tvShare.setOnClickListener {
             processShare()
+        }
+        menuBottomSheetBinding.tvEdit.setOnClickListener {
+            val playlistId = requireArguments().getInt(ARGS_PLAYLIST)
+            findNavController().navigate(
+                R.id.action_playlistDetailFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(playlistId)
+            )
         }
         binding.btnBack.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -299,6 +307,8 @@ class PlaylistDetailFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         hideBottomNav()
+        viewModel.loadPlaylist()
+        handleMenuHide()
     }
 
     override fun onPause() {

@@ -47,7 +47,7 @@ class PlaylistDetailViewModel(
         sharingInteractor.sharePlaylist(playlistShareModel)
     }
 
-    private fun loadPlaylist(){
+    fun loadPlaylist(){
         viewModelScope.launch {
             val model = getPlaylistByIdUseCase(playlistId)
             getPlaylistTracks(model.idsTracks).collect { tracks ->
