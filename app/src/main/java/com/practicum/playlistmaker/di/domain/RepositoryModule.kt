@@ -3,7 +3,9 @@ package com.practicum.playlistmaker.di.domain
 import com.practicum.playlistmaker.di.data.networkModule
 import com.practicum.playlistmaker.di.data.storageModule
 import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
-import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.db.dao.PlaylistDao
+import com.practicum.playlistmaker.features.media.data.db.dao.TrackDao
+import com.practicum.playlistmaker.features.media.data.db.dao.TracksInPlaylistsDao
 import com.practicum.playlistmaker.features.media.data.impl.FavouriteRepo
 import com.practicum.playlistmaker.features.media.data.impl.PlaylistRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
@@ -25,11 +27,11 @@ val repositoryModule = module{
     includes(networkModule, storageModule)
 
     single<IRemoteTrackRepository>{
-        RemoteTrackRepository(get<NetworkClient>(), get<AppDataBase>())
+        RemoteTrackRepository(get<NetworkClient>(), get<TrackDao>())
     }
 
     single<ISearchHistoryRepository>{
-        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")), get<AppDataBase>())
+        SearchHistoryRepository(get<StorageClient<MutableList<TrackHistoryDto>>>(named("history")), get<TrackDao>())
     }
 
     single<ISettingsRepository>{
@@ -37,12 +39,13 @@ val repositoryModule = module{
     }
 
     single<IFavouriteRepo>{
-        FavouriteRepo(get<AppDataBase>())
+        FavouriteRepo(get<TrackDao>())
     }
 
     single<IPlaylistRepo>{
         PlaylistRepo(
-            get<AppDataBase>(),
+            get<PlaylistDao>(),
+            get<TracksInPlaylistsDao>(),
             get<IFileStorageClient>(named("playlist_poster"))
         )
     }

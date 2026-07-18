@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.search.data.impl
 
-import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.db.dao.TrackDao
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
 import com.practicum.playlistmaker.features.search.data.extensions.toDomain
@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 
 class SearchHistoryRepository(
     private val storage: StorageClient<MutableList<TrackHistoryDto>>,
-    private val appDataBase: AppDataBase
+    private val trackDao: TrackDao
 ): ISearchHistoryRepository {
 
     override fun saveToHistory(m: TrackModel) {
@@ -28,7 +28,7 @@ class SearchHistoryRepository(
 
     override suspend fun getHistory(): List<TrackModel> {
         val tracksDto = storage.getData() ?: listOf()
-        val favouriteTrackIds = appDataBase.trackDao().getFavouriteTracksIds()
+        val favouriteTrackIds = trackDao.getFavouriteTracksIds()
         val tracks = tracksDto.map { it.toDomain(favouriteTrackIds) }
         return tracks
     }

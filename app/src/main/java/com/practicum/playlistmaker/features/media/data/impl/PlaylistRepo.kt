@@ -2,7 +2,8 @@ package com.practicum.playlistmaker.features.media.data.impl
 
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
-import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.db.dao.PlaylistDao
+import com.practicum.playlistmaker.features.media.data.db.dao.TracksInPlaylistsDao
 import com.practicum.playlistmaker.features.media.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toEntity
 import com.practicum.playlistmaker.features.media.data.db.entity.toModel
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class PlaylistRepo(
-    private val appDataBase: AppDataBase,
+    private val playlistDao: PlaylistDao,
+    private val tracksInPlaylistsDao: TracksInPlaylistsDao,
     private val storageClient: IFileStorageClient
 ) : IPlaylistRepo {
     override suspend fun deletePosterImage(path: String): DeleteResult {
@@ -50,7 +52,7 @@ class PlaylistRepo(
     override suspend fun insertPlaylist(playlist: PlaylistModel): SaveResult {
         return try{
             val entity = playlist.toEntity()
-            appDataBase.playlistDao().insertPlaylist(entity)
+            playlistDao.insertPlaylist(entity)
             SaveResult.Success(playlist.title)
         } catch (e: Exception){
             SaveResult.Error(
@@ -61,7 +63,7 @@ class PlaylistRepo(
     }
 
     override fun getPlaylists(): Flow<List<PlaylistModel>> {
-        return appDataBase.playlistDao()
+        return playlistDao
             .getPlaylists()
             .map { entities -> entities.map { it.toModel() } }
     }
@@ -72,13 +74,13 @@ class PlaylistRepo(
     ): SaveResult {
         return try {
             val entityTrack = track.toTracksInPlaylistsEntity()
-            appDataBase.tracksInPlaylistsDao().insertTrack(entityTrack)
+            tracksInPlaylistsDao.insertTrack(entityTrack)
             val updatedPlaylist = playlist.copy(
                 totalTracks = playlist.totalTracks + 1,
                 idsTracks = playlist.idsTracks + track.trackId
             )
             val entityPlaylist = updatedPlaylist.toEntity()
-            appDataBase.playlistDao().insertPlaylist(entityPlaylist)
+            playlistDao.insertPlaylist(entityPlaylist)
             SaveResult.Success(playlist.title)
         } catch (e: Exception){
             SaveResult.Error(
@@ -88,34 +90,34 @@ class PlaylistRepo(
     }
 
     override suspend fun getPlaylistById(playlistId: Int): PlaylistModel {
-        val entity = appDataBase.playlistDao().getPlaylistById(playlistId)
+        val entity = playlistDao.getPlaylistById(playlistId)
         return entity.toModel()
     }
 
     override fun getTracksByIds(tracksIds: List<Int>): Flow<List<TrackModel>> {
-        return appDataBase.tracksInPlaylistsDao()
+        return tracksInPlaylistsDao
             .getTracksByIds(tracksIds)
             .map { entities -> entities.map { it.toModel() } }
     }
 
     override suspend fun removeTrackFromPlaylist(trackId: Int, playlistId: Int) {
-        val playlist = appDataBase.playlistDao().getPlaylistById(playlistId)
+        val playlist = playlistDao.getPlaylistById(playlistId)
         val updatedTracksIds = playlist.idsTracks.filter { it != trackId }
-        appDataBase.playlistDao().updatePlaylist(
+        playlistDao.updatePlaylist(
             playlist.copy(
                 idsTracks = updatedTracksIds,
                 totalTracks = updatedTracksIds.size
             )
         )
-        val allPlaylists = appDataBase.playlistDao().getPlaylists().first()
+        val allPlaylists = playlistDao.getPlaylists().first()
         removeUnusedTrack(trackId, allPlaylists)
     }
 
     override suspend fun deletePlaylist(playlistId: Int): DeleteResult {
         return try {
-            val playlist = appDataBase.playlistDao().getPlaylistById(playlistId)
-            appDataBase.playlistDao().deletePlaylistById(playlistId)
-            val allPlaylists = appDataBase.playlistDao().getPlaylists().first()
+            val playlist = playlistDao.getPlaylistById(playlistId)
+            playlistDao.deletePlaylistById(playlistId)
+            val allPlaylists = playlistDao.getPlaylists().first()
             playlist.idsTracks.forEach{ trackId ->
                 removeUnusedTrack(trackId, allPlaylists)
             }
@@ -130,7 +132,7 @@ class PlaylistRepo(
     suspend fun removeUnusedTrack(trackId: Int, allPlaylists: List<PlaylistEntity>) {
         val isUsed = allPlaylists.any{ it.idsTracks.contains(trackId)}
         if(!isUsed){
-            appDataBase.tracksInPlaylistsDao().removeTrackById(trackId)
+            tracksInPlaylistsDao.removeTrackById(trackId)
         }
     }
 }
