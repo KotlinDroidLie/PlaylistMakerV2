@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseC
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(
+open class CreatePlaylistViewModel(
     private val createPlaylistUseCase: ICreatePlaylistUseCase
 ): ViewModel() {
     private val _state = MutableLiveData<CreatePlaylistState>(CreatePlaylistState.Editing(PlaylistCreateUiModel()))
@@ -69,11 +69,11 @@ class CreatePlaylistViewModel(
         }
     }
 
-    private fun renderState(state: CreatePlaylistState) {
+    protected fun renderState(state: CreatePlaylistState) {
         _state.value = state
     }
 
-    private fun processResult(result: SaveResult, playlist: PlaylistCreateUiModel){
+    protected open fun processResult(result: SaveResult, playlist: PlaylistCreateUiModel){
         when(result){
             is SaveResult.Error -> {
                 renderState(CreatePlaylistState.Error(playlist,result.errorMessage))

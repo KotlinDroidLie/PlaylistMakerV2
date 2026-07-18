@@ -26,11 +26,12 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.C
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistCreateUiModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
-class CreatePlaylistFragment: Fragment() {
-    private val viewModel: CreatePlaylistViewModel by viewModel()
+open class CreatePlaylistFragment: Fragment() {
+    protected open val viewModel: CreatePlaylistViewModel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
-    private val binding get() = _binding!!
+    protected val binding get() = _binding!!
     private lateinit var onBackCallBack: OnBackPressedCallback
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private val cornerRadius by lazy {
@@ -123,12 +124,13 @@ class CreatePlaylistFragment: Fragment() {
         _binding = null
     }
 
-    private fun handleState(state: CreatePlaylistState) {
+    protected open fun handleState(state: CreatePlaylistState) {
         when(state){
             is CreatePlaylistState.Created -> handleCreated(state.title)
             is CreatePlaylistState.Editing -> handleEditing(state.playlist)
             CreatePlaylistState.Creating -> handleCreating()
             is CreatePlaylistState.Error -> handleError(state.resIdErrorMessage)
+            else ->{}
         }
     }
 
@@ -141,7 +143,7 @@ class CreatePlaylistFragment: Fragment() {
         showErrorNotification(resIdErrorMessage)
     }
 
-    private fun enableInput(enable: Boolean){
+    protected fun enableInput(enable: Boolean){
         isButtonEnable(enable)
         binding.apply {
             etTitleContainer.isEnabled = enable
@@ -157,9 +159,10 @@ class CreatePlaylistFragment: Fragment() {
         }
     }
 
-    private fun setPoster(uri: Uri) {
+    protected fun setPoster(uri: Uri) {
+        val modelToLoad = prepareGlideModel(uri)
         Glide.with(this)
-            .load(uri)
+            .load(modelToLoad)
             .transform(
                 MultiTransformation(
                     CenterCrop(),
@@ -168,6 +171,16 @@ class CreatePlaylistFragment: Fragment() {
             )
             .placeholder(R.drawable.placeholder_poster_playlist)
             .into(binding.ivPoster)
+    }
+
+    private fun prepareGlideModel(uri: Uri): Any{
+        val isLocalFile = uri.scheme == "file" || uri.scheme == null
+        val modelToLoad = if (isLocalFile && uri.path != null) {
+            File(uri.path!!)
+        } else {
+            uri
+        }
+        return modelToLoad
     }
 
     private fun handleCreated(title: String) {
@@ -221,6 +234,7 @@ class CreatePlaylistFragment: Fragment() {
 
             CreatePlaylistState.Creating -> false
             is CreatePlaylistState.Error -> true
+            else -> true
         }
     }
 }

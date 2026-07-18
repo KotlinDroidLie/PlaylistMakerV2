@@ -9,3 +9,12 @@ fun PlaylistCreateUiModel.toDomain(): PlaylistModel{
         uri = this.coverImagePath,
     )
 }
+
+fun PlaylistModel.toCreateUiModel(): PlaylistCreateUiModel{
+    return PlaylistCreateUiModel(
+        title = this.title,
+        description = this.description ?: "",
+        coverImagePath = this.uri,
+        isButtonEnable = true
+    )
+}
