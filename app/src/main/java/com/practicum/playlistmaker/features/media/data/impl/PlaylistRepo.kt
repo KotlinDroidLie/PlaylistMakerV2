@@ -24,12 +24,12 @@ class PlaylistRepo(
     override suspend fun deletePosterImage(path: String): DeleteResult {
         return when(val response = storageClient.deleteFile(path)){
             is ResponseStorage.Error -> {
-                DeleteResult.Success
-            }
-            is ResponseStorage.Success -> {
                 DeleteResult.Error(
                     R.string.placeholder_text_error_delete_storage
                 )
+            }
+            is ResponseStorage.Success -> {
+                DeleteResult.Success
             }
         }
     }
