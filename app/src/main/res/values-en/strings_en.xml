@@ -59,4 +59,6 @@
     <string name="playlist_detail_empty_notification">This playlist contains no shareable tracks</string>
     <string name="playlist_detail_confirm_delete_dialog_title">Do you want to delete the %1$s playlist?</string>
     <string name="placeholder_text_error_delete_playlist_database">Failed to delete playlist</string>
+    <string name="edit_playlist_fragment_save_button">Save</string>
+    <string name="edit_playlist_fragment_title">Edit</string>
 </resources>
