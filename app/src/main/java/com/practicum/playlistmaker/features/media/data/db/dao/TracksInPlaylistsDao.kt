@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.practicum.playlistmaker.features.media.data.db.entity.TracksInPlaylistsEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TracksInPlaylistsDao {
@@ -12,5 +13,8 @@ interface TracksInPlaylistsDao {
     suspend fun insertTrack(track: TracksInPlaylistsEntity)
 
     @Query("SELECT * FROM tracks_in_playlists WHERE trackId IN (:trackIds)")
-    suspend fun getTracksByIds(trackIds: List<Int>): List<TracksInPlaylistsEntity>
+    fun getTracksByIds(trackIds: List<Int>): Flow<List<TracksInPlaylistsEntity>>
+
+    @Query("DELETE FROM tracks_in_playlists WHERE trackId = (:trackId) ")
+    suspend fun removeTrackById(trackId: Int)
 }

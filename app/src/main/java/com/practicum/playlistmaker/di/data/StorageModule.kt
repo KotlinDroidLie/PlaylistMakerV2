@@ -9,6 +9,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.features.media.data.api.IFileStorageClient
 import com.practicum.playlistmaker.features.media.data.db.AppDataBase
+import com.practicum.playlistmaker.features.media.data.db.dao.PlaylistDao
+import com.practicum.playlistmaker.features.media.data.db.dao.TrackDao
+import com.practicum.playlistmaker.features.media.data.db.dao.TracksInPlaylistsDao
 import com.practicum.playlistmaker.features.media.data.impl.FileStorageClient
 import com.practicum.playlistmaker.features.search.data.api.StorageClient
 import com.practicum.playlistmaker.features.search.data.dto.TrackHistoryDto
@@ -58,6 +61,18 @@ val storageModule = module {
 
     single<AppDataBase>{
         Room.databaseBuilder(androidContext(), AppDataBase::class.java, "track.db").build()
+    }
+
+    single<TrackDao> {
+        get<AppDataBase>().trackDao()
+    }
+
+    single<TracksInPlaylistsDao> {
+        get<AppDataBase>().tracksInPlaylistsDao()
+    }
+
+    single<PlaylistDao> {
+        get<AppDataBase>().playlistDao()
     }
 
     single<IFileStorageClient>(named("playlist_poster")){

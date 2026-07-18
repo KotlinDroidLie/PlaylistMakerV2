@@ -5,12 +5,24 @@ import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylist
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteRepo
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IDeletePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFormatPlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IPlaylistRepo
+import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IUpdatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.AddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.FavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.impl.CreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.DeletePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.FormatPlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistByIdUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistTracksUseCase
 import com.practicum.playlistmaker.features.media.domain.impl.GetPlaylistsUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.RemoveTrackUseCase
+import com.practicum.playlistmaker.features.media.domain.impl.UpdatePlaylistUseCase
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.domain.impl.FormatTrackUseCase
 import com.practicum.playlistmaker.features.search.domain.api.repo.IRemoteTrackRepository
@@ -23,8 +35,8 @@ import com.practicum.playlistmaker.features.settings.domain.api.ISettingsReposit
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.settings.domain.impl.SettingsUseCase
 import com.practicum.playlistmaker.features.sharing.domain.api.IExternalNavigator
-import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
-import com.practicum.playlistmaker.features.sharing.domain.impl.SharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
+import com.practicum.playlistmaker.features.sharing.domain.impl.SharingInteractor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -47,8 +59,12 @@ val useCaseModule = module{
         SettingsUseCase(get<ISettingsRepository>())
     }
 
-    single<ISharingUseCase>{
-        SharingUseCase(get<IExternalNavigator>(), androidContext())
+    single<ISharingInteractor>{
+        SharingInteractor(
+            get<IExternalNavigator>(),
+            get<IFormatTrackUseCase>(),
+            androidContext(),
+        )
     }
 
     single<IFavouriteInteractor>{
@@ -65,6 +81,29 @@ val useCaseModule = module{
 
     single<IAddTrackToPlaylistUseCase> {
         AddTrackToPlaylistUseCase(get<IPlaylistRepo>())
+    }
+
+    single<IGetPlaylistByIdUseCase>{
+        GetPlaylistByIdUseCase(get<IPlaylistRepo>())
+    }
+
+    single<IGetPlaylistTracksUseCase>{
+        GetPlaylistTracksUseCase(get<IPlaylistRepo>())
+    }
+    single<IFormatPlaylistUseCase>{
+        FormatPlaylistUseCase()
+    }
+    single<IRemoveTrackUseCase>{
+        RemoveTrackUseCase(get<IPlaylistRepo>())
+    }
+    single<IDeletePlaylistUseCase>{
+        DeletePlaylistUseCase(get<IPlaylistRepo>())
+    }
+    single<IUpdatePlaylistUseCase> {
+        UpdatePlaylistUseCase(
+            get<IPlaylistRepo>(),
+            get<ICreatePlaylistUseCase>()
+        )
     }
 
 }

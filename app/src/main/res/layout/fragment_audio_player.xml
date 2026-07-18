@@ -236,8 +236,8 @@
         android:layout_height="match_parent"
         android:visibility="visible"/>
 
-    <include layout="@layout/playlist_bottom_sheet"
-        android:id="@+id/bottom_sheet"
+    <include layout="@layout/audio_player_bottom_sheet"
+        android:id="@+id/bottom_sheet_audio_player"
         tools:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -17,8 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.AudioPlayerBottomSheetBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
-import com.practicum.playlistmaker.databinding.PlaylistBottomSheetBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
 import com.practicum.playlistmaker.features.media.domain.model.PlaylistModel
 import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetContentState
@@ -35,7 +35,7 @@ import org.koin.core.parameter.parametersOf
 
 class AudioPlayerFragment : Fragment() {
 
-    private var _bottomSheetBinding: PlaylistBottomSheetBinding? = null
+    private var _bottomSheetBinding: AudioPlayerBottomSheetBinding? = null
     private val bottomSheetBinding get() = _bottomSheetBinding!!
 
     private lateinit var playlistAdapter: PlaylistAdapter
@@ -73,7 +73,7 @@ class AudioPlayerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAudioPlayerBinding.inflate(inflater, container, false)
-        _bottomSheetBinding = PlaylistBottomSheetBinding.bind(binding.bottomSheet.root)
+        _bottomSheetBinding = AudioPlayerBottomSheetBinding.bind(binding.bottomSheetAudioPlayer.root)
         return binding.root
     }
 
@@ -88,7 +88,7 @@ class AudioPlayerFragment : Fragment() {
             false
         )
 
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetBinding.bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetBinding.bottomSheetAudioPlayer)
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
             override fun onStateChanged(bottomSheet: View, newState: Int) {}

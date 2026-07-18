@@ -36,7 +36,7 @@
     <string name="create_playlist_confirm_dialog_positive_message">"Complete "</string>
     <string name="create_playlist_confirm_dialog_neutral_message">Cancel</string>
     <string name="create_playlist_notification">"The playlist %1$s has been created.  "</string>
-    <string name="placeholder_text_error_storage">Error saving the cover</string>
+    <string name="placeholder_text_error_save_storage">Error saving the cover</string>
     <string name="placeholder_text_error_save_playlist_database">Playlist saving error</string>
     <string name="added_track_in_playlist_notification">Added to the playlist %1$s</string>
     <string name="add_to_playlist">Add to playlist</string>
@@ -46,4 +46,20 @@
         <item quantity="one">%d track</item>
         <item quantity="other">%d tracks</item>
     </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="playlist_detail_confirm_dialog_title">Do you want to delete a track?</string>
+    <string name="playlist_detail_confirm_dialog_positive_button">YES</string>
+    <string name="playlist_detail_confirm_dialog_negative_button">NO</string>
+    <string name="share_playlist">Share</string>
+    <string name="edit_playlist">Edit info</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="playlist_detail_empty_notification">This playlist contains no shareable tracks</string>
+    <string name="playlist_detail_confirm_delete_dialog_title">Do you want to delete the %1$s playlist?</string>
+    <string name="placeholder_text_error_delete_playlist_database">Failed to delete playlist</string>
+    <string name="edit_playlist_fragment_save_button">Save</string>
+    <string name="edit_playlist_fragment_title">Edit</string>
+    <string name="placeholder_text_error_delete_storage">Cover deletion error</string>
 </resources>

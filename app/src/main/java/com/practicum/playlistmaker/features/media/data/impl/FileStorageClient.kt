@@ -36,4 +36,18 @@ class FileStorageClient(
             }
         }
     }
+
+    override suspend fun deleteFile(path: String): ResponseStorage {
+        return withContext(Dispatchers.IO){
+            try {
+                val file = File(path)
+                if(file.exists()){
+                    file.delete()
+                }
+                ResponseStorage.Success(file.path)
+            } catch (e: Exception){
+                ResponseStorage.Error(e.message)
+            }
+        }
+    }
 }

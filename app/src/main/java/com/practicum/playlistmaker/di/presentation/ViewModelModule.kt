@@ -7,9 +7,18 @@ import com.practicum.playlistmaker.di.domain.useCaseModule
 import com.practicum.playlistmaker.features.media.domain.api.IAddTrackToPlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IFavouriteInteractor
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IDeletePlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IFormatPlaylistUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IUpdatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.edit_playlist.EditPlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailMenuViewModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
 import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetViewModel
@@ -20,7 +29,7 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.settings.ui.view_model.SettingsViewModel
-import com.practicum.playlistmaker.features.sharing.domain.api.ISharingUseCase
+import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -55,7 +64,7 @@ val viewModelModule = module{
     viewModel{
         SettingsViewModel(
             get<ISettingsUseCase>(),
-            get<ISharingUseCase>()
+            get<ISharingInteractor>()
         )
     }
 
@@ -76,6 +85,34 @@ val viewModelModule = module{
             model,
             get<IGetPlaylistsUseCase>(),
             get<IAddTrackToPlaylistUseCase>()
+        )
+    }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistDetailViewModel(
+            removeTrackUseCase = get<IRemoveTrackUseCase>(),
+            getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
+            getPlaylistTracks = get<IGetPlaylistTracksUseCase>(),
+            formatPlaylistUseCase = get<IFormatPlaylistUseCase>(),
+            sharingInteractor = get<ISharingInteractor>(),
+            playlistId = playlistId
+        )
+    }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistDetailMenuViewModel(
+            getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
+            deletePlaylistUseCase = get<IDeletePlaylistUseCase>(),
+            playlistId = playlistId
+        )
+    }
+
+    viewModel { (playlistId: Int) ->
+        EditPlaylistViewModel(
+            getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
+            createPlaylistUseCase = get<ICreatePlaylistUseCase>(),
+            updatePlaylistUseCase = get<IUpdatePlaylistUseCase>(),
+            playlistId = playlistId
         )
     }
 
