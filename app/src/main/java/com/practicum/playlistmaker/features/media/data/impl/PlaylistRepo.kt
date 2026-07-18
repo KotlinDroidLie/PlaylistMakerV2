@@ -21,11 +21,24 @@ class PlaylistRepo(
     private val appDataBase: AppDataBase,
     private val storageClient: IFileStorageClient
 ) : IPlaylistRepo {
+    override suspend fun deletePosterImage(path: String): DeleteResult {
+        return when(val response = storageClient.deleteFile(path)){
+            is ResponseStorage.Error -> {
+                DeleteResult.Success
+            }
+            is ResponseStorage.Success -> {
+                DeleteResult.Error(
+                    R.string.placeholder_text_error_delete_storage
+                )
+            }
+        }
+    }
+
     override suspend fun savePosterImage(sourceUri: String): SaveResult {
         return when(val response = storageClient.saveFile(sourceUri)){
             is ResponseStorage.Error -> {
                 SaveResult.Error(
-                    errorMessage = R.string.placeholder_text_error_storage
+                    errorMessage = R.string.placeholder_text_error_save_storage
                 )
             }
             is ResponseStorage.Success -> {

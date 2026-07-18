@@ -36,7 +36,7 @@
     <string name="create_playlist_confirm_dialog_positive_message">"Complete "</string>
     <string name="create_playlist_confirm_dialog_neutral_message">Cancel</string>
     <string name="create_playlist_notification">"The playlist %1$s has been created.  "</string>
-    <string name="placeholder_text_error_storage">Error saving the cover</string>
+    <string name="placeholder_text_error_save_storage">Error saving the cover</string>
     <string name="placeholder_text_error_save_playlist_database">Playlist saving error</string>
     <string name="added_track_in_playlist_notification">Added to the playlist %1$s</string>
     <string name="add_to_playlist">Add to playlist</string>
@@ -61,4 +61,5 @@
     <string name="placeholder_text_error_delete_playlist_database">Failed to delete playlist</string>
     <string name="edit_playlist_fragment_save_button">Save</string>
     <string name="edit_playlist_fragment_title">Edit</string>
+    <string name="placeholder_text_error_delete_storage">Cover deletion error</string>
 </resources>

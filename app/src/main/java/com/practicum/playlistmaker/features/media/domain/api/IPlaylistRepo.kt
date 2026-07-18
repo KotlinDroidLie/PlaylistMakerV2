@@ -7,6 +7,7 @@ import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import kotlinx.coroutines.flow.Flow
 
 interface IPlaylistRepo {
+    suspend fun deletePosterImage(path: String): DeleteResult
     suspend fun savePosterImage(sourceUri: String) : SaveResult
     suspend fun insertPlaylist(playlist: PlaylistModel): SaveResult
     fun getPlaylists(): Flow<List<PlaylistModel>>
