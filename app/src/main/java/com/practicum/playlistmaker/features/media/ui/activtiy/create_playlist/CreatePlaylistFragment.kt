@@ -24,7 +24,7 @@ import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.features.main.BottomNavigationOwner
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistState
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
-import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistUiModel
+import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.PlaylistCreateUiModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatePlaylistFragment: Fragment() {
@@ -150,7 +150,7 @@ class CreatePlaylistFragment: Fragment() {
         }
     }
 
-    private fun handleEditing(playlist: PlaylistUiModel) {
+    private fun handleEditing(playlist: PlaylistCreateUiModel) {
         isButtonEnable(playlist.isButtonEnable)
         playlist.coverImagePath?.let {
             setPoster(it.toUri())

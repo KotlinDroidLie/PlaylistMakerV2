@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist
 
-data class PlaylistUiModel(
+data class PlaylistCreateUiModel(
     val title: String = "",
     val description: String = "",
     val coverImagePath: String? = null,
