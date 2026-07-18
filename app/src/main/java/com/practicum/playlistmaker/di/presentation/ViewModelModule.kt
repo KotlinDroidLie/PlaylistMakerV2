@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUse
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistTracksUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistsUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IRemoveTrackUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IUpdatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.edit_playlist.EditPlaylistViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.favourite.FavouriteTracksViewModel
@@ -110,6 +111,7 @@ val viewModelModule = module{
         EditPlaylistViewModel(
             getPlaylistByIdUseCase = get<IGetPlaylistByIdUseCase>(),
             createPlaylistUseCase = get<ICreatePlaylistUseCase>(),
+            updatePlaylistUseCase = get<IUpdatePlaylistUseCase>(),
             playlistId = playlistId
         )
     }

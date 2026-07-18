@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.features.media.ui.viewModel.edit_playlist
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.features.media.domain.api.ICreatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.api.IGetPlaylistByIdUseCase
+import com.practicum.playlistmaker.features.media.domain.api.IUpdatePlaylistUseCase
 import com.practicum.playlistmaker.features.media.domain.model.SaveResult
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistState
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.CreatePlaylistViewModel
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class EditPlaylistViewModel(
     private val getPlaylistByIdUseCase: IGetPlaylistByIdUseCase,
-    private val createPlaylistUseCase: ICreatePlaylistUseCase,
+    createPlaylistUseCase: ICreatePlaylistUseCase,
+    private val updatePlaylistUseCase: IUpdatePlaylistUseCase,
     private val playlistId: Int
 ): CreatePlaylistViewModel(createPlaylistUseCase) {
     init {
@@ -45,14 +47,21 @@ class EditPlaylistViewModel(
 
             val originalPlaylist = getPlaylistByIdUseCase(playlistId)
 
+            val coverChanged = playlist.coverImagePath != originalPlaylist.uri
+
             val updatedPlaylist = originalPlaylist.copy(
                 title = playlist.title,
                 description = playlist.description.ifBlank { null },
                 uri = validUriString
             )
 
+            val oldSourceUri = if(coverChanged) originalPlaylist.uri else null
+
             renderState(CreatePlaylistState.Saving)
-            val result = createPlaylistUseCase(updatedPlaylist)
+            val result = updatePlaylistUseCase(
+                updatedPlaylist,
+                oldSourceUri
+            )
             processResult(result, playlist)
         }
     }
