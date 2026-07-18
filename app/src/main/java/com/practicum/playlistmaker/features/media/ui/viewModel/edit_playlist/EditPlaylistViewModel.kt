@@ -47,7 +47,7 @@ class EditPlaylistViewModel(
 
             val updatedPlaylist = originalPlaylist.copy(
                 title = playlist.title,
-                description = playlist.description,
+                description = playlist.description.ifBlank { null },
                 uri = validUriString
             )
 
