@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.P
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.WithData
 import com.practicum.playlistmaker.features.media.ui.viewModel.create_playlist.toCreateUiModel
 import kotlinx.coroutines.launch
+import java.io.File
 
 class EditPlaylistViewModel(
     private val getPlaylistByIdUseCase: IGetPlaylistByIdUseCase,
@@ -37,13 +38,7 @@ class EditPlaylistViewModel(
                 else -> return@launch
             }
 
-            val validUriString = playlist.coverImagePath?.let { path ->
-                when {
-                    path.startsWith("file://") -> path
-                    path.startsWith("content://") -> path
-                    else -> "file://$path"
-                }
-            }
+            val validUriString = playlist.coverImagePath.toValidUri()
 
             val originalPlaylist = getPlaylistByIdUseCase(playlistId)
 
@@ -76,4 +71,12 @@ class EditPlaylistViewModel(
             }
         }
     }
+    private fun String?.toValidUri(): String?{
+        return when{
+            this.isNullOrBlank() -> null
+            File(this).exists() -> "file://$this"
+            else -> this
+        }
+    }
+
 }
