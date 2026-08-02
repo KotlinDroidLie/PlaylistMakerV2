@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.features.player.ui.activity
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.toRect
 import com.practicum.playlistmaker.R
 import java.lang.Integer.min
 
@@ -36,9 +36,9 @@ class PlaybackButtonView @JvmOverloads constructor(
             field = value
             invalidate()
         }
-    private val playImageBitMap: Bitmap?
+    private val playDrawable: Drawable?
     private val minSizeView = resources.getDimensionPixelSize(R.dimen.playbackButtonViewMinSize)
-    private val pauseImageBitMap: Bitmap?
+    private val pauseDrawable: Drawable?
     init {
         context.theme.obtainStyledAttributes(
             attrs,
@@ -47,8 +47,8 @@ class PlaybackButtonView @JvmOverloads constructor(
             0
         ).apply {
             try {
-                playImageBitMap = getDrawable(R.styleable.PlayBackButtonView_playImageResId)?.toBitmap()
-                pauseImageBitMap = getDrawable(R.styleable.PlayBackButtonView_pauseImageResId)?.toBitmap()
+                playDrawable = getDrawable(R.styleable.PlayBackButtonView_playImageResId)
+                pauseDrawable = getDrawable(R.styleable.PlayBackButtonView_pauseImageResId)
             } finally {
                 recycle()
             }
@@ -70,10 +70,10 @@ class PlaybackButtonView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         when(state){
             PlaybackButtonViewState.Pause ->{
-                drawBitmap(pauseImageBitMap, canvas)
+                drawDrawable(pauseDrawable, canvas)
             }
             PlaybackButtonViewState.Play ->{
-                drawBitmap(playImageBitMap, canvas)
+                drawDrawable(playDrawable, canvas)
             }
         }
     }
@@ -83,9 +83,10 @@ class PlaybackButtonView @JvmOverloads constructor(
         return gestureDetector.onTouchEvent(event)
     }
 
-    private fun drawBitmap(bitMap: Bitmap?, canvas: Canvas){
-        bitMap?.let {
-            canvas.drawBitmap(bitMap,null, imageRect, null)
+    private fun drawDrawable(drawable: Drawable?, canvas: Canvas){
+        drawable?.let {
+            drawable.bounds = imageRect.toRect()
+            drawable.draw(canvas)
         }
     }
 
