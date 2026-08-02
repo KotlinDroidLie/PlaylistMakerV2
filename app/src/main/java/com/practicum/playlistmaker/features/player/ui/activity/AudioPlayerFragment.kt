@@ -250,13 +250,6 @@ class AudioPlayerFragment : Fragment() {
     private fun enableButton(flag:Boolean){
         binding.ibtnMusic.isEnabled = flag
     }
-    private fun updatePlayButtonIcon(flag: Boolean) {
-        val icon = when (flag) {
-            false -> R.drawable.ic_button_pause_music_100
-            true -> R.drawable.ic_button_play_music_100
-        }
-        binding.ibtnMusic.setImageResource(icon)
-    }
     private fun initView(model: PlayerUiModel){
         binding.apply {
             tvNameSongPlayer.text = model.trackName
@@ -285,9 +278,15 @@ class AudioPlayerFragment : Fragment() {
             .into(binding.ivPosterSongPlayer)
     }
     private fun renderPlaybackControl(state: PlayerState){
+        if(state is PlayerState.Prepared){
+            setPreparedPlayButtonIcon()
+        }
         enableButton(state.buttonIsEnable)
-        updatePlayButtonIcon(state.buttonIsPlayIcon)
         updateTimer(state.progress)
+    }
+
+    private fun setPreparedPlayButtonIcon() {
+        binding.ibtnMusic.state = PlaybackButtonViewState.Play
     }
 
     private fun renderUI(trackUiModel: PlayerUiModel){

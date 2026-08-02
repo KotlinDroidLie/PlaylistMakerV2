@@ -95,14 +95,16 @@
                 app:layout_constraintStart_toStartOf="@id/left_border"
                 app:layout_constraintTop_toTopOf="@+id/ibtn_music" />
 
-            <ImageButton
+            <com.practicum.playlistmaker.features.player.ui.activity.PlaybackButtonView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:id="@+id/ibtn_music"
-                style="@style/ImageButtonAudioPlayerStyle"
                 android:layout_marginTop="32dp"
-                android:src="@drawable/ic_button_play_music_100"
+                app:playImageResId = "@drawable/ic_button_play_music_100"
+                app:pauseImageResId = "@drawable/ic_button_pause_music_100"
                 app:layout_constraintEnd_toStartOf="@+id/ibtn_add_to_favorite"
                 app:layout_constraintStart_toEndOf="@+id/ibtn_add_to_playlist"
-                app:layout_constraintTop_toBottomOf="@id/tv_group_name_player" />
+                app:layout_constraintTop_toBottomOf="@id/tv_group_name_player"/>
 
             <ImageButton
                 android:id="@+id/ibtn_add_to_favorite"
