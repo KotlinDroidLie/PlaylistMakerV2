@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.di.presentation.viewModelModule
+import com.practicum.playlistmaker.di.utils.utilsModule
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,7 @@ class App : Application() {
         startKoin{
             androidLogger(Level.DEBUG)
             androidContext(this@App)
-            modules(viewModelModule)
+            modules(viewModelModule, utilsModule)
         }
         val settings = settingsUseCase.getSettings()
         AppCompatDelegate.setDefaultNightMode(
