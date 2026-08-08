@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.features.player.ui.activity
 
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -28,8 +30,10 @@ import com.practicum.playlistmaker.features.player.ui.view_model.PlayerUiModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.features.player.ui.view_model.BottomSheetUiState
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
+import com.practicum.playlistmaker.utils.NetworkStateReceiver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -66,6 +70,7 @@ class AudioPlayerFragment : Fragment() {
             bottomSheetViewModel.addTrackToPlaylist(playlistModel)
         }
     }
+    private val networkStateReceiver: NetworkStateReceiver by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,12 +147,19 @@ class AudioPlayerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         hideBottomNav()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkStateReceiver,
+            IntentFilter(NetworkStateReceiver.CONNECTIVITY_CHANGE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
         showBottomNav()
+        requireContext().unregisterReceiver(networkStateReceiver)
     }
 
     override fun onDestroyView() {

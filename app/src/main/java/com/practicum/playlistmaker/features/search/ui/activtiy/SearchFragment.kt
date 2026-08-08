@@ -1,11 +1,13 @@
 package com.practicum.playlistmaker.features.search.ui.activtiy
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -22,8 +24,10 @@ import com.practicum.playlistmaker.features.player.ui.activity.AudioPlayerFragme
 import com.practicum.playlistmaker.features.search.domain.model.TrackModel
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchState
 import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
+import com.practicum.playlistmaker.utils.NetworkStateReceiver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -42,7 +46,7 @@ class SearchFragment : Fragment() {
     private var isClickAllowed = true
     private lateinit var adapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
-
+    private val networkStateReceiver: NetworkStateReceiver by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = TrackAdapter(
@@ -120,6 +124,20 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkStateReceiver,
+            IntentFilter(NetworkStateReceiver.CONNECTIVITY_CHANGE_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(networkStateReceiver)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         isClickAllowed = true
