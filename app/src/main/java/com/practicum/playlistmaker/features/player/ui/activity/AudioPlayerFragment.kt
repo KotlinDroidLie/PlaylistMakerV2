@@ -146,7 +146,6 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.onPause()
         showBottomNav()
     }
 
@@ -278,15 +277,18 @@ class AudioPlayerFragment : Fragment() {
             .into(binding.ivPosterSongPlayer)
     }
     private fun renderPlaybackControl(state: PlayerState){
-        if(state is PlayerState.Prepared){
-            setPreparedPlayButtonIcon()
-        }
+        updatePlayButtonState(state)
         enableButton(state.buttonIsEnable)
         updateTimer(state.progress)
     }
 
-    private fun setPreparedPlayButtonIcon() {
-        binding.ibtnMusic.state = PlaybackButtonViewState.Play
+    private fun updatePlayButtonState(state: PlayerState) {
+        binding.ibtnMusic.state = when (state){
+            is PlayerState.Default -> PlaybackButtonViewState.Play
+            is PlayerState.Paused -> PlaybackButtonViewState.Play
+            is PlayerState.Playing -> PlaybackButtonViewState.Pause
+            is PlayerState.Prepared -> PlaybackButtonViewState.Play
+        }
     }
 
     private fun renderUI(trackUiModel: PlayerUiModel){
