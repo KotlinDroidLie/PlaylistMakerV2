@@ -1,9 +1,12 @@
 package com.practicum.playlistmaker.features.player.services
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.IBinder
 import com.practicum.playlistmaker.features.player.ui.view_model.IMusicServiceController
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerState
@@ -53,6 +56,31 @@ class MusicServiceController(private val appContext: Context): IMusicServiceCont
 
     override fun playerControl() {
         musicService?.playerControl()
+    }
+
+    override fun hideForegroundNotification() {
+        if(isPlaying()){
+            musicService?.stopForegroundNotification()
+        }
+    }
+
+    override fun showForegroundNotification() {
+        if(hasNotificationPermission() && isPlaying()){
+            musicService?.startForegroundNotification()
+        }else{
+            musicService?.pausePlayer()
+        }
+    }
+
+    private fun hasNotificationPermission(): Boolean{
+       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+           val permissionProvider = appContext.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+           if(permissionProvider == PackageManager.PERMISSION_DENIED ) return false
+       }
+        return true
+    }
+    private fun isPlaying(): Boolean{
+        return _playbackState.value is PlayerState.Playing
     }
     private fun observePlaybackState() {
         val service = musicService ?: return

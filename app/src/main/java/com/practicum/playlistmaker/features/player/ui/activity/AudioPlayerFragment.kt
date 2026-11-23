@@ -139,6 +139,11 @@ class AudioPlayerFragment : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.hideForegroundNotification()
+    }
+
     override fun onResume() {
         super.onResume()
         hideBottomNav()
@@ -147,6 +152,11 @@ class AudioPlayerFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         showBottomNav()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.showForegroundNotification()
     }
 
     override fun onDestroyView() {

@@ -79,4 +79,12 @@ class PlayerViewModel(
         super.onCleared()
         musicServiceController.unBindService()
     }
+
+    fun hideForegroundNotification() {
+        musicServiceController.hideForegroundNotification()
+    }
+
+    fun showForegroundNotification() {
+        musicServiceController.showForegroundNotification()
+    }
 }

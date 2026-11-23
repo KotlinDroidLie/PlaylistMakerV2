@@ -7,5 +7,8 @@ interface IMusicServiceController {
     fun bindService(trackModel: TrackModel)
     fun unBindService()
     fun playerControl()
+    fun hideForegroundNotification()
+    fun showForegroundNotification()
+
     val playbackState: StateFlow<PlayerState>
 }
