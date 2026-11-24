@@ -21,6 +21,8 @@ import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.P
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlist_detail.PlaylistDetailViewModel
 import com.practicum.playlistmaker.features.media.ui.viewModel.playlists.PlaylistViewModel
 import com.practicum.playlistmaker.features.player.domain.api.IFormatTrackUseCase
+import com.practicum.playlistmaker.features.player.services.MusicServiceController
+import com.practicum.playlistmaker.features.player.ui.view_model.IMusicServiceController
 import com.practicum.playlistmaker.features.player.ui.view_model.PlaylistBottomSheetViewModel
 import com.practicum.playlistmaker.features.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.features.search.domain.api.usecase.IHistoryUseCase
@@ -30,6 +32,7 @@ import com.practicum.playlistmaker.features.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.features.settings.domain.api.ISettingsUseCase
 import com.practicum.playlistmaker.features.settings.ui.view_model.SettingsViewModel
 import com.practicum.playlistmaker.features.sharing.domain.api.ISharingInteractor
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -43,12 +46,15 @@ val viewModelModule = module{
     factory<MediaPlayer>{
         MediaPlayer()
     }
+    factory<IMusicServiceController> {
+        MusicServiceController(androidContext())
+    }
 
     viewModel { (model: TrackModel) ->
         PlayerViewModel(
             model,
             get<IFormatTrackUseCase>(),
-            get<MediaPlayer>(),
+            get<IMusicServiceController>(),
             get<IFavouriteInteractor>()
         )
     }

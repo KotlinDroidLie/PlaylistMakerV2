@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toRect
 import com.practicum.playlistmaker.R
@@ -16,20 +14,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     ): View(context,attrs) {
-    private val gestureDetector = GestureDetector(
-        context,
-        object : GestureDetector.SimpleOnGestureListener(){
-            override fun onDown(e: MotionEvent): Boolean {
-                return true
-            }
 
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                togglePlayback()
-                performClick()
-                return true
-            }
-        }
-    )
     private var imageRect = RectF(0f,0f,0f,0f)
     internal var state: PlaybackButtonViewState = PlaybackButtonViewState.Play
         set(value) {
@@ -78,22 +63,10 @@ class PlaybackButtonView @JvmOverloads constructor(
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if(!isEnabled) return false
-        return gestureDetector.onTouchEvent(event)
-    }
-
     private fun drawDrawable(drawable: Drawable?, canvas: Canvas){
         drawable?.let {
             drawable.bounds = imageRect.toRect()
             drawable.draw(canvas)
-        }
-    }
-
-    private fun togglePlayback() {
-        state = when (state) {
-            PlaybackButtonViewState.Pause -> PlaybackButtonViewState.Play
-            PlaybackButtonViewState.Play -> PlaybackButtonViewState.Pause
         }
     }
 
