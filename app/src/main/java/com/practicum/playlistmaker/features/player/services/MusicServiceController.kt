@@ -59,28 +59,11 @@ class MusicServiceController(private val appContext: Context): IMusicServiceCont
     }
 
     override fun hideForegroundNotification() {
-        if(isPlaying()){
-            musicService?.stopForegroundNotification()
-        }
+        musicService?.hideForegroundNotification()
     }
 
     override fun showForegroundNotification() {
-        if(hasNotificationPermission() && isPlaying()){
-            musicService?.startForegroundNotification()
-        }else{
-            musicService?.pausePlayer()
-        }
-    }
-
-    private fun hasNotificationPermission(): Boolean{
-       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-           val permissionProvider = appContext.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-           if(permissionProvider == PackageManager.PERMISSION_DENIED ) return false
-       }
-        return true
-    }
-    private fun isPlaying(): Boolean{
-        return _playbackState.value is PlayerState.Playing
+        musicService?.showForegroundNotification()
     }
     private fun observePlaybackState() {
         val service = musicService ?: return
