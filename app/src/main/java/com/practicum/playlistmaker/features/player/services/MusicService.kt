@@ -1,11 +1,14 @@
 package com.practicum.playlistmaker.features.player.services
 
+import android.Manifest
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
 class MusicService : Service() {
     private val _playbackState = MutableStateFlow<PlayerState>(PlayerState.Default(DEFAULT_PROGRESS))
@@ -136,7 +140,7 @@ class MusicService : Service() {
         timerJob?.cancel()
         timerJob = serviceScope.launch {
             while (mediaPlayer.isPlaying){
-                delay(TIMER_CHANGE_DELAY)
+                delay(TIMER_CHANGE_DELAY.milliseconds)
                 val state = PlayerState.Playing(getCurrentPlayerPosition())
                 renderPlaybackState(state)
             }
@@ -149,13 +153,13 @@ class MusicService : Service() {
         renderPlaybackState(state)
         startTimer()
     }
-    fun pausePlayer() {
+    private fun pausePlayer() {
         pauseTimer()
         mediaPlayer.pause()
         val state = PlayerState.Paused(getCurrentPlayerPosition())
         renderPlaybackState(state)
     }
-    fun startForegroundNotification(){
+    private fun startForegroundNotification(){
         ServiceCompat.startForeground(
             this,
             SERVICE_NOTIFICATION_ID,
@@ -163,7 +167,7 @@ class MusicService : Service() {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
         )
     }
-    fun stopForegroundNotification(){
+    private fun stopForegroundNotification(){
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
     private fun renderPlaybackState(state: PlayerState){
@@ -171,5 +175,30 @@ class MusicService : Service() {
     }
     private fun getCurrentPlayerPosition(): String{
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+    }
+
+    fun hideForegroundNotification() {
+        if(isPlaying()){
+            stopForegroundNotification()
+        }
+    }
+
+    fun showForegroundNotification() {
+        if(hasNotificationPermission() && isPlaying()){
+            startForegroundNotification()
+        }else{
+            pausePlayer()
+        }
+    }
+
+    private fun hasNotificationPermission(): Boolean{
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            val permissionProvider = checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+            if(permissionProvider == PackageManager.PERMISSION_DENIED ) return false
+        }
+        return true
+    }
+    private fun isPlaying(): Boolean{
+        return _playbackState.value is PlayerState.Playing
     }
 }
